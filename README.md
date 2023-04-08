@@ -1,2 +1,1 @@
-# inkball
-inkball
+# canvas application
