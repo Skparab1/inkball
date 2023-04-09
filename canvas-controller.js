@@ -6,7 +6,7 @@ canvas.width = window.innerWidth-20;
 canvas.height = window.innerHeight-20; 
 const byte = 2*((window.innerHeight-100)/(16*2.2));
 const width = byte*30;
-const height = byte*20; // gonna make a full sized canvas with a little bit of ground leeway
+const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
 // now you can clearred fillrect fillstyle arc on the ctx
 
@@ -124,7 +124,7 @@ function drawmousetrail(){
             if (s <= 2){
               deltax = mousetrail[r][s+2][0]-mousetrail[r][s][0];
               deltay = mousetrail[r][s+2][1]-mousetrail[r][s][1];
-              console.log('called this btw',mousetrail[r][s+1][1], mousetrail[r][s][1]);
+              //console.log('called this btw',mousetrail[r][s+1][1], mousetrail[r][s][1]);
             } else {
               deltax = mousetrail[r][s][0]-mousetrail[r][s-2][0];
               deltay = mousetrail[r][s][1]-mousetrail[r][s-2][1];
@@ -140,36 +140,36 @@ function drawmousetrail(){
 
             let theta = radians_to_degrees(Math.atan(deltay/deltax));
             
-            console.log('old velocities',dx[bl],dy[bl]);
+            //console.log('old velocities',dx[bl],dy[bl]);
 
             // ok this is gonna be another try
             
             let Velocity_Magnitude = Math.sqrt(dx[bl]*dx[bl]+dy[bl]*dy[bl]);
 
-            console.log('mid');
+            //console.log('mid');
 
             // let new_x = dx + vx * Velocity_Magnitude * Time_Interval
 
             let nx = -Math.sin(degreestoradians(theta));
             let ny = Math.cos(degreestoradians(theta));
 
-            console.log('nx ny',nx,ny);
+            //console.log('nx ny',nx,ny);
 
 
             let dt = dx[bl] * nx + dy[bl] * ny;
 
-            console.log('dt',dt);
+            //console.log('dt',dt);
 
             let vnewx = dx[bl] - (2 * dt * nx);
             let vnewy = dy[bl] - (2 * dt * ny);
 
-            console.log('vnews',vnewx,vnewy);
+            //console.log('vnews',vnewx,vnewy);
 
 
             dx[bl] = vnewx;
             dy[bl] = vnewy;
 
-            console.log('new velocities',dx[bl],dy[bl]);
+            //console.log('new velocities',dx[bl],dy[bl]);
 
             // in contact
             // disable that line
@@ -278,7 +278,7 @@ async function shrinkball(num, hole){
   // cuz if not then you lost
   if (clrs[num] != holecolors[hole]){
     // you lost
-    alert("you lost");
+    alert("Oops! Ball entered hole of wrong color");
     location.reload();
   }
 
@@ -299,7 +299,10 @@ async function shrinkball(num, hole){
 
   if (numgotten >= bx.length){
     // you won
-    alert('you won');
+    let endTime = new Date();
+    let time = endTime-startTime;
+    time = time/1000;
+    alert('You won! Time taken:'+time+" sec");
   }
 
 }
@@ -327,16 +330,20 @@ function addball(){
 }
 
 
-let ballwidth = window.innerWidth/55;
-let borderwidth = window.innerWidth/60;
+let ballwidth = byte*0.75;
+let borderwidth = byte/2;
 let holewidth = ballwidth*2;
+
+let startTime = new Date();
 
 let numgotten = 0;
 
-let bx = [100,200,300,400];
-let by = [100,100,100,100];
+let sfactor = byte/28.41;
 
-let dx = [2,2,2,2];
+let bx = [100*sfactor,200*sfactor,300*sfactor,400*sfactor];
+let by = [100*sfactor,100*sfactor,100*sfactor,100*sfactor];
+
+let dx = [2*sfactor,2*sfactor,2*sfactor,2*sfactor];
 let dy = [0,0,0,0];
 
 const BLUE = "rgb(3, 161, 252)";
@@ -353,6 +360,8 @@ let mousetrail = [];
 //addball();
 // addball();
 
+console.log(byte); //28.41
+
 //holes
 let holecenters = [[width-borderwidth-holewidth/1.33,height-borderwidth-holewidth/1.33],[borderwidth+holewidth/1.33,height-borderwidth-holewidth/1.33]]; // the centers
 let holecolors = [BLUE,ORANGE]; // the centers
@@ -362,11 +371,12 @@ let holecolors = [BLUE,ORANGE]; // the centers
 let blocks = [
   [3,10],[4,10],[5,10],[6,10],[7,10],[8,10],[9,10],[10,10],[11,10], // first wall
   [17,6],[18,6],[19,6],[18,6],[19,6],[20,6],[21,6],[22,6],[23,6],[24,6],[25,6],[26,6],[27,6],[28,6],[29,6],
-  [11,11],[11,12],[11,13],[11,17],[11,18],[11,19],
-  [26,11],[26,12],[26,13],[26,14],[26,15],[26,16],[26,17],[26,18],[26,19],
+  [11,11],[11,12],[11,13],[11,17],[11,18],
+  [26,11],[26,12],[26,13],[26,14],[26,15],[26,16],[26,17],[26,18],
 ];
 
 let testing = true;
+
 
 // main loop
 let y = 0;
@@ -440,7 +450,7 @@ let y = 0;
             // it is either above or below
             if (by[lucid] < blocks[o][1]*byte){
               // reflect up
-              console.log('tried to reflect up');
+              //console.log('tried to reflect up');
               dy[lucid] = -Math.abs(dy[lucid]);
             } else {
               // reflect down
