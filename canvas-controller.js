@@ -3,9 +3,10 @@
 const canvas = document.querySelector('.myCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth-20; 
+canvas.height = window.innerHeight-20; 
 const byte = 2*((window.innerHeight-100)/(16*2.2));
-const width = window.innerWidth-20-window.innerWidth/25-window.innerWidth/60;
-const height = canvas.height = window.innerHeight-20; // gonna make a full sized canvas with a little bit of ground leeway
+const width = byte*30;
+const height = byte*20; // gonna make a full sized canvas with a little bit of ground leeway
 
 // now you can clearred fillrect fillstyle arc on the ctx
 
@@ -29,13 +30,22 @@ function drawbg(){
   // this is a supposed hole
   let j = 0;
   while (j < holecenters.length){
-    ctx.fillStyle = 'orange';
+    ctx.fillStyle = holecolors[j];
     ctx.fillRect(holecenters[j][0]-holewidth*1.5/2,holecenters[j][1]-holewidth*1.5/2,holewidth*1.5,holewidth*1.5);
     ctx.fillStyle = 'black';
     ctx.arc(holecenters[j][0],holecenters[j][1],holewidth/2,0,Math.PI*2);
     ctx.fill();
     j += 1;
   }
+
+  // these are blocks
+  j = 0;
+  while (j < blocks.length){
+    ctx.fillStyle = 'gray';
+    ctx.fillRect(blocks[j][0]*byte-byte/2,blocks[j][1]*byte-byte/2 ,byte,byte);
+    j += 1;
+  }
+
 }
 
 function mouse_position(){
@@ -95,7 +105,10 @@ function drawmousetrail(){
       while (s < mousetrail[r].length){
         let xp = mousetrail[r][s][0];
         let yp = mousetrail[r][s][1];
-        ctx.lineTo(xp,yp);
+
+        if (xp < width && yp < height){
+          ctx.lineTo(xp,yp);
+        }
 
         // just quickly check if it is in contact with any of the balls
         let bl = 0;
@@ -118,103 +131,40 @@ function drawmousetrail(){
             }
 
             if (deltax == 0){
-              if (deltay < 0){
+              if (deltax < 0){
                 deltax = 0.01;
               } else {
                 deltax = -0.01;
               }
             }
 
-            // let vn = [deltay*100,deltax*100];
-            // let vi = [dx[bl],dy[bl]];
-
-            // let vidotvn = dot(vi,vn);
-
-            // let zx = vidotvn; // this is the x component if it was straight
-            // // now we have to conserve the magnitude so
-            // let zy = Math.sqrt((dx[bl]*dx[bl]+dy[bl]*dy[bl])-zx*zx);
-
-            // // let currentdeltamag = Math.sqrt(deltax*deltax+deltay*deltay);
-
-            // // let wantedmagnitude = zx;
-
-            // // let pushx = wantedmagnitude/currentdeltamag*deltax;
-            // // let pushy = wantedmagnitude/currentdeltamag*deltay;
-
-            // // now actual
-            // zx = dot([zx,zy],[100,0]);
-            // // now conserve magnitude so
-            // zy = Math.sqrt((dx[bl]*dx[bl]+dy[bl]*dy[bl])-zx*zx);
-
-            // dx[bl] = zx;
-            // dy[bl] = zy;
-
-            // //Ve = Vi - 2 * (Vi dot Vn) * Vn
-
             let theta = radians_to_degrees(Math.atan(deltay/deltax));
-            let e = radians_to_degrees(Math.atan(dy[bl]/dx[bl]));
-            let endangle = 2*theta-e;
-
-            // // sometimes this angle will have to be changed
-            // if (deltax/deltay < 0){
-            //   if (by/bx < 0){
-            //     // endangle = 180-endangle;
-            //     // endangle = endangle;
-            //   } else {
-            //     // dont need to do anything ig
-            //   }
-            // } else {
-            //   if (by/bx < 0){
-
-            //   } else {
-            //     //endangle = 180-endangle;
-
-            //   }
-            // }
-
-            // the magnitude should still be the same
-            // let magnitude = Math.sqrt(dx[bl]*dx[bl]+dy[bl]*dy[bl]);
+            
             console.log('old velocities',dx[bl],dy[bl]);
-
-            // let supnewx = magnitude*Math.cos(degreestoradians(endangle));
-            // let supnewy = magnitude*Math.sin(degreestoradians(endangle));
-            // if (supnewx == dx[bl]){
-            //   dx[bl] = -supnewx;
-            // } else {
-            //   dx[bl] = supnewx;
-            // }
-            // if (supnewy == dy[bl]){
-            //   dy[bl] = -supnewy;
-            // } else {
-            //   dy[bl] = supnewy;
-            // }
-
-            // if (Math.abs(deltax) < 5){
-            //   console.log('vertical triggered');
-            //   dx[bl] = -dx[bl];
-            //   dy[bl] = supnewy;
-            // } else if (Math.abs(deltay) < 5){
-            //   console.log('horizontal triggered');
-            //   dy[bl] = -dy[bl];
-            //   dx[bl] = supnewx;
-            // } else {
-            //   dx[bl] = supnewx;
-            //   dy[bl] = supnewy;
-            // }
 
             // ok this is gonna be another try
             
             let Velocity_Magnitude = Math.sqrt(dx[bl]*dx[bl]+dy[bl]*dy[bl]);
+
+            console.log('mid');
 
             // let new_x = dx + vx * Velocity_Magnitude * Time_Interval
 
             let nx = -Math.sin(degreestoradians(theta));
             let ny = Math.cos(degreestoradians(theta));
 
-            let dot = dx[bl] * nx + dy[bl] * ny;
+            console.log('nx ny',nx,ny);
 
-            let vnewx = vx - 2 * dot * nx;
-            let vnewy = vy - 2 * dot * ny;
+
+            let dt = dx[bl] * nx + dy[bl] * ny;
+
+            console.log('dt',dt);
+
+            let vnewx = dx[bl] - (2 * dt * nx);
+            let vnewy = dy[bl] - (2 * dt * ny);
+
+            console.log('vnews',vnewx,vnewy);
+
 
             dx[bl] = vnewx;
             dy[bl] = vnewy;
@@ -244,6 +194,7 @@ function inholerange(lucid, hole){
 }
 
 function yoinkball(ball, hole){
+
   let distx = (holecenters[hole][0])-bx[ball];
   let disty = (holecenters[hole][1])-by[ball];
 
@@ -318,7 +269,19 @@ function touching(num1,num2){
   return (Math.sqrt(Math.pow(bx[num1]-bx[num2],2)+Math.pow(by[num1]-by[num2],2)) <= ballwidth*2 && bx[num1] < width+borderwidth);
 }
 
-async function shrinkball(num){
+function dist1(x1,y1,x2,y2){
+  return (Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)));
+}
+
+async function shrinkball(num, hole){
+  // first of all is the ball in the holw of its color or not
+  // cuz if not then you lost
+  if (clrs[num] != holecolors[hole]){
+    // you lost
+    alert("you lost");
+    location.reload();
+  }
+
   let u = 100;
   while (u > 0){
     bwidths[num] = u/100*ballwidth;
@@ -333,6 +296,12 @@ async function shrinkball(num){
   by[num] = ballwidth;
   dx[num] = 0; // shud already be but anyway
   dy[num] = 0; // but we accelerate this;
+
+  if (numgotten >= bx.length){
+    // you won
+    alert('you won');
+  }
+
 }
 
 const getAllSubsets = 
@@ -364,17 +333,17 @@ let holewidth = ballwidth*2;
 
 let numgotten = 0;
 
-let bx = [100];
-let by = [100];
+let bx = [100,200,300,400];
+let by = [100,100,100,100];
 
-let dx = [1];
-let dy = [0];
+let dx = [2,2,2,2];
+let dy = [0,0,0,0];
 
 const BLUE = "rgb(3, 161, 252)";
 const ORANGE = "rgb(252, 115, 3)";
 
-let clrs = [BLUE];
-let bwidths = [ballwidth];
+let clrs = [BLUE,ORANGE,BLUE,ORANGE];
+let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
 let bounceexp = [0,0,0,0];
 
 let mousedown = false;
@@ -386,6 +355,16 @@ let mousetrail = [];
 
 //holes
 let holecenters = [[width-borderwidth-holewidth/1.33,height-borderwidth-holewidth/1.33],[borderwidth+holewidth/1.33,height-borderwidth-holewidth/1.33]]; // the centers
+let holecolors = [BLUE,ORANGE]; // the centers
+
+// blocks
+
+let blocks = [
+  [3,10],[4,10],[5,10],[6,10],[7,10],[8,10],[9,10],[10,10],[11,10], // first wall
+  [17,6],[18,6],[19,6],[18,6],[19,6],[20,6],[21,6],[22,6],[23,6],[24,6],[25,6],[26,6],[27,6],[28,6],[29,6],
+  [11,11],[11,12],[11,13],[11,17],[11,18],[11,19],
+  [26,11],[26,12],[26,13],[26,14],[26,15],[26,16],[26,17],[26,18],[26,19],
+];
 
 let testing = true;
 
@@ -449,6 +428,41 @@ let y = 0;
         }
       }
 
+      // quickly check if it is contacting any of the blocks
+      let o = 0;
+      while (o < blocks.length){
+        //console.log(dist1(4*byte,4*byte,bx[0],by[0]),ballwidth+byte/2);
+        if (dist1(blocks[o][0]*byte,blocks[o][1]*byte,bx[lucid],by[lucid]) < ballwidth+byte/2){
+          //console.log('close enough');
+          // contacted
+          // is it in line horizontally
+          if (bx[lucid] > blocks[o][0]*byte-byte/2-ballwidth/2 && bx[lucid] < blocks[o][0]*byte+byte/2+ballwidth/2){
+            // it is either above or below
+            if (by[lucid] < blocks[o][1]*byte){
+              // reflect up
+              console.log('tried to reflect up');
+              dy[lucid] = -Math.abs(dy[lucid]);
+            } else {
+              // reflect down
+              //console.log('tried to reflect down', by[lucid] , blocks[o][1]);
+              dy[lucid] = Math.abs(dy[lucid]);
+            }
+          }
+
+          // is it in line vertically
+          if (by[lucid] > blocks[o][1]*byte-byte/2-ballwidth/2 && by[lucid] < blocks[o][1]*byte+byte/2+ballwidth/2){
+            if (bx[lucid] < blocks[o][0]*byte-byte/2){
+              // reflect left
+              dx[lucid] = -Math.abs(dx[lucid]);
+            } else {
+              // reflect right
+              dx[lucid] = Math.abs(dx[lucid]);
+            }
+          }
+        }
+        o += 1;
+      }
+
       lucid += 1;
     }
 
@@ -509,7 +523,7 @@ let y = 0;
           if (bwidths[lucid] == ballwidth){
             dx[lucid] = 0;
             dy[lucid] = 0;
-            shrinkball(lucid);
+            shrinkball(lucid,g);
             numgotten += 1;
           }
         }
