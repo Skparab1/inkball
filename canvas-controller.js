@@ -292,7 +292,7 @@ async function shrinkball(num, hole){
 
   bwidths[num] = ballwidth;
 
-  bx[num] = width+borderwidth+ballwidth;
+  bx[num] = width+byte*2; // this may be wrong
   by[num] = ballwidth;
   dx[num] = 0; // shud already be but anyway
   dy[num] = 0; // but we accelerate this;
@@ -331,7 +331,7 @@ function addball(){
 
 
 let ballwidth = byte*0.75;
-let borderwidth = byte/2;
+let borderwidth = byte;
 let holewidth = ballwidth*2;
 
 let startTime = new Date();
@@ -363,7 +363,7 @@ let mousetrail = [];
 console.log(byte); //28.41
 
 //holes
-let holecenters = [[width-borderwidth-holewidth/1.33,height-borderwidth-holewidth/1.33],[borderwidth+holewidth/1.33,height-borderwidth-holewidth/1.33]]; // the centers
+let holecenters = [[byte*28,byte*17],[borderwidth+holewidth/1.33,height-borderwidth-holewidth/1.33]]; // the centers
 let holecolors = [BLUE,ORANGE]; // the centers
 
 // blocks
@@ -430,6 +430,8 @@ let y = 0;
 
       if (bx[lucid] > width+borderwidth){
         // it is an out ball
+        // make sure its at rest horizontally
+        dx[lucid] = 0;
         if (by[lucid] < height-borderwidth-ballwidth*(numgotten)*2){
           // in range
           dy[lucid] += 1;
