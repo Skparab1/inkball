@@ -1,10 +1,9 @@
 // canvas template
 
-const canvas = document.querySelector('.myCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth-20; 
 canvas.height = window.innerHeight-20; 
-const byte = 2*((window.innerHeight-100)/(16*2.2));
+// byte, canvas declared in first.js
 const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
@@ -30,6 +29,7 @@ function drawbg(){
   // this is a supposed hole
   let j = 0;
   while (j < holecenters.length){
+    ctx.beginPath();
     ctx.fillStyle = holecolors[j];
     ctx.fillRect(holecenters[j][0]-holewidth*1.5/2,holecenters[j][1]-holewidth*1.5/2,holewidth*1.5,holewidth*1.5);
     ctx.fillStyle = 'black';
@@ -42,26 +42,10 @@ function drawbg(){
   j = 0;
   while (j < blocks.length){
     ctx.fillStyle = 'gray';
-    ctx.fillRect(blocks[j][0]*byte-byte/2,blocks[j][1]*byte-byte/2 ,byte,byte);
+    ctx.fillRect(blocks[j][0]-byte/2,blocks[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
 
-}
-
-function mouse_position(){
-  var e = window.event;
-
-  var posX = e.clientX;
-  var posY = e.clientY;
-
-  mousepos = [posX,posY];
-
-  //console.log(mousetrail);
-
-  if (mousedown){
-    mousetrail[mousetrail.length-1].push(mousepos);
-    //console.log(mousetrail);
-  }
 }
 
 function radians_to_degrees(radians)
@@ -302,7 +286,7 @@ async function shrinkball(num, hole){
     let endTime = new Date();
     let time = endTime-startTime;
     time = time/1000;
-    alert('You won! Time taken:'+time+" sec");
+    alert('You won! Time taken: '+time+" sec");
   }
 
 }
@@ -329,27 +313,49 @@ function addball(){
   }
 }
 
+function sfactorize(arr){
+  let t = 0;
+  while (t < arr.length){
+    arr[t] = arr[t]*sfactor;
+    t += 1;
+  }
 
-let ballwidth = byte*0.75;
+  return arr;
+}
+
+function byteize(arr){
+  let t = 0;
+  while (t < arr.length){
+    arr[t] = [arr[t][0]*byte,arr[t][1]*byte];
+    t += 1;
+  }
+
+  return arr;
+}
+
+function addpoint(){
+  // adding mousetrail[mousetrail.length-1].push(mousepos);
+
+  let ln = mousetrail[mousetrail.length-1];
+
+  if (ln.length > 0){
+    let lp = ln[ln.length-1];
+
+    if (dist1(lp[0],lp[1],mousepos[0],mousepos[1]) > ballwidth){
+      console.log('called this');
+      let midp = [(mousepos[0]+lp[0])/2,(mousepos[1]+lp[1])/2];
+      mousetrail[mousetrail.length-1].push(midp);
+    }
+  }
+
+  mousetrail[mousetrail.length-1].push(mousepos); // add this point regardless
+}
+
+let loaded = false;
+
+// ballwidth, sfactor and other defined in first.js
 let borderwidth = byte;
 let holewidth = ballwidth*2;
-
-let startTime = new Date();
-
-let numgotten = 0;
-
-let sfactor = byte/28.41;
-
-let bx = [100*sfactor,200*sfactor,300*sfactor,400*sfactor];
-let by = [100*sfactor,100*sfactor,100*sfactor,100*sfactor];
-
-let dx = [2*sfactor,2*sfactor,2*sfactor,2*sfactor];
-let dy = [0,0,0,0];
-
-const BLUE = "rgb(3, 161, 252)";
-const ORANGE = "rgb(252, 115, 3)";
-
-let clrs = [BLUE,ORANGE,BLUE,ORANGE];
 let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
 let bounceexp = [0,0,0,0];
 
@@ -357,29 +363,42 @@ let mousedown = false;
 let mousepos = [0,0];
 let mousetrail = [];
 
-//addball();
-// addball();
+let startTime = new Date();
 
-console.log(byte); //28.41
+let numgotten = 0;
+
+
+
+//get the map we are going to use
+let map;
+if (window.location.href.includes("map2")){
+  map = getmap2();
+} else {
+  map = getmap1();
+}
+
+let bx = sfactorize(map.bx);
+let by = sfactorize(map.by);
+
+let dx = sfactorize(map.dx);
+let dy = sfactorize(map.dy);
+
+let clrs = map.clrs;
 
 //holes
-let holecenters = [[byte*28,byte*17],[borderwidth+holewidth/1.33,height-borderwidth-holewidth/1.33]]; // the centers
-let holecolors = [BLUE,ORANGE]; // the centers
+let holecenters = byteize(map.holecenters); // the centers
+let holecolors = map.holecolors; // the centers
 
 // blocks
 
-let blocks = [
-  [4,10],[5,10],[6,10],[7,10],[8,10],[9,10],[10,10],[11,10], // first wall
-  [17,6],[18,6],[19,6],[18,6],[19,6],[20,6],[21,6],[22,6],[23,6],[24,6],[25,6],[26,6],[27,6],[28,6],[29,6],
-  [11,11],[11,12],[11,13],[11,17],[11,18],
-  [26,11],[26,12],[26,13],[26,14],[26,15],[26,16],[26,17],[26,18],
-];
-
+let blocks = byteize(map.blocks);
 let testing = true;
 
 
 // main loop
 let y = 0;
+
+// start the async here so we dont start the game before loading the data
 (async () => {
   while (y < 10 || testing){
     //a big ol background rect
@@ -388,7 +407,7 @@ let y = 0;
     drawmousetrail();
 
     if (mousedown){
-      mousetrail[mousetrail.length-1].push(mousepos);
+      addpoint();
       //console.log(mousetrail);
     }
 
@@ -444,13 +463,13 @@ let y = 0;
       let o = 0;
       while (o < blocks.length){
         //console.log(dist1(4*byte,4*byte,bx[0],by[0]),ballwidth+byte/2);
-        if (dist1(blocks[o][0]*byte,blocks[o][1]*byte,bx[lucid],by[lucid]) < ballwidth+byte/2){
+        if (dist1(blocks[o][0],blocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           //console.log('close enough');
           // contacted
           // is it in line horizontally
-          if (bx[lucid] > blocks[o][0]*byte-byte/2-ballwidth/2 && bx[lucid] < blocks[o][0]*byte+byte/2+ballwidth/2){
+          if (bx[lucid] > blocks[o][0]-byte/2-ballwidth/2 && bx[lucid] < blocks[o][0]+byte/2+ballwidth/2){
             // it is either above or below
-            if (by[lucid] < blocks[o][1]*byte){
+            if (by[lucid] < blocks[o][1]){
               // reflect up
               //console.log('tried to reflect up');
               dy[lucid] = -Math.abs(dy[lucid]);
@@ -462,8 +481,8 @@ let y = 0;
           }
 
           // is it in line vertically
-          if (by[lucid] > blocks[o][1]*byte-byte/2-ballwidth/2 && by[lucid] < blocks[o][1]*byte+byte/2+ballwidth/2){
-            if (bx[lucid] < blocks[o][0]*byte-byte/2){
+          if (by[lucid] > blocks[o][1]-byte/2-ballwidth/2 && by[lucid] < blocks[o][1]+byte/2+ballwidth/2){
+            if (bx[lucid] < blocks[o][0]-byte/2){
               // reflect left
               dx[lucid] = -Math.abs(dx[lucid]);
             } else {

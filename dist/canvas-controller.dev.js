@@ -9,14 +9,12 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 // canvas template
-var canvas = document.querySelector('.myCanvas');
 var ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth - 20;
+canvas.height = window.innerHeight - 20; // byte, canvas declared in first.js
 
-var _byte = 2 * ((window.innerHeight - 100) / (16 * 2.2));
-
-var width = window.innerWidth - 20 - window.innerWidth / 25 - window.innerWidth / 60;
-var height = canvas.height = window.innerHeight - 20; // gonna make a full sized canvas with a little bit of ground leeway
+var width = byte * 30;
+var height = byte * 19; // gonna make a full sized canvas with a little bit of ground leeway
 // now you can clearred fillrect fillstyle arc on the ctx
 // for animations
 
@@ -41,23 +39,22 @@ function drawbg() {
   var j = 0;
 
   while (j < holecenters.length) {
-    ctx.fillStyle = 'orange';
+    ctx.beginPath();
+    ctx.fillStyle = holecolors[j];
     ctx.fillRect(holecenters[j][0] - holewidth * 1.5 / 2, holecenters[j][1] - holewidth * 1.5 / 2, holewidth * 1.5, holewidth * 1.5);
     ctx.fillStyle = 'black';
     ctx.arc(holecenters[j][0], holecenters[j][1], holewidth / 2, 0, Math.PI * 2);
     ctx.fill();
     j += 1;
-  }
-}
+  } // these are blocks
 
-function mouse_position() {
-  var e = window.event;
-  var posX = e.clientX;
-  var posY = e.clientY;
-  mousepos = [posX, posY]; //console.log(mousetrail);
 
-  if (mousedown) {
-    mousetrail[mousetrail.length - 1].push(mousepos); //console.log(mousetrail);
+  j = 0;
+
+  while (j < blocks.length) {
+    ctx.fillStyle = 'gray';
+    ctx.fillRect(blocks[j][0] - byte / 2, blocks[j][1] - byte / 2, byte, byte);
+    j += 1;
   }
 }
 
@@ -100,7 +97,11 @@ function drawmousetrail() {
       while (s < mousetrail[r].length) {
         var xp = mousetrail[r][s][0];
         var yp = mousetrail[r][s][1];
-        ctx.lineTo(xp, yp); // just quickly check if it is in contact with any of the balls
+
+        if (xp < width && yp < height) {
+          ctx.lineTo(xp, yp);
+        } // just quickly check if it is in contact with any of the balls
+
 
         var bl = 0;
 
@@ -114,95 +115,37 @@ function drawmousetrail() {
 
             if (s <= 2) {
               deltax = mousetrail[r][s + 2][0] - mousetrail[r][s][0];
-              deltay = mousetrail[r][s + 2][1] - mousetrail[r][s][1];
-              console.log('called this btw', mousetrail[r][s + 1][1], mousetrail[r][s][1]);
+              deltay = mousetrail[r][s + 2][1] - mousetrail[r][s][1]; //console.log('called this btw',mousetrail[r][s+1][1], mousetrail[r][s][1]);
             } else {
               deltax = mousetrail[r][s][0] - mousetrail[r][s - 2][0];
               deltay = mousetrail[r][s][1] - mousetrail[r][s - 2][1];
             }
 
             if (deltax == 0) {
-              if (deltay < 0) {
+              if (deltax < 0) {
                 deltax = 0.01;
               } else {
                 deltax = -0.01;
               }
-            } // let vn = [deltay*100,deltax*100];
-            // let vi = [dx[bl],dy[bl]];
-            // let vidotvn = dot(vi,vn);
-            // let zx = vidotvn; // this is the x component if it was straight
-            // // now we have to conserve the magnitude so
-            // let zy = Math.sqrt((dx[bl]*dx[bl]+dy[bl]*dy[bl])-zx*zx);
-            // // let currentdeltamag = Math.sqrt(deltax*deltax+deltay*deltay);
-            // // let wantedmagnitude = zx;
-            // // let pushx = wantedmagnitude/currentdeltamag*deltax;
-            // // let pushy = wantedmagnitude/currentdeltamag*deltay;
-            // // now actual
-            // zx = dot([zx,zy],[100,0]);
-            // // now conserve magnitude so
-            // zy = Math.sqrt((dx[bl]*dx[bl]+dy[bl]*dy[bl])-zx*zx);
-            // dx[bl] = zx;
-            // dy[bl] = zy;
-            // //Ve = Vi - 2 * (Vi dot Vn) * Vn
+            }
 
-
-            var theta = radians_to_degrees(Math.atan(deltay / deltax));
-            var e = radians_to_degrees(Math.atan(dy[bl] / dx[bl]));
-            var endangle = 2 * theta - e; // // sometimes this angle will have to be changed
-            // if (deltax/deltay < 0){
-            //   if (by/bx < 0){
-            //     // endangle = 180-endangle;
-            //     // endangle = endangle;
-            //   } else {
-            //     // dont need to do anything ig
-            //   }
-            // } else {
-            //   if (by/bx < 0){
-            //   } else {
-            //     //endangle = 180-endangle;
-            //   }
-            // }
-            // the magnitude should still be the same
-            // let magnitude = Math.sqrt(dx[bl]*dx[bl]+dy[bl]*dy[bl]);
-
-            console.log('old velocities', dx[bl], dy[bl]); // let supnewx = magnitude*Math.cos(degreestoradians(endangle));
-            // let supnewy = magnitude*Math.sin(degreestoradians(endangle));
-            // if (supnewx == dx[bl]){
-            //   dx[bl] = -supnewx;
-            // } else {
-            //   dx[bl] = supnewx;
-            // }
-            // if (supnewy == dy[bl]){
-            //   dy[bl] = -supnewy;
-            // } else {
-            //   dy[bl] = supnewy;
-            // }
-            // if (Math.abs(deltax) < 5){
-            //   console.log('vertical triggered');
-            //   dx[bl] = -dx[bl];
-            //   dy[bl] = supnewy;
-            // } else if (Math.abs(deltay) < 5){
-            //   console.log('horizontal triggered');
-            //   dy[bl] = -dy[bl];
-            //   dx[bl] = supnewx;
-            // } else {
-            //   dx[bl] = supnewx;
-            //   dy[bl] = supnewy;
-            // }
+            var theta = radians_to_degrees(Math.atan(deltay / deltax)); //console.log('old velocities',dx[bl],dy[bl]);
             // ok this is gonna be another try
 
-            var Velocity_Magnitude = Math.sqrt(dx[bl] * dx[bl] + dy[bl] * dy[bl]); // let new_x = dx + vx * Velocity_Magnitude * Time_Interval
+            var Velocity_Magnitude = Math.sqrt(dx[bl] * dx[bl] + dy[bl] * dy[bl]); //console.log('mid');
+            // let new_x = dx + vx * Velocity_Magnitude * Time_Interval
 
             var nx = -Math.sin(degreestoradians(theta));
-            var ny = Math.cos(degreestoradians(theta));
+            var ny = Math.cos(degreestoradians(theta)); //console.log('nx ny',nx,ny);
 
-            var _dot = dx[bl] * nx + dy[bl] * ny;
+            var dt = dx[bl] * nx + dy[bl] * ny; //console.log('dt',dt);
 
-            var vnewx = vx - 2 * _dot * nx;
-            var vnewy = vy - 2 * _dot * ny;
+            var vnewx = dx[bl] - 2 * dt * nx;
+            var vnewy = dy[bl] - 2 * dt * ny; //console.log('vnews',vnewx,vnewy);
+
             dx[bl] = vnewx;
-            dy[bl] = vnewy;
-            console.log('new velocities', dx[bl], dy[bl]); // in contact
+            dy[bl] = vnewy; //console.log('new velocities',dx[bl],dy[bl]);
+            // in contact
             // disable that line
 
             mousetrail[r] = []; // we cud have splcied but this garuntees a break
@@ -293,39 +236,60 @@ function touching(num1, num2) {
   return Math.sqrt(Math.pow(bx[num1] - bx[num2], 2) + Math.pow(by[num1] - by[num2], 2)) <= ballwidth * 2 && bx[num1] < width + borderwidth;
 }
 
-function shrinkball(num) {
-  var u;
+function dist1(x1, y1, x2, y2) {
+  return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+}
+
+function shrinkball(num, hole) {
+  var u, endTime, time;
   return regeneratorRuntime.async(function shrinkball$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
+          // first of all is the ball in the holw of its color or not
+          // cuz if not then you lost
+          if (clrs[num] != holecolors[hole]) {
+            // you lost
+            alert("Oops! Ball entered hole of wrong color");
+            location.reload();
+          }
+
           u = 100;
 
-        case 1:
+        case 2:
           if (!(u > 0)) {
-            _context.next = 8;
+            _context.next = 9;
             break;
           }
 
           bwidths[num] = u / 100 * ballwidth; //console.log(bwidths);
 
-          _context.next = 5;
+          _context.next = 6;
           return regeneratorRuntime.awrap(sleep(2));
 
-        case 5:
+        case 6:
           u -= 1;
-          _context.next = 1;
+          _context.next = 2;
           break;
 
-        case 8:
+        case 9:
           bwidths[num] = ballwidth;
-          bx[num] = width + borderwidth + ballwidth;
+          bx[num] = width + byte * 2; // this may be wrong
+
           by[num] = ballwidth;
           dx[num] = 0; // shud already be but anyway
 
           dy[num] = 0; // but we accelerate this;
 
-        case 13:
+          if (numgotten >= bx.length) {
+            // you won
+            endTime = new Date();
+            time = endTime - startTime;
+            time = time / 1000;
+            alert('You won! Time taken: ' + time + " sec");
+          }
+
+        case 15:
         case "end":
           return _context.stop();
       }
@@ -355,33 +319,83 @@ function addball() {
   }
 }
 
-var ballwidth = window.innerWidth / 55;
-var borderwidth = window.innerWidth / 60;
+function sfactorize(arr) {
+  var t = 0;
+
+  while (t < arr.length) {
+    arr[t] = arr[t] * sfactor;
+    t += 1;
+  }
+
+  return arr;
+}
+
+function byteize(arr) {
+  var t = 0;
+
+  while (t < arr.length) {
+    arr[t] = [arr[t][0] * byte, arr[t][1] * byte];
+    t += 1;
+  }
+
+  return arr;
+}
+
+function addpoint() {
+  // adding mousetrail[mousetrail.length-1].push(mousepos);
+  var ln = mousetrail[mousetrail.length - 1];
+
+  if (ln.length > 0) {
+    var lp = ln[ln.length - 1];
+
+    if (dist1(lp[0], lp[1], mousepos[0], mousepos[1]) > ballwidth) {
+      console.log('called this');
+      var midp = [(mousepos[0] + lp[0]) / 2, (mousepos[1] + lp[1]) / 2];
+      mousetrail[mousetrail.length - 1].push(midp);
+    }
+  }
+
+  mousetrail[mousetrail.length - 1].push(mousepos); // add this point regardless
+}
+
+var loaded = false; // ballwidth, sfactor and other defined in first.js
+
+var borderwidth = byte;
 var holewidth = ballwidth * 2;
-var numgotten = 0;
-var bx = [100];
-var by = [100];
-var dx = [1];
-var dy = [0];
-var BLUE = "rgb(3, 161, 252)";
-var ORANGE = "rgb(252, 115, 3)";
-var clrs = [BLUE];
-var bwidths = [ballwidth];
+var bwidths = [ballwidth, ballwidth, ballwidth, ballwidth];
 var bounceexp = [0, 0, 0, 0];
 var mousedown = false;
 var mousepos = [0, 0];
-var mousetrail = []; //addball();
-// addball();
-//holes
+var mousetrail = [];
+var startTime = new Date();
+var numgotten = 0; //get the map we are going to use
 
-var holecenters = [[width - borderwidth - holewidth / 1.33, height - borderwidth - holewidth / 1.33], [borderwidth + holewidth / 1.33, height - borderwidth - holewidth / 1.33]]; // the centers
+var map;
 
+if (window.location.href.includes("map2")) {
+  map = getmap2();
+} else {
+  map = getmap1();
+}
+
+var bx = sfactorize(map.bx);
+var by = sfactorize(map.by);
+var dx = sfactorize(map.dx);
+var dy = sfactorize(map.dy);
+var clrs = map.clrs; //holes
+
+var holecenters = byteize(map.holecenters); // the centers
+
+var holecolors = map.holecolors; // the centers
+// blocks
+
+var blocks = byteize(map.blocks);
 var testing = true; // main loop
 
-var y = 0;
+var y = 0; // start the async here so we dont start the game before loading the data
 
 (function _callee() {
-  var lucid, subs, newsubs, i, g, allowd;
+  var lucid, o, subs, newsubs, i, g, allowd;
   return regeneratorRuntime.async(function _callee$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -396,7 +410,7 @@ var y = 0;
           drawmousetrail();
 
           if (mousedown) {
-            mousetrail[mousetrail.length - 1].push(mousepos); //console.log(mousetrail);
+            addpoint(); //console.log(mousetrail);
           }
 
           ctx.fillStyle = 'red';
@@ -439,12 +453,52 @@ var y = 0;
 
             if (bx[lucid] > width + borderwidth) {
               // it is an out ball
+              // make sure its at rest horizontally
+              dx[lucid] = 0;
+
               if (by[lucid] < height - borderwidth - ballwidth * numgotten * 2) {
                 // in range
                 dy[lucid] += 1;
               } else {
                 dy[lucid] = -Math.abs(dy[lucid] * 0.7);
               }
+            } // quickly check if it is contacting any of the blocks
+
+
+            o = 0;
+
+            while (o < blocks.length) {
+              //console.log(dist1(4*byte,4*byte,bx[0],by[0]),ballwidth+byte/2);
+              if (dist1(blocks[o][0], blocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
+                //console.log('close enough');
+                // contacted
+                // is it in line horizontally
+                if (bx[lucid] > blocks[o][0] - byte / 2 - ballwidth / 2 && bx[lucid] < blocks[o][0] + byte / 2 + ballwidth / 2) {
+                  // it is either above or below
+                  if (by[lucid] < blocks[o][1]) {
+                    // reflect up
+                    //console.log('tried to reflect up');
+                    dy[lucid] = -Math.abs(dy[lucid]);
+                  } else {
+                    // reflect down
+                    //console.log('tried to reflect down', by[lucid] , blocks[o][1]);
+                    dy[lucid] = Math.abs(dy[lucid]);
+                  }
+                } // is it in line vertically
+
+
+                if (by[lucid] > blocks[o][1] - byte / 2 - ballwidth / 2 && by[lucid] < blocks[o][1] + byte / 2 + ballwidth / 2) {
+                  if (bx[lucid] < blocks[o][0] - byte / 2) {
+                    // reflect left
+                    dx[lucid] = -Math.abs(dx[lucid]);
+                  } else {
+                    // reflect right
+                    dx[lucid] = Math.abs(dx[lucid]);
+                  }
+                }
+              }
+
+              o += 1;
             }
 
             lucid += 1;
@@ -507,7 +561,7 @@ var y = 0;
                 if (bwidths[lucid] == ballwidth) {
                   dx[lucid] = 0;
                   dy[lucid] = 0;
-                  shrinkball(lucid);
+                  shrinkball(lucid, g);
                   numgotten += 1;
                 }
               }
