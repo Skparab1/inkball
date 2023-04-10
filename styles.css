@@ -182,11 +182,12 @@ nav {
   background-color: black;
   border: 2px solid white;
   color: white;
-  width: 19%;
+  width: 20%;
   height: 12%;
   display: inline-block;
   position: absolute;
-  font-size: 100%;
+  font-size: 300%;
+  margin-left: 80%;
 }
 .form-button:hover {
   background:rgb(46, 46, 46);

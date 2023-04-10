@@ -15,8 +15,10 @@ canvas.height = window.innerHeight - 20; // byte, canvas declared in first.js
 
 var width = byte * 30;
 var height = byte * 19; // gonna make a full sized canvas with a little bit of ground leeway
-// now you can clearred fillrect fillstyle arc on the ctx
-// for animations
+// set up the audio
+
+var audi = new Audio('audio.mp3');
+audi.play(); // for animations
 
 var sleep = function sleep(ms) {
   return new Promise(function (res) {
@@ -286,6 +288,8 @@ function shrinkball(num, hole) {
             endTime = new Date();
             time = endTime - startTime;
             time = time / 1000;
+            console.log('map' + mapnum);
+            localStorage.setItem('map' + mapnum, time);
             alert('You won! Time taken: ' + time + " sec");
           }
 
@@ -341,6 +345,17 @@ function byteize(arr) {
   return arr;
 }
 
+function byteize1d(arr) {
+  var t = 0;
+
+  while (t < arr.length) {
+    arr[t] = arr[t] * byte;
+    t += 1;
+  }
+
+  return arr;
+}
+
 function addpoint() {
   // adding mousetrail[mousetrail.length-1].push(mousepos);
   var ln = mousetrail[mousetrail.length - 1];
@@ -362,8 +377,6 @@ var loaded = false; // ballwidth, sfactor and other defined in first.js
 
 var borderwidth = byte;
 var holewidth = ballwidth * 2;
-var bwidths = [ballwidth, ballwidth, ballwidth, ballwidth];
-var bounceexp = [0, 0, 0, 0];
 var mousedown = false;
 var mousepos = [0, 0];
 var mousetrail = [];
@@ -371,15 +384,35 @@ var startTime = new Date();
 var numgotten = 0; //get the map we are going to use
 
 var map;
+var mapnum = -1;
 
-if (window.location.href.includes("map2")) {
-  map = getmap2();
-} else {
+if (window.location.href.includes("map1")) {
   map = getmap1();
+  mapnum = 1;
+} else if (window.location.href.includes("map2")) {
+  map = getmap2();
+  mapnum = 2;
+} else if (window.location.href.includes("map3")) {
+  map = getmap3();
+  mapnum = 3;
+} else if (window.location.href.includes("map4")) {
+  map = getmap4();
+  mapnum = 4;
+} else if (window.location.href.includes("map5")) {
+  map = getmap5();
+  mapnum = 5;
+} else if (window.location.href.includes("map6")) {
+  map = getmap6();
+  mapnum = 6;
+} else if (window.location.href.includes("map7")) {
+  map = getmap7();
+  mapnum = 7;
+} else {
+  window.location.href = "./app.html";
 }
 
-var bx = sfactorize(map.bx);
-var by = sfactorize(map.by);
+var bx = byteize1d(map.bx);
+var by = byteize1d(map.by);
 var dx = sfactorize(map.dx);
 var dy = sfactorize(map.dy);
 var clrs = map.clrs; //holes
@@ -390,7 +423,15 @@ var holecolors = map.holecolors; // the centers
 // blocks
 
 var blocks = byteize(map.blocks);
-var testing = true; // main loop
+var testing = true;
+var bwidths = [ballwidth, ballwidth, ballwidth, ballwidth];
+var bounceexp = [0, 0, 0, 0];
+
+if (bx.length > 4) {
+  bwidths = [ballwidth, ballwidth, ballwidth, ballwidth, ballwidth, ballwidth, ballwidth, ballwidth];
+  bounceexp = [0, 0, 0, 0, 0, 0, 0, 0];
+} // main loop
+
 
 var y = 0; // start the async here so we dont start the game before loading the data
 
@@ -400,7 +441,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
-          if (!(y < 10 || testing)) {
+          if (!(y < 1 || testing)) {
             _context2.next = 24;
             break;
           }

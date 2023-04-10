@@ -7,8 +7,9 @@ canvas.height = window.innerHeight-20;
 const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
-// now you can clearred fillrect fillstyle arc on the ctx
-
+// set up the audio
+var audi = new Audio('audio.mp3');
+audi.play();
 
 // for animations
 const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -286,6 +287,8 @@ async function shrinkball(num, hole){
     let endTime = new Date();
     let time = endTime-startTime;
     time = time/1000;
+    console.log('map'+mapnum);
+    localStorage.setItem('map'+mapnum,time);
     alert('You won! Time taken: '+time+" sec");
   }
 
@@ -333,6 +336,16 @@ function byteize(arr){
   return arr;
 }
 
+function byteize1d(arr){
+  let t = 0;
+  while (t < arr.length){
+    arr[t] = arr[t]*byte;
+    t += 1;
+  }
+
+  return arr;
+}
+
 function addpoint(){
   // adding mousetrail[mousetrail.length-1].push(mousepos);
 
@@ -356,8 +369,6 @@ let loaded = false;
 // ballwidth, sfactor and other defined in first.js
 let borderwidth = byte;
 let holewidth = ballwidth*2;
-let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
-let bounceexp = [0,0,0,0];
 
 let mousedown = false;
 let mousepos = [0,0];
@@ -371,14 +382,27 @@ let numgotten = 0;
 
 //get the map we are going to use
 let map;
-if (window.location.href.includes("map2")){
-  map = getmap2();
+let mapnum = -1;
+if (window.location.href.includes("map1")){
+  map = getmap1(); mapnum = 1;
+} else if (window.location.href.includes("map2")){
+  map = getmap2(); mapnum = 2;
+} else if (window.location.href.includes("map3")){
+  map = getmap3(); mapnum = 3;
+} else if (window.location.href.includes("map4")){
+  map = getmap4(); mapnum = 4;
+} else if (window.location.href.includes("map5")){
+  map = getmap5(); mapnum = 5;
+} else if (window.location.href.includes("map6")){
+  map = getmap6(); mapnum = 6;
+} else if (window.location.href.includes("map7")){
+  map = getmap7(); mapnum = 7;
 } else {
-  map = getmap1();
+  window.location.href = "./app.html";
 }
 
-let bx = sfactorize(map.bx);
-let by = sfactorize(map.by);
+let bx = byteize1d(map.bx);
+let by = byteize1d(map.by);
 
 let dx = sfactorize(map.dx);
 let dy = sfactorize(map.dy);
@@ -390,9 +414,15 @@ let holecenters = byteize(map.holecenters); // the centers
 let holecolors = map.holecolors; // the centers
 
 // blocks
-
 let blocks = byteize(map.blocks);
 let testing = true;
+
+let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
+let bounceexp = [0,0,0,0];
+if (bx.length > 4){
+  bwidths = [ballwidth,ballwidth,ballwidth,ballwidth,ballwidth,ballwidth,ballwidth,ballwidth];
+  bounceexp = [0,0,0,0,0,0,0,0];
+}
 
 
 // main loop
@@ -400,7 +430,7 @@ let y = 0;
 
 // start the async here so we dont start the game before loading the data
 (async () => {
-  while (y < 10 || testing){
+  while (y < 1 || testing){
     //a big ol background rect
     drawbg();
 
