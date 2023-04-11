@@ -18,7 +18,7 @@ while (ij < 9){
     div.innerHTML += `
       <h3>Completed in ${localStorage.getItem("map"+ij)} sec</h3>
     `;
-    div.style.backgroundColor = 'lightgreen';
+    div.style.backgroundColor = 'green';
   }
 
   div.style.float = 'left';
