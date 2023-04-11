@@ -2,11 +2,11 @@
 let holder = document.getElementById('allmaps');
 
 let ij = 1;
-while (ij < 8){
+while (ij < 9){
   let div = document.createElement('tr');
   div.innerHTML = `
     <a href="./index.html?map${ij}">
-      <h2 class='form-button'>Map ${ij}</h2>
+      <h2 >Map ${ij}</h2>
       <img src="images/map${ij}.png" width='95%' alt="map ${ij}">
     </a>
   `;

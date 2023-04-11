@@ -407,6 +407,12 @@ if (window.location.href.includes("map1")) {
 } else if (window.location.href.includes("map7")) {
   map = getmap7();
   mapnum = 7;
+} else if (window.location.href.includes("map8")) {
+  map = getmap8();
+  mapnum = 8;
+} else if (window.location.href.includes("map9")) {
+  map = getmap9();
+  mapnum = 9;
 } else {
   window.location.href = "./app.html";
 }
