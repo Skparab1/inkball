@@ -205,17 +205,22 @@ function getmap8(){
 function getmap9(){  
   
   let map = {
-    "bx": [14, 20, 2, 2],
-    "by": [2, 2, 6, 10.5],
-    "dx": [0, 0, 2, 2],
-    "dy": [2, 2, 0, 0],
-    "clrs": [BLUE,ORANGE,BLUE,ORANGE],
+    "bx": [11, 11, 11, 11, 11],
+    "by": [4, 7, 10, 13, 16],
+    "dx": [2, 2, 2, 2, 2],
+    "dy": [0, 0, 0, 0, 0],
+    "clrs": [BLUE,ORANGE,BLUE,ORANGE,BLUE],
   
-    "holecenters": [[2,2],[5.5,13.5],[24.5,13.5],[24.5,5.5]],
-    "holecolors": [BLUE, ORANGE, GREEN, GOLD],
+    "holecenters": [[2,2],[2,6],[2,10],[2,14],[28,2],[28,6],[28,10],[28,14]],
+    "holecolors": [BLUE,BLUE,BLUE,BLUE,ORANGE,ORANGE,ORANGE,ORANGE],
   
     "blocks": [
-      
+      [10,1],[21,1],
+      [10,4],[21,4],
+      [10,7],[21,7],
+      [10,10],[21,10],
+      [10,13],[21,13],
+      [10,16],[21,16],
     ]
   };
   
