@@ -8,7 +8,7 @@ const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
 // set up the audio
-var audi = new Audio('space.mp3');
+var audi = new Audio('audio.mp3');
 audi.play();
 
 // for animations
