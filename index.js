@@ -1,4 +1,4 @@
-// isloate records
+
 
 const sleep = ms => new Promise(res => setTimeout(res, ms));
 

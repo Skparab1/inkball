@@ -383,7 +383,11 @@ let numgotten = 0;
 //get the map we are going to use
 let map;
 let mapnum = -1;
-if (window.location.href.includes("map1")){
+
+
+if (window.location.href.includes("map10")){
+  map = getmap10(); mapnum = 10;
+} else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
   map = getmap2(); mapnum = 2;
@@ -399,7 +403,8 @@ if (window.location.href.includes("map1")){
   map = getmap7(); mapnum = 7;
 } else if (window.location.href.includes("map8")){
   map = getmap8(); mapnum = 8;
-} else if (window.location.href.includes("map9")){
+} else if 
+(window.location.href.includes("map9")){
   map = getmap9(); mapnum = 9;
 } else {
   window.location.href = "./app.html";
@@ -419,8 +424,7 @@ let holecolors = map.holecolors; // the centers
 
 // blocks
 let blocks = byteize(map.blocks);
-let testing = true;
-
+let testing = true; 
 let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
 let bounceexp = [0,0,0,0];
 if (bx.length > 4){
