@@ -386,7 +386,10 @@ var numgotten = 0; //get the map we are going to use
 var map;
 var mapnum = -1;
 
-if (window.location.href.includes("map1")) {
+if (window.location.href.includes("map10")) {
+  map = getmap10();
+  mapnum = 10;
+} else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
 } else if (window.location.href.includes("map2")) {
@@ -520,7 +523,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
                 //console.log('close enough');
                 // contacted
                 // is it in line horizontally
-                if (bx[lucid] > blocks[o][0] - byte / 2 - ballwidth / 2 && bx[lucid] < blocks[o][0] + byte / 2 + ballwidth / 2) {
+                if (bx[lucid] > blocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < blocks[o][0] + byte / 2 + ballwidth / 1.5) {
                   // it is either above or below
                   if (by[lucid] < blocks[o][1]) {
                     // reflect up
@@ -534,7 +537,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
                 } // is it in line vertically
 
 
-                if (by[lucid] > blocks[o][1] - byte / 2 - ballwidth / 2 && by[lucid] < blocks[o][1] + byte / 2 + ballwidth / 2) {
+                if (by[lucid] > blocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < blocks[o][1] + byte / 2 + ballwidth / 1.5) {
                   if (bx[lucid] < blocks[o][0] - byte / 2) {
                     // reflect left
                     dx[lucid] = -Math.abs(dx[lucid]);

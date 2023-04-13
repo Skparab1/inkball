@@ -505,7 +505,7 @@ let y = 0;
           //console.log('close enough');
           // contacted
           // is it in line horizontally
-          if (bx[lucid] > blocks[o][0]-byte/2-ballwidth/2 && bx[lucid] < blocks[o][0]+byte/2+ballwidth/2){
+          if (bx[lucid] > blocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < blocks[o][0]+byte/2+ballwidth/1.5){
             // it is either above or below
             if (by[lucid] < blocks[o][1]){
               // reflect up
@@ -519,7 +519,7 @@ let y = 0;
           }
 
           // is it in line vertically
-          if (by[lucid] > blocks[o][1]-byte/2-ballwidth/2 && by[lucid] < blocks[o][1]+byte/2+ballwidth/2){
+          if (by[lucid] > blocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < blocks[o][1]+byte/2+ballwidth/1.5){
             if (bx[lucid] < blocks[o][0]-byte/2){
               // reflect left
               dx[lucid] = -Math.abs(dx[lucid]);
