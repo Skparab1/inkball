@@ -8,8 +8,18 @@ const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
 // set up the audio
-var audi = new Audio('inkball_theme.mp3');
-audi.volume = 0.5;
+
+let randad = Math.floor(Math.random()*3); // 0 1 2
+
+var audi;
+if (randad == 0){
+  audi = new Audio('inkball_theme.mp3');
+} else if (randad == 1){
+  audi = new Audio('inkball_2.mp3');
+} else {
+  audi = new Audio('inkball_3.mp3');
+}
+audi.volume = 1;
 audi.play();
 
 // for animations
