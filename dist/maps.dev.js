@@ -164,8 +164,8 @@ function getmap11() {
   var map = {
     "bx": [30.75, 30.75, 30.75, 30.75],
     "by": [-2, -4.5, -7, -10],
-    "dx": [0, 0, 0, 0],
-    "dy": [2, 2, 2, 2],
+    "dx": [0, 2, 2, 0],
+    "dy": [2, 0, 0, 2],
     "clrs": [BLUE, ORANGE, BLUE, ORANGE],
     "releasepoint": [2.25, 2.25],
     "releasetimes": [500, 1000, 1200, 2000],
