@@ -17,7 +17,8 @@ var width = byte * 30;
 var height = byte * 19; // gonna make a full sized canvas with a little bit of ground leeway
 // set up the audio
 
-var audi = new Audio('audio.mp3');
+var audi = new Audio('inkball_theme.mp3');
+audi.volume = 0.5;
 audi.play(); // for animations
 
 var sleep = function sleep(ms) {
@@ -36,7 +37,35 @@ function drawbg() {
   ctx.fillRect(0, 0, width, borderwidth);
   ctx.fillRect(0, 0, borderwidth, height);
   ctx.fillRect(width - borderwidth, 0, borderwidth, height);
-  ctx.fillRect(0, height - borderwidth, width, borderwidth); // this is a supposed hole
+  ctx.fillRect(0, height - borderwidth, width, borderwidth); // releaser
+
+  if (releaser != null) {
+    ctx.fillRect(width + ballwidth * 2, 0, byte / 2, byte * 7);
+    ctx.fillRect(width, byte * 6.5, ballwidth * 2 + byte / 2, byte / 2);
+    ctx.fillStyle = 'rgb(200,200,200)';
+    ctx.fillRect(releaser[0], releaser[1], ballwidth / 2, ballwidth / 2);
+    ctx.fillRect(releaser[0] - ballwidth / 2, releaser[1], ballwidth / 2, ballwidth / 2);
+    ctx.fillRect(releaser[0] + ballwidth / 2, releaser[1], ballwidth / 2, ballwidth / 2);
+    ctx.fillRect(releaser[0], releaser[1] - ballwidth / 2, ballwidth / 2, ballwidth / 2);
+    ctx.fillRect(releaser[0], releaser[1] + ballwidth / 2, ballwidth / 2, ballwidth / 2); // a pie chart sort of thing
+    //ctx.fillStyle = 'rgb(200,200,200)';
+    // max is 200
+
+    var tc = 0;
+
+    if (nextt / nextgap > 0.75) {
+      tc = 800 * (1 - nextt / nextgap);
+    } else {
+      tc = 200;
+    }
+
+    ctx.fillStyle = 'rgb(' + tc + ',' + tc + ',' + tc + ')';
+    ctx.beginPath();
+    ctx.arc(width + byte, byte * 8, ballwidth, 0, Math.PI * 2 * (nextt / nextgap));
+    ctx.lineTo(width + byte, byte * 8);
+    ctx.fill();
+  } // this is a supposed hole
+
 
   var j = 0;
 
@@ -278,7 +307,7 @@ function shrinkball(num, hole) {
           bwidths[num] = ballwidth;
           bx[num] = width + byte * 2; // this may be wrong
 
-          by[num] = ballwidth;
+          by[num] = byte * 8;
           dx[num] = 0; // shud already be but anyway
 
           dy[num] = 0; // but we accelerate this;
@@ -308,6 +337,59 @@ var getAllSubsets = function getAllSubsets(theArray) {
     }));
   }, [[]]);
 };
+
+function releaseball(r) {
+  return regeneratorRuntime.async(function releaseball$(_context2) {
+    while (1) {
+      switch (_context2.prev = _context2.next) {
+        case 0:
+          // release it
+          releasedstatuses[r] = true;
+          console.log("releasing", r, bx); // let u = 100;
+          // while (u > 0){
+          //   bwidths[r] = u/100*ballwidth;
+          //   //console.log(bwidths);
+          //   await sleep(2);
+          //   u -= 1;
+          // }
+
+          bx[r] = releaser[0]; // set the coord;
+
+          by[r] = releaser[1]; // while (u < 100){
+          //   bwidths[r] = u/100*ballwidth;
+          //   //console.log(bwidths);
+          //   await sleep(2);
+          //   u += 1;
+          // }
+
+          dx[r] = tempdx[r];
+          dy[r] = tempdy[r];
+          console.log(dx, tempdx);
+          pushballs();
+          univrb = true;
+
+        case 9:
+        case "end":
+          return _context2.stop();
+      }
+    }
+  });
+}
+
+function pushballs() {
+  // we have nextgap time to move it down ballwidth/2 px;
+  // we are nextt/nextgap through this
+  // to move it ballwidth px in nextgap time it needs to have velocity ballwidth/nextgap
+  var d = 0;
+
+  while (d < dy.length) {
+    if (!releasedstatuses[d]) {
+      dy[d] = ballwidth / nextgap / 20;
+    }
+
+    d += 1;
+  }
+}
 
 function addball() {
   bx.push(Math.floor(Math.random() * width));
@@ -356,6 +438,32 @@ function byteize1d(arr) {
   return arr;
 }
 
+function zeroarr(arr) {
+  var e = 0;
+  var newarr = [];
+
+  while (e < arr.length) {
+    newarr.push(0); // no this overwrites it
+
+    e += 1;
+  }
+
+  return newarr;
+}
+
+function setarr(arr) {
+  var e = 0;
+  var newarr = [];
+
+  while (e < arr.length) {
+    newarr.push(3.5); // no this overwrites it
+
+    e += 1;
+  }
+
+  return newarr;
+}
+
 function addpoint() {
   // adding mousetrail[mousetrail.length-1].push(mousepos);
   var ln = mousetrail[mousetrail.length - 1];
@@ -389,6 +497,12 @@ var mapnum = -1;
 if (window.location.href.includes("map10")) {
   map = getmap10();
   mapnum = 10;
+} else if (window.location.href.includes("map11")) {
+  map = getmap11();
+  mapnum = 11;
+} else if (window.location.href.includes("map12")) {
+  map = getmap12();
+  mapnum = 12;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -424,6 +538,9 @@ var bx = byteize1d(map.bx);
 var by = byteize1d(map.by);
 var dx = sfactorize(map.dx);
 var dy = sfactorize(map.dy);
+var tempdx = dx; //if needed
+
+var tempdy = dy;
 var clrs = map.clrs; //holes
 
 var holecenters = byteize(map.holecenters); // the centers
@@ -432,7 +549,22 @@ var holecolors = map.holecolors; // the centers
 // blocks
 
 var blocks = byteize(map.blocks);
-var testing = true;
+var testing = true; // releaser
+
+var releaser = map.releasepoint;
+
+if (releaser != null) {
+  releaser = [releaser[0] * byte - ballwidth / 4, releaser[1] * byte - ballwidth / 4];
+  dx = zeroarr(dx);
+  dy = setarr(dx);
+}
+
+var releasetimes = map.releasetimes;
+var releasedstatuses = [false, false, false, false, false, false, false, false, false, false, false, false];
+var nextgap = 1;
+var nextt = 1;
+var univtimer = 0;
+var univrb = false;
 var bwidths = [ballwidth, ballwidth, ballwidth, ballwidth];
 var bounceexp = [0, 0, 0, 0];
 
@@ -445,13 +577,13 @@ if (bx.length > 4) {
 var y = 0; // start the async here so we dont start the game before loading the data
 
 (function _callee() {
-  var lucid, o, subs, newsubs, i, g, allowd;
-  return regeneratorRuntime.async(function _callee$(_context2) {
+  var lucid, o, subs, newsubs, i, g, allowd, lasttimee, r;
+  return regeneratorRuntime.async(function _callee$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context2.next = 24;
+            _context3.next = 28;
             break;
           }
 
@@ -494,14 +626,14 @@ var y = 0; // start the async here so we dont start the game before loading the 
             if (by[lucid] < ballwidth + borderwidth) {
               dy[lucid] = Math.abs(dy[lucid]);
             } else if (by[lucid] > height - ballwidth - borderwidth) {
-              if (bx[lucid] > width + borderwidth) {// an out ball
+              if (bx[lucid] > width + borderwidth && by[lucid] > byte * 7) {// an out ball
               } else {
                 // bounce at full
                 dy[lucid] = -Math.abs(dy[lucid]);
               }
             }
 
-            if (bx[lucid] > width + borderwidth) {
+            if (bx[lucid] > width + borderwidth && by[lucid] > byte * 7) {
               // it is an out ball
               // make sure its at rest horizontally
               dx[lucid] = 0;
@@ -511,6 +643,13 @@ var y = 0; // start the async here so we dont start the game before loading the 
                 dy[lucid] += 1;
               } else {
                 dy[lucid] = -Math.abs(dy[lucid] * 0.7);
+              }
+            } else if (bx[lucid] > width) {
+              // this is a starting ball
+              if (by[lucid] > byte * 6.5 - ballwidth) {
+                // it is over
+                dy[lucid] = 0;
+                by[lucid] = byte * 6.5 - ballwidth;
               }
             } // quickly check if it is contacting any of the blocks
 
@@ -620,19 +759,50 @@ var y = 0; // start the async here so we dont start the game before loading the 
             }
 
             lucid += 1;
+          } // if (univrb){
+          //   console.log('pushed');
+          //   pushballs();
+          //   univrb = false;
+          // }
+
+
+          nextgap = 1;
+          lasttimee = 0;
+
+          if (releaser != null) {
+            r = 0;
+
+            while (r < releasetimes.length) {
+              if (univtimer > releasetimes[r] && !releasedstatuses[r]) {
+                // release it
+                //console.log('called for ',r,' on time ',releasetimes[r]);
+                releaseball(r);
+              }
+
+              if (nextgap == 1 && !releasedstatuses[r]) {
+                // what was the total time since the last one
+                nextgap = releasetimes[r] - lasttimee; // what is the time remaining from now till that time
+
+                nextt = releasetimes[r] - univtimer;
+              }
+
+              lasttimee = releasetimes[r];
+              r += 1;
+            }
           }
 
           y += 1;
-          _context2.next = 22;
+          univtimer += 1;
+          _context3.next = 26;
           return regeneratorRuntime.awrap(sleep());
 
-        case 22:
-          _context2.next = 0;
+        case 26:
+          _context3.next = 0;
           break;
 
-        case 24:
+        case 28:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });
@@ -641,9 +811,9 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
 
 (function _callee2() {
-  return regeneratorRuntime.async(function _callee2$(_context3) {
+  return regeneratorRuntime.async(function _callee2$(_context4) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
           window.addEventListener("keydown", function (event) {
             if (event.defaultPrevented) {
@@ -656,7 +826,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
         case 1:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
   });

@@ -8,7 +8,8 @@ const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
 // set up the audio
-var audi = new Audio('audio.mp3');
+var audi = new Audio('inkball_theme.mp3');
+audi.volume = 0.5;
 audi.play();
 
 // for animations
@@ -25,7 +26,40 @@ function drawbg(){
   ctx.fillRect(0,0,width,borderwidth);
   ctx.fillRect(0,0,borderwidth,height);
   ctx.fillRect(width-borderwidth,0,borderwidth,height);
-  ctx.fillRect(0,height-borderwidth, width, borderwidth)
+  ctx.fillRect(0,height-borderwidth, width, borderwidth);
+
+  // releaser
+  if (releaser != null){
+    ctx.fillRect(width+ballwidth*2,0, byte/2, byte*7);
+    ctx.fillRect(width,byte*6.5, ballwidth*2+byte/2, byte/2);
+
+    ctx.fillStyle = 'rgb(200,200,200)';
+    ctx.fillRect(releaser[0],releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0]-ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0]+ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0],releaser[1]-ballwidth/2, ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0],releaser[1]+ballwidth/2, ballwidth/2,ballwidth/2);
+
+    // a pie chart sort of thing
+
+    //ctx.fillStyle = 'rgb(200,200,200)';
+    // max is 200
+
+    let tc = 0;
+    if (nextt/nextgap > 0.75){
+      tc = (800*(1-nextt/nextgap));
+    } else {
+      tc = 200;
+    }
+
+    ctx.fillStyle = 'rgb('+tc+','+tc+','+tc+')';
+
+    ctx.beginPath();
+    ctx.arc(width+byte,byte*8,ballwidth,0,Math.PI*2*(nextt/nextgap));
+    ctx.lineTo(width+byte,byte*8);
+    ctx.fill();
+
+  }
 
   // this is a supposed hole
   let j = 0;
@@ -278,7 +312,7 @@ async function shrinkball(num, hole){
   bwidths[num] = ballwidth;
 
   bx[num] = width+byte*2; // this may be wrong
-  by[num] = ballwidth;
+  by[num] = byte*8;
   dx[num] = 0; // shud already be but anyway
   dy[num] = 0; // but we accelerate this;
 
@@ -301,6 +335,52 @@ const getAllSubsets =
     ),
     [[]]
 );
+
+async function releaseball(r){
+  // release it
+  releasedstatuses[r] = true;
+  
+  console.log("releasing",r,bx);
+
+  // let u = 100;
+  // while (u > 0){
+  //   bwidths[r] = u/100*ballwidth;
+  //   //console.log(bwidths);
+  //   await sleep(2);
+  //   u -= 1;
+  // }
+
+  bx[r] = releaser[0]; // set the coord;
+  by[r] = releaser[1];
+
+  // while (u < 100){
+  //   bwidths[r] = u/100*ballwidth;
+  //   //console.log(bwidths);
+  //   await sleep(2);
+  //   u += 1;
+  // }
+
+  dx[r] = tempdx[r];
+  dy[r] = tempdy[r];
+  console.log(dx,tempdx);
+
+  pushballs();
+
+  univrb = true;
+}
+
+function pushballs(){
+  // we have nextgap time to move it down ballwidth/2 px;
+  // we are nextt/nextgap through this
+  // to move it ballwidth px in nextgap time it needs to have velocity ballwidth/nextgap
+  let d = 0;
+  while (d < dy.length){
+    if (!releasedstatuses[d]){
+      dy[d] = (ballwidth/nextgap)/20;
+    }
+    d += 1;
+  }
+}
 
 function addball(){
   bx.push(Math.floor(Math.random()*width));
@@ -346,6 +426,28 @@ function byteize1d(arr){
   return arr;
 }
 
+function zeroarr(arr){
+  let e = 0;
+  let newarr = [];
+  while (e < arr.length){
+    newarr.push(0); // no this overwrites it
+    e += 1;
+  }
+
+  return newarr;
+}
+
+function setarr(arr){
+  let e = 0;
+  let newarr = [];
+  while (e < arr.length){
+    newarr.push(3.5); // no this overwrites it
+    e += 1;
+  }
+
+  return newarr;
+}
+
 function addpoint(){
   // adding mousetrail[mousetrail.length-1].push(mousepos);
 
@@ -379,7 +481,6 @@ let startTime = new Date();
 let numgotten = 0;
 
 
-
 //get the map we are going to use
 let map;
 let mapnum = -1;
@@ -387,6 +488,10 @@ let mapnum = -1;
 
 if (window.location.href.includes("map10")){
   map = getmap10(); mapnum = 10;
+} else if (window.location.href.includes("map11")){
+  map = getmap11(); mapnum = 11;
+} else if (window.location.href.includes("map12")){
+  map = getmap12(); mapnum = 12;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -403,8 +508,7 @@ if (window.location.href.includes("map10")){
   map = getmap7(); mapnum = 7;
 } else if (window.location.href.includes("map8")){
   map = getmap8(); mapnum = 8;
-} else if 
-(window.location.href.includes("map9")){
+} else if (window.location.href.includes("map9")){
   map = getmap9(); mapnum = 9;
 } else {
   window.location.href = "./app.html";
@@ -415,6 +519,8 @@ let by = byteize1d(map.by);
 
 let dx = sfactorize(map.dx);
 let dy = sfactorize(map.dy);
+let tempdx = dx; //if needed
+let tempdy = dy;
 
 let clrs = map.clrs;
 
@@ -425,6 +531,22 @@ let holecolors = map.holecolors; // the centers
 // blocks
 let blocks = byteize(map.blocks);
 let testing = true; 
+
+// releaser
+let releaser = map.releasepoint;
+if (releaser != null){
+  releaser = [releaser[0]*byte-ballwidth/4,releaser[1]*byte-ballwidth/4];
+  dx = zeroarr(dx);
+  dy = setarr(dx);
+}
+let releasetimes = map.releasetimes;
+let releasedstatuses = [false,false,false,false,false,false,false,false,false,false,false,false];
+let nextgap = 1;
+let nextt = 1;
+
+let univtimer = 0;
+let univrb = false;
+
 let bwidths = [ballwidth,ballwidth,ballwidth,ballwidth];
 let bounceexp = [0,0,0,0];
 if (bx.length > 4){
@@ -477,7 +599,7 @@ let y = 0;
       if (by[lucid] < ballwidth+borderwidth){
         dy[lucid] = Math.abs(dy[lucid]);
       } else if (by[lucid] > height-ballwidth-borderwidth){
-        if (bx[lucid] > width+borderwidth){
+        if (bx[lucid] > width+borderwidth && by[lucid] > byte*7){
           // an out ball
         } else {
           // bounce at full
@@ -485,8 +607,9 @@ let y = 0;
         }
       }
 
-      if (bx[lucid] > width+borderwidth){
+      if (bx[lucid] > width+borderwidth && by[lucid] > byte*7){
         // it is an out ball
+
         // make sure its at rest horizontally
         dx[lucid] = 0;
         if (by[lucid] < height-borderwidth-ballwidth*(numgotten)*2){
@@ -494,6 +617,13 @@ let y = 0;
           dy[lucid] += 1;
         } else {
           dy[lucid] = -Math.abs(dy[lucid]*0.7);
+        }
+      } else if (bx[lucid] > width){
+        // this is a starting ball
+        if (by[lucid] > byte*6.5-ballwidth){
+          // it is over
+          dy[lucid] = 0;
+          by[lucid] = byte*6.5-ballwidth;
         }
       }
 
@@ -603,9 +733,39 @@ let y = 0;
       lucid += 1;
     }
 
+    // if (univrb){
+    //   console.log('pushed');
+    //   pushballs();
+    //   univrb = false;
+    // }
+
+    nextgap = 1;
+    let lasttimee = 0;
+    if (releaser != null){
+      let r = 0;
+      while (r < releasetimes.length){
+        if (univtimer > releasetimes[r] && !releasedstatuses[r]){
+          // release it
+          //console.log('called for ',r,' on time ',releasetimes[r]);
+          releaseball(r);
+        }
+
+        if (nextgap == 1 && !releasedstatuses[r]){
+          // what was the total time since the last one
+          nextgap = releasetimes[r]-lasttimee;
+          // what is the time remaining from now till that time
+          nextt = releasetimes[r]-univtimer;
+        }
+
+        lasttimee = releasetimes[r];
+
+        r += 1;
+      }
+    }
 
 
     y += 1;
+    univtimer += 1;
     await sleep(); // standard delay
   }
 })();
