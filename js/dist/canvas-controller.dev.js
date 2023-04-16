@@ -31,11 +31,11 @@ var randad = Math.floor(Math.random() * 3); // 0 1 2
 var audi;
 
 if (randad == 0) {
-  audi = new Audio('inkball_theme.mp3');
+  audi = new Audio('audio/inkball_theme.mp3');
 } else if (randad == 1) {
-  audi = new Audio('inkball_2.mp3');
+  audi = new Audio('audio/inkball_2.mp3');
 } else {
-  audi = new Audio('inkball_3.mp3');
+  audi = new Audio('audio/inkball_3.mp3');
 }
 
 audi.volume = 0.5;

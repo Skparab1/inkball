@@ -6,7 +6,7 @@
     <meta name="og:description" content="canvas application">
     <meta property="og:image" content="image">
     <title>Skparab1 - Inkball</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="icon" type="image/x-icon" href="pacman-favicon.png">
@@ -20,12 +20,14 @@
       </canvas>
     </div>
 
-    <a href="./app.html">
-      <button class="form-button">All maps</button>
-    </a>
-
-    <script src="maps.js"></script>
-    <script src="canvas-controller.js"></script>
-    <script src="html-controller.js"></script>
+    <div id="right-panel" class="right-panel">
+      <a href="./app.html">
+        <button class="form-button">All maps</button>
+      </a>
+    </div>
+    
+    <script src="js/maps.js"></script>
+    <script src="js/canvas-controller.js"></script>
+    <script src="js/html-controller.js"></script>
   </body>
 </html>

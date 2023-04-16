@@ -7,19 +7,27 @@ canvas.height = window.innerHeight-20;
 const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
 
-// set up the audio
+// just to make sure that the canvas is sized right
+// alternate times reload
+if (localStorage.getItem('mapreload') == 'declined'){
+  localStorage.setItem('mapreload','valid');
+  location.reload();
+} else {
+  localStorage.setItem('mapreload','declined');
+}
 
+// set up the audio
 let randad = Math.floor(Math.random()*3); // 0 1 2
 
 var audi;
 if (randad == 0){
-  audi = new Audio('inkball_theme.mp3');
+  audi = new Audio('audio/inkball_theme.mp3');
 } else if (randad == 1){
-  audi = new Audio('inkball_2.mp3');
+  audi = new Audio('audio/inkball_2.mp3');
 } else {
-  audi = new Audio('inkball_3.mp3');
+  audi = new Audio('audio/inkball_3.mp3');
 }
-audi.volume = 1;
+audi.volume = 0.5;
 audi.play();
 
 // for animations
@@ -150,9 +158,9 @@ function drawmousetrail(){
             // get the general angle of r
             let deltax;
             let deltay;
-            if (s <= 2){
-              deltax = mousetrail[r][s+2][0]-mousetrail[r][s][0];
-              deltay = mousetrail[r][s+2][1]-mousetrail[r][s][1];
+            if (s < 2){
+              deltax = mousetrail[r][s+1][0]-mousetrail[r][s][0];
+              deltay = mousetrail[r][s+1][1]-mousetrail[r][s][1];
               //console.log('called this btw',mousetrail[r][s+1][1], mousetrail[r][s][1]);
             } else {
               deltax = mousetrail[r][s][0]-mousetrail[r][s-2][0];
@@ -160,7 +168,7 @@ function drawmousetrail(){
             }
 
             if (deltax == 0){
-              if (deltax < 0){
+              if (deltay > 0){
                 deltax = 0.01;
               } else {
                 deltax = -0.01;
@@ -202,7 +210,9 @@ function drawmousetrail(){
 
             // in contact
             // disable that line
-            mousetrail[r] = []; // we cud have splcied but this garuntees a break
+            mousetrail[r] = []; // we cud have splcied lets just splice
+            mousetrail.splice(r,1);
+
             mousedown = false;
           }
           bl += 1;
@@ -565,6 +575,28 @@ if (bx.length > 4){
 }
 
 
+// some collision presets
+// not presets just defined things
+let subs = getAllSubsets([...Array(dx.length).keys()]);
+//console.log(subs);
+// filter for length 2;
+let newsubs = [];
+let i = 0;
+while (i < subs.length){
+  if (subs[i].length == 2){
+    newsubs.push(subs[i]);
+  }
+  i += 1;
+}
+
+// now create a timer sort of thing
+let collisiontimer = [];
+let hee = 0;
+while (hee < newsubs.length){
+  collisiontimer.push(60);
+  hee += 1;
+}
+
 // main loop
 let y = 0;
 
@@ -679,18 +711,13 @@ let y = 0;
     // are they close enough
     // assume 4 balls max for now
     // get the subsets
+    // we already got the subsets
 
-
-    let subs = getAllSubsets([...Array(dx.length).keys()]);
-    //console.log(subs);
-    // filter for length 2;
-    let newsubs = [];
-    let i = 0;
-    while (i < subs.length){
-      if (subs[i].length == 2){
-        newsubs.push(subs[i]);
-      }
-      i += 1;
+    // upgrade the collision timers
+    let ye = 0;
+    while (ye < collisiontimer.length){
+      collisiontimer[ye] += 1;
+      ye += 1;
     }
 
     //console.log(newsubs);
@@ -698,8 +725,10 @@ let y = 0;
     // now try each of them
     i = 0;
     while (i < newsubs.length){
-      if (touching(newsubs[i][0],newsubs[i][1])){
+      if ((collisiontimer[i] > 10 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
         bounce(newsubs[i][0],newsubs[i][1]);
+        // now if we do the bounce set the timer
+        collisiontimer[i] = 0;
       }
       i += 1;
     }
