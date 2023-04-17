@@ -51,39 +51,6 @@ function drawbg(){
   ctx.fillRect(width-borderwidth,0,borderwidth,height);
   ctx.fillRect(0,height-borderwidth, width, borderwidth);
 
-  // releaser
-  if (releaser != null){
-    ctx.fillRect(width+ballwidth*2,0, byte/2, byte*7);
-    ctx.fillRect(width,byte*6.5, ballwidth*2+byte/2, byte/2);
-
-    ctx.fillStyle = 'rgb(200,200,200)';
-    ctx.fillRect(releaser[0],releaser[1], ballwidth/2,ballwidth/2);
-    ctx.fillRect(releaser[0]-ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
-    ctx.fillRect(releaser[0]+ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
-    ctx.fillRect(releaser[0],releaser[1]-ballwidth/2, ballwidth/2,ballwidth/2);
-    ctx.fillRect(releaser[0],releaser[1]+ballwidth/2, ballwidth/2,ballwidth/2);
-
-    // a pie chart sort of thing
-
-    //ctx.fillStyle = 'rgb(200,200,200)';
-    // max is 200
-
-    let tc = 0;
-    if (nextt/nextgap > 0.75){
-      tc = (800*(1-nextt/nextgap));
-    } else {
-      tc = 200;
-    }
-
-    ctx.fillStyle = 'rgb('+tc+','+tc+','+tc+')';
-
-    ctx.beginPath();
-    ctx.arc(width+byte,byte*8,ballwidth,0,Math.PI*2*(nextt/nextgap));
-    ctx.lineTo(width+byte,byte*8);
-    ctx.fill();
-
-  }
-
   // this is a supposed hole
   let j = 0;
   while (j < holecenters.length){
@@ -98,8 +65,8 @@ function drawbg(){
 
   // these are blocks
   j = 0;
+  ctx.fillStyle = 'gray';
   while (j < blocks.length){
-    ctx.fillStyle = 'gray';
     ctx.fillRect(blocks[j][0]-byte/2,blocks[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
@@ -140,6 +107,110 @@ function drawbg(){
     j += 1;
   }
 
+  // these are pushers
+  j = 0;
+  ctx.fillStyle = 'rgb(90,90,90)';
+  while (j < leftpusher.length){
+    drawpusherleft(leftpusher[j][0],leftpusher[j][1]);
+    j += 1;
+  }
+  j = 0;
+  while (j < rightpusher.length){
+    drawpusherright(rightpusher[j][0],rightpusher[j][1]);
+    j += 1;
+  }
+  j = 0;
+  while (j < uppusher.length){
+    drawpusherup(uppusher[j][0],uppusher[j][1]);
+    j += 1;
+  }
+  j = 0;
+  while (j < downpusher.length){
+    drawpusherdown(downpusher[j][0],downpusher[j][1]);
+    j += 1;
+  }
+
+  // releaser
+  if (releaser != null){
+    ctx.fillRect(width+ballwidth*2,0, byte/2, byte*7);
+    ctx.fillRect(width,byte*6.5, ballwidth*2+byte/2, byte/2);
+
+    ctx.fillStyle = 'rgb(200,200,200)';
+    ctx.fillRect(releaser[0],releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0]-ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0]+ballwidth/2,releaser[1], ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0],releaser[1]-ballwidth/2, ballwidth/2,ballwidth/2);
+    ctx.fillRect(releaser[0],releaser[1]+ballwidth/2, ballwidth/2,ballwidth/2);
+
+    // a pie chart sort of thing
+
+    //ctx.fillStyle = 'rgb(200,200,200)';
+    // max is 200
+
+    let tc = 0;
+    if (nextt/nextgap > 0.75){
+      tc = (800*(1-nextt/nextgap));
+    } else {
+      tc = 200;
+    }
+
+    ctx.fillStyle = 'rgb('+tc+','+tc+','+tc+')';
+
+    ctx.beginPath();
+    ctx.arc(width+byte,byte*8,ballwidth,0,Math.PI*2*(nextt/nextgap));
+    ctx.lineTo(width+byte,byte*8);
+    ctx.fill();
+
+  }
+}
+
+function drawpusherright(x,y){
+  ctx.beginPath();
+  ctx.moveTo(x-byte/2,y-byte/2);
+  ctx.lineTo(x,y-byte/2);
+  ctx.lineTo(x+byte/2,y);
+  ctx.lineTo(x,y+byte/2);
+  ctx.lineTo(x-byte/2,y+byte/2);
+  ctx.lineTo(x,y);
+  ctx.lineTo(x-byte/2,y-byte/2);
+  ctx.fill();
+}
+
+function drawpusherleft(x,y){
+  ctx.beginPath();
+  ctx.moveTo(x,y-byte/2);
+  ctx.lineTo(x+byte/2,y-byte/2);
+  ctx.lineTo(x,y);
+  ctx.lineTo(x+byte/2,y+byte/2);
+  ctx.lineTo(x,y+byte/2);
+  ctx.lineTo(x-byte/2,y);
+  ctx.lineTo(x,y-byte/2);
+  ctx.fill();
+}
+
+function drawpusherup(x,y){
+  ctx.beginPath();
+  ctx.moveTo(x-byte/2,y+byte/2);
+  ctx.lineTo(x-byte/2,y);
+  ctx.lineTo(x,y-byte/2);
+  ctx.lineTo(x+byte/2,y);
+  ctx.lineTo(x+byte/2,y+byte/2);
+  ctx.lineTo(x,y);
+  ctx.lineTo(x-byte/2,y+byte/2);
+  ctx.fill();
+}
+
+
+function drawpusherdown(x,y){
+  ctx.beginPath();
+  ctx.moveTo(x+byte/2,y-byte/2);
+  ctx.lineTo(x+byte/2,y);
+  ctx.lineTo(x,y+byte/2);
+  ctx.lineTo(x-byte/2,y);
+  ctx.lineTo(x-byte/2,y-byte/2);
+  ctx.lineTo(x,y);
+  ctx.lineTo(x+byte/2,y-byte/2);
+  ctx.fill();
 }
 
 function radians_to_degrees(radians)
@@ -580,6 +651,14 @@ if (window.location.href.includes("map10")){
   map = getmap15(); mapnum = 15;
 } else if (window.location.href.includes("map16")){
   map = getmap16(); mapnum = 16;
+} else if (window.location.href.includes("map17")){
+  map = getmap17(); mapnum = 17;
+} else if (window.location.href.includes("map18")){
+  map = getmap18(); mapnum = 18;
+} else if (window.location.href.includes("map19")){
+  map = getmap19(); mapnum = 19;
+} else if (window.location.href.includes("map20")){
+  map = getmap20(); mapnum = 20;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -607,6 +686,10 @@ let by = byteize1d(map.by);
 
 let dx = sfactorize(map.dx);
 let dy = sfactorize(map.dy);
+
+let lastdx = dx;
+let lastdy = dy;
+
 let tempdx = dx; //if needed
 let tempdy = dy;
 
@@ -631,6 +714,26 @@ if (map.timedblocks != null){
   timedblockinterval = map.timedblockinterval;
 }
 let tbtimer = 0;
+
+// pushers
+let leftpusher = [];
+let rightpusher = [];
+let uppusher = [];
+let downpusher = [];
+if (map.uppusher != null){
+  uppusher = byteize(map.uppusher);
+}
+if (map.rightpusher != null){
+  rightpusher = byteize(map.rightpusher);
+}
+if (map.downpusher != null){
+  downpusher = byteize(map.downpusher);
+}
+if (map.leftpusher != null){
+  leftpusher = byteize(map.leftpusher);
+}
+
+console.log(uppusher, leftpusher);
 
 // releaser
 let releaser = map.releasepoint;
@@ -707,8 +810,20 @@ let y = 0;
       ctx.arc(bx[lucid],by[lucid],bwidths[lucid],0,Math.PI*2);
       ctx.fillStyle = clrs[lucid];
       ctx.fill();
+
+      if (dx[lucid] == NaN || isNaN(dx[lucid])){
+        dx[lucid] = lastdx[lucid];
+      }
+
+      if (dy[lucid] == NaN || isNaN(dy[lucid])){
+        dy[lucid] = lastdy[lucid];
+      }
+
       lucid += 1;
     }
+
+    lastbx = bx;
+    lastby = by;
 
     if (lost){
       break;
@@ -836,6 +951,48 @@ let y = 0;
             } else {
               dx[lucid] = Math.abs(dx[lucid]);
             }
+          }
+        }
+        o += 1;
+      }
+
+      // pushers
+      o = 0;
+      while (o < leftpusher.length){
+        if (dist1(leftpusher[o][0],leftpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          // accelerate if not above threshold
+          if (dx[lucid] > -2){
+            dx[lucid] -= 0.1;
+          }
+        }
+        o += 1;
+      }
+      o = 0;
+      while (o < downpusher.length){
+        if (dist1(downpusher[o][0],downpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          // accelerate if not above threshold
+          if (dy[lucid] < 2){
+            dy[lucid] += 0.1;
+          }
+        }
+        o += 1;
+      }
+      o = 0;
+      while (o < rightpusher.length){
+        if (dist1(rightpusher[o][0],rightpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          // accelerate if not above threshold
+          if (dx[lucid] < 2){
+            dx[lucid] += 0.1;
+          }
+        }
+        o += 1;
+      }
+      o = 0;
+      while (o < uppusher.length){
+        if (dist1(uppusher[o][0],uppusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          // accelerate if not above threshold
+          if (dy[lucid] > -2){
+            dy[lucid] -= 0.1;
           }
         }
         o += 1;
