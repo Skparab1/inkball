@@ -14,16 +14,25 @@
   </head>
   <body>
     
-    <div id='canvas-container' style="float: left; position: absolute; z-index: -1" onmousedown="mousedown = true; mousetrail.push([]);" onmouseup="mousedown = false;" onmousemove="mouse_position();">
+    <div id='canvas-container' style="float: left; position: absolute; z-index: -1; cursor: crosshair;" onmousedown="mousedown = true; mousetrail.push([]);" onmouseup="mousedown = false;" onmousemove="mouse_position();">
       <canvas class="myCanvas">
         <p>Rip ur browser doesnt support canvas :(( u shud switch to a better browser...</p>
       </canvas>
     </div>
 
     <div id="right-panel" class="right-panel">
+      <h1>Inkball</h1>
       <a href="./app.html">
-        <button class="form-button">All maps</button>
+        <button>All maps</button>
       </a>
+    </div>
+
+    <div id="lose-dialogue" class="lose-dialogue">
+      <h1>You lost</h1>
+    </div>
+
+    <div id="win-dialogue" class="win-dialogue">
+      <h1>You won!</h1>
     </div>
     
     <script src="js/maps.js"></script>

@@ -29,6 +29,11 @@ if (randad == 0){
 }
 audi.volume = 0.5;
 audi.play();
+let getaudio = new Audio('audio/inkball_get.mp3');
+let winaudio = new Audio('audio/inkball_win.mp3');
+let loseaudio = new Audio('audio/inkball_lose.mp3');
+let collisionaudio = new Audio('audio/inkball_collision.mp3');
+
 
 // for animations
 const sleep = ms => new Promise(res => setTimeout(res, ms));
@@ -317,33 +322,51 @@ async function shrinkball(num, hole){
   // cuz if not then you lost
   if (clrs[num] != holecolors[hole]){
     // you lost
-    alert("Oops! Ball entered hole of wrong color");
-    location.reload();
-  }
+    //alert("Oops! Ball entered hole of wrong color");
+    //location.reload();
+    audi.pause();
+    loseaudio.play();
 
-  let u = 100;
-  while (u > 0){
-    bwidths[num] = u/100*ballwidth;
-    //console.log(bwidths);
-    await sleep(2);
-    u -= 1;
-  }
+    let loser = document.getElementById('lose-dialogue');
+    loser.style.display = 'block';
+    loser.style.opacity = 1;
+    lost = true;
+  } else {
+    // you got a ball
+    getaudio.play();
 
-  bwidths[num] = ballwidth;
+    let u = 100;
+    while (u > 0){
+      bwidths[num] = u/100*ballwidth;
+      //console.log(bwidths);
+      await sleep(2);
+      u -= 1;
+    }
 
-  bx[num] = width+byte*2; // this may be wrong
-  by[num] = byte*8;
-  dx[num] = 0; // shud already be but anyway
-  dy[num] = 0; // but we accelerate this;
+    bwidths[num] = ballwidth;
 
-  if (numgotten >= bx.length){
-    // you won
-    let endTime = new Date();
-    let time = endTime-startTime;
-    time = time/1000;
-    console.log('map'+mapnum);
-    localStorage.setItem('map'+mapnum,time);
-    alert('You won! Time taken: '+time+" sec");
+    bx[num] = width+byte*2; // this may be wrong
+    by[num] = byte*8;
+    dx[num] = 0; // shud already be but anyway
+    dy[num] = 0; // but we accelerate this;
+
+    if (numgotten >= bx.length){
+      // you won
+      audi.pause();
+      winaudio.play();
+
+      let endTime = new Date();
+      let time = endTime-startTime;
+      time = time/1000;
+      console.log('map'+mapnum);
+      localStorage.setItem('map'+mapnum,time);
+      //alert('You won! Time taken: '+time+" sec");
+      lost = true; // ik its not loss but whatever LMAO
+
+      let wn = document.getElementById('win-dialogue');
+      wn.style.opacity = 1;
+      wn.style.display = 'block';
+    }
   }
 
 }
@@ -499,6 +522,7 @@ let mousetrail = [];
 let startTime = new Date();
 
 let numgotten = 0;
+let lost = false;
 
 
 //get the map we are going to use
@@ -512,6 +536,8 @@ if (window.location.href.includes("map10")){
   map = getmap11(); mapnum = 11;
 } else if (window.location.href.includes("map12")){
   map = getmap12(); mapnum = 12;
+} else if (window.location.href.includes("map13")){
+  map = getmap13(); mapnum = 13;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -597,6 +623,13 @@ while (hee < newsubs.length){
   hee += 1;
 }
 
+// size the control panel rlly quickly
+let cpanel = document.getElementById('right-panel');
+cpanel.style.left = (width+byte*2.5+ballwidth)+'px';
+cpanel.style.height = (window.innerHeight-20)+'px';
+cpanel.style.width = (window.innerWidth-(width+byte*3.5+ballwidth))+'px';
+
+
 // main loop
 let y = 0;
 
@@ -621,6 +654,10 @@ let y = 0;
       ctx.fillStyle = clrs[lucid];
       ctx.fill();
       lucid += 1;
+    }
+
+    if (lost){
+      break;
     }
 
     lucid = 0;
@@ -725,10 +762,14 @@ let y = 0;
     // now try each of them
     i = 0;
     while (i < newsubs.length){
-      if ((collisiontimer[i] > 10 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
+      if ((collisiontimer[i] > 60 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
         bounce(newsubs[i][0],newsubs[i][1]);
         // now if we do the bounce set the timer
         collisiontimer[i] = 0;
+
+        if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)){
+          collisionaudio.play();
+        }
       }
       i += 1;
     }

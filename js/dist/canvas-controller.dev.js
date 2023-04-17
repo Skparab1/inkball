@@ -39,7 +39,11 @@ if (randad == 0) {
 }
 
 audi.volume = 0.5;
-audi.play(); // for animations
+audi.play();
+var getaudio = new Audio('audio/inkball_get.mp3');
+var winaudio = new Audio('audio/inkball_win.mp3');
+var loseaudio = new Audio('audio/inkball_lose.mp3');
+var collisionaudio = new Audio('audio/inkball_collision.mp3'); // for animations
 
 var sleep = function sleep(ms) {
   return new Promise(function (res) {
@@ -293,38 +297,50 @@ function dist1(x1, y1, x2, y2) {
 }
 
 function shrinkball(num, hole) {
-  var u, endTime, time;
+  var loser, u, endTime, time, wn;
   return regeneratorRuntime.async(function shrinkball$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          // first of all is the ball in the holw of its color or not
-          // cuz if not then you lost
-          if (clrs[num] != holecolors[hole]) {
-            // you lost
-            alert("Oops! Ball entered hole of wrong color");
-            location.reload();
+          if (!(clrs[num] != holecolors[hole])) {
+            _context.next = 9;
+            break;
           }
 
+          // you lost
+          //alert("Oops! Ball entered hole of wrong color");
+          //location.reload();
+          audi.pause();
+          loseaudio.play();
+          loser = document.getElementById('lose-dialogue');
+          loser.style.display = 'block';
+          loser.style.opacity = 1;
+          lost = true;
+          _context.next = 24;
+          break;
+
+        case 9:
+          // you got a ball
+          getaudio.play();
           u = 100;
 
-        case 2:
+        case 11:
           if (!(u > 0)) {
-            _context.next = 9;
+            _context.next = 18;
             break;
           }
 
           bwidths[num] = u / 100 * ballwidth; //console.log(bwidths);
 
-          _context.next = 6;
+          _context.next = 15;
           return regeneratorRuntime.awrap(sleep(2));
 
-        case 6:
+        case 15:
           u -= 1;
-          _context.next = 2;
+          _context.next = 11;
           break;
 
-        case 9:
+        case 18:
           bwidths[num] = ballwidth;
           bx[num] = width + byte * 2; // this may be wrong
 
@@ -335,15 +351,22 @@ function shrinkball(num, hole) {
 
           if (numgotten >= bx.length) {
             // you won
+            audi.pause();
+            winaudio.play();
             endTime = new Date();
             time = endTime - startTime;
             time = time / 1000;
             console.log('map' + mapnum);
-            localStorage.setItem('map' + mapnum, time);
-            alert('You won! Time taken: ' + time + " sec");
+            localStorage.setItem('map' + mapnum, time); //alert('You won! Time taken: '+time+" sec");
+
+            lost = true; // ik its not loss but whatever LMAO
+
+            wn = document.getElementById('win-dialogue');
+            wn.style.opacity = 1;
+            wn.style.display = 'block';
           }
 
-        case 15:
+        case 24:
         case "end":
           return _context.stop();
       }
@@ -510,7 +533,8 @@ var mousedown = false;
 var mousepos = [0, 0];
 var mousetrail = [];
 var startTime = new Date();
-var numgotten = 0; //get the map we are going to use
+var numgotten = 0;
+var lost = false; //get the map we are going to use
 
 var map;
 var mapnum = -1;
@@ -524,6 +548,9 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map12")) {
   map = getmap12();
   mapnum = 12;
+} else if (window.location.href.includes("map13")) {
+  map = getmap13();
+  mapnum = 13;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -617,8 +644,13 @@ var hee = 0;
 while (hee < newsubs.length) {
   collisiontimer.push(60);
   hee += 1;
-} // main loop
+} // size the control panel rlly quickly
 
+
+var cpanel = document.getElementById('right-panel');
+cpanel.style.left = width + byte * 2.5 + ballwidth + 'px';
+cpanel.style.height = window.innerHeight - 20 + 'px';
+cpanel.style.width = window.innerWidth - (width + byte * 3.5 + ballwidth) + 'px'; // main loop
 
 var y = 0; // start the async here so we dont start the game before loading the data
 
@@ -629,7 +661,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
       switch (_context3.prev = _context3.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context3.next = 26;
+            _context3.next = 28;
             break;
           }
 
@@ -652,6 +684,14 @@ var y = 0; // start the async here so we dont start the game before loading the 
             lucid += 1;
           }
 
+          if (!lost) {
+            _context3.next = 9;
+            break;
+          }
+
+          return _context3.abrupt("break", 28);
+
+        case 9:
           lucid = 0;
 
           while (lucid < bx.length) {
@@ -757,10 +797,14 @@ var y = 0; // start the async here so we dont start the game before loading the 
           i = 0;
 
           while (i < newsubs.length) {
-            if ((collisiontimer[i] > 10 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
+            if ((collisiontimer[i] > 60 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
               bounce(newsubs[i][0], newsubs[i][1]); // now if we do the bounce set the timer
 
               collisiontimer[i] = 0;
+
+              if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) {
+                collisionaudio.play();
+              }
             }
 
             i += 1;
@@ -836,14 +880,14 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
           y += 1;
           univtimer += 1;
-          _context3.next = 24;
+          _context3.next = 26;
           return regeneratorRuntime.awrap(sleep());
 
-        case 24:
+        case 26:
           _context3.next = 0;
           break;
 
-        case 26:
+        case 28:
         case "end":
           return _context3.stop();
       }

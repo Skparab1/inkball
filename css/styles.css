@@ -110,9 +110,39 @@ nav {
   padding-bottom: 20px;
 }
 
-#right-panel {
-  right: 2vw;
-  height: auto;
+.right-panel {
+  /* the positioning and height width is taken care by the js */
+  position: absolute;
+  border: 7px solid teal;
+  text-align: center;
+}
+
+.lose-dialogue {
+  display: none;
+  text-align: center;
+  position: fixed;
+  width: 40%;
+  height: 40%;
+  left: 30%;
+  top: 30%;
+  background: rgba(60,60,60,0.7);
+  border: 7px solid rgb(218, 165, 32);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.win-dialogue {
+  display: none;
+  text-align: center;
+  position: fixed;
+  width: 40%;
+  height: 70%;
+  left: 30%;
+  top: 15%;
+  background: linear-gradient(rgba(218, 165, 32,0.7),rgba(60,60,60,0.7),rgba(0, 128, 128,0.7));
+  border: 7px solid rgb(218, 165, 32);
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 .horiz-container {
