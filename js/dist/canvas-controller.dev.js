@@ -723,7 +723,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
       switch (_context3.prev = _context3.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context3.next = 30;
+            _context3.next = 31;
             break;
           }
 
@@ -751,7 +751,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             break;
           }
 
-          return _context3.abrupt("break", 30);
+          return _context3.abrupt("break", 31);
 
         case 9:
           lucid = 0;
@@ -820,6 +820,17 @@ var y = 0; // start the async here so we dont start the game before loading the 
                     // reflect down
                     //console.log('tried to reflect down', by[lucid] , blocks[o][1]);
                     dy[lucid] = Math.abs(dy[lucid]);
+                  }
+                } // is it in line vertically
+
+
+                if (by[lucid] > blocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < blocks[o][1] + byte / 2 + ballwidth / 1.5) {
+                  if (bx[lucid] < blocks[o][0] - byte / 2) {
+                    // reflect left
+                    dx[lucid] = -Math.abs(dx[lucid]);
+                  } else {
+                    // reflect right
+                    dx[lucid] = Math.abs(dx[lucid]);
                   }
                 }
               }
@@ -898,7 +909,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
           i = 0;
 
           while (i < newsubs.length) {
-            if ((collisiontimer[i] > 60 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
+            if ((collisiontimer[i] > 30 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
               bounce(newsubs[i][0], newsubs[i][1]); // now if we do the bounce set the timer
 
               collisiontimer[i] = 0;
@@ -979,6 +990,11 @@ var y = 0; // start the async here so we dont start the game before loading the 
             }
           }
 
+          if (audi.currentTime >= audi.duration) {
+            audi.currentTime = 0;
+            audi.play();
+          }
+
           tbtimer += 1;
 
           if (tbtimer >= timedblockinterval) {
@@ -987,14 +1003,14 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
           y += 1;
           univtimer += 1;
-          _context3.next = 28;
+          _context3.next = 29;
           return regeneratorRuntime.awrap(sleep());
 
-        case 28:
+        case 29:
           _context3.next = 0;
           break;
 
-        case 30:
+        case 31:
         case "end":
           return _context3.stop();
       }

@@ -11,6 +11,8 @@ while (ij < 17) {
   if (localStorage.getItem("map" + ij) != null) {
     // finished it
     div.innerHTML += "\n      <h3 style=\"color: green\">Completed in ".concat(localStorage.getItem("map" + ij), " sec</h3>\n    "); // div.style.backgroundColor = 'green';
+  } else {
+    div.innerHTML += "\n    <h3 style=\"color: black\">hi</h3>\n  ";
   }
 
   div.style["float"] = 'left';

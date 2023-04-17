@@ -780,6 +780,17 @@ let y = 0;
               dy[lucid] = Math.abs(dy[lucid]);
             }
           }
+
+          // is it in line vertically
+          if (by[lucid] > blocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < blocks[o][1]+byte/2+ballwidth/1.5){
+            if (bx[lucid] < blocks[o][0]-byte/2){
+              // reflect left
+              dx[lucid] = -Math.abs(dx[lucid]);
+            } else {
+              // reflect right
+              dx[lucid] = Math.abs(dx[lucid]);
+            }
+          }
         }
         o += 1;
       }
@@ -851,7 +862,7 @@ let y = 0;
     // now try each of them
     i = 0;
     while (i < newsubs.length){
-      if ((collisiontimer[i] > 60 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
+      if ((collisiontimer[i] > 30 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
         bounce(newsubs[i][0],newsubs[i][1]);
         // now if we do the bounce set the timer
         collisiontimer[i] = 0;
@@ -930,6 +941,11 @@ let y = 0;
 
         r += 1;
       }
+    }
+
+    if (audi.currentTime >= audi.duration){
+      audi.currentTime = 0;
+      audi.play();
     }
 
     tbtimer += 1;

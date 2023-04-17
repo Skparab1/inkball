@@ -19,6 +19,10 @@ while (ij < 17){
       <h3 style="color: green">Completed in ${localStorage.getItem("map"+ij)} sec</h3>
     `;
     // div.style.backgroundColor = 'green';
+  } else {
+    div.innerHTML += `
+    <h3 style="color: black">hi</h3>
+  `;
   }
 
   div.style.float = 'left';
