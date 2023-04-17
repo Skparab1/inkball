@@ -110,6 +110,47 @@ function drawbg() {
     ctx.fillStyle = 'gray';
     ctx.fillRect(blocks[j][0] - byte / 2, blocks[j][1] - byte / 2, byte, byte);
     j += 1;
+  } // these are timed blocks
+
+
+  j = 0;
+
+  while (j < timedblocks.length && tbtimer < timedblockinterval / 2 + 50) {
+    if (tbtimer < 100) {
+      var tv = tbtimer / 100;
+      ctx.strokeStyle = 'rgba(128,128,128,' + tv + ')';
+    } else if (tbtimer < timedblockinterval / 2 - 50) {
+      ctx.strokeStyle = 'gray';
+    } else {
+      var _tv = (timedblockinterval / 2 + 50 - tbtimer) / 100;
+
+      ctx.strokeStyle = 'rgba(128,128,128,' + _tv + ')';
+    }
+
+    ctx.lineWidth = ballwidth / 4;
+    ctx.strokeRect(timedblocks[j][0] - byte / 2, timedblocks[j][1] - byte / 2, byte, byte);
+    j += 1;
+  } // these are antitimed blocks
+
+
+  j = 0;
+
+  while (j < antitimedblocks.length && tbtimer > timedblockinterval / 2 - 50) {
+    if (tbtimer < timedblockinterval / 2 + 50) {
+      var _tv2 = (tbtimer - (timedblockinterval / 2 - 50)) / 100;
+
+      ctx.strokeStyle = 'rgba(128,128,128,' + _tv2 + ')';
+    } else if (tbtimer < timedblockinterval / 2 - 50) {
+      ctx.strokeStyle = 'gray';
+    } else {
+      var _tv3 = (timedblockinterval - tbtimer) / 100;
+
+      ctx.strokeStyle = 'rgba(128,128,128,' + _tv3 + ')';
+    }
+
+    ctx.lineWidth = ballwidth / 4;
+    ctx.strokeRect(antitimedblocks[j][0] - byte / 2, antitimedblocks[j][1] - byte / 2, byte, byte);
+    j += 1;
   }
 }
 
@@ -551,6 +592,15 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map13")) {
   map = getmap13();
   mapnum = 13;
+} else if (window.location.href.includes("map14")) {
+  map = getmap14();
+  mapnum = 14;
+} else if (window.location.href.includes("map15")) {
+  map = getmap15();
+  mapnum = 15;
+} else if (window.location.href.includes("map16")) {
+  map = getmap16();
+  mapnum = 16;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -597,7 +647,19 @@ var holecolors = map.holecolors; // the centers
 // blocks
 
 var blocks = byteize(map.blocks);
-var testing = true; // releaser
+var testing = true; //timedblocks
+
+var timedblocks = [];
+var antitimedblocks = [];
+var timedblockinterval = 3000;
+
+if (map.timedblocks != null) {
+  timedblocks = byteize(map.timedblocks);
+  antitimedblocks = byteize(map.antitimedblocks);
+  timedblockinterval = map.timedblockinterval;
+}
+
+var tbtimer = 0; // releaser
 
 var releaser = map.releasepoint;
 
@@ -661,7 +723,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
       switch (_context3.prev = _context3.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context3.next = 28;
+            _context3.next = 30;
             break;
           }
 
@@ -689,7 +751,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             break;
           }
 
-          return _context3.abrupt("break", 28);
+          return _context3.abrupt("break", 30);
 
         case 9:
           lucid = 0;
@@ -759,15 +821,54 @@ var y = 0; // start the async here so we dont start the game before loading the 
                     //console.log('tried to reflect down', by[lucid] , blocks[o][1]);
                     dy[lucid] = Math.abs(dy[lucid]);
                   }
-                } // is it in line vertically
+                }
+              }
+
+              o += 1;
+            } // timedblocks
 
 
-                if (by[lucid] > blocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < blocks[o][1] + byte / 2 + ballwidth / 1.5) {
-                  if (bx[lucid] < blocks[o][0] - byte / 2) {
-                    // reflect left
+            o = 0;
+
+            while (o < timedblocks.length && tbtimer < timedblockinterval / 2 - 50) {
+              if (dist1(timedblocks[o][0], timedblocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
+                if (bx[lucid] > timedblocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < timedblocks[o][0] + byte / 2 + ballwidth / 1.5) {
+                  if (by[lucid] < timedblocks[o][1]) {
+                    dy[lucid] = -Math.abs(dy[lucid]);
+                  } else {
+                    dy[lucid] = Math.abs(dy[lucid]);
+                  }
+                }
+
+                if (by[lucid] > timedblocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < timedblocks[o][1] + byte / 2 + ballwidth / 1.5) {
+                  if (bx[lucid] < timedblocks[o][0] - byte / 2) {
                     dx[lucid] = -Math.abs(dx[lucid]);
                   } else {
-                    // reflect right
+                    dx[lucid] = Math.abs(dx[lucid]);
+                  }
+                }
+              }
+
+              o += 1;
+            } // antitimedblocks
+
+
+            o = 0;
+
+            while (o < antitimedblocks.length && tbtimer > timedblockinterval / 2 + 50) {
+              if (dist1(antitimedblocks[o][0], antitimedblocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
+                if (bx[lucid] > antitimedblocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < antitimedblocks[o][0] + byte / 2 + ballwidth / 1.5) {
+                  if (by[lucid] < antitimedblocks[o][1]) {
+                    dy[lucid] = -Math.abs(dy[lucid]);
+                  } else {
+                    dy[lucid] = Math.abs(dy[lucid]);
+                  }
+                }
+
+                if (by[lucid] > antitimedblocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < antitimedblocks[o][1] + byte / 2 + ballwidth / 1.5) {
+                  if (bx[lucid] < antitimedblocks[o][0] - byte / 2) {
+                    dx[lucid] = -Math.abs(dx[lucid]);
+                  } else {
                     dx[lucid] = Math.abs(dx[lucid]);
                   }
                 }
@@ -878,16 +979,22 @@ var y = 0; // start the async here so we dont start the game before loading the 
             }
           }
 
+          tbtimer += 1;
+
+          if (tbtimer >= timedblockinterval) {
+            tbtimer = 0;
+          }
+
           y += 1;
           univtimer += 1;
-          _context3.next = 26;
+          _context3.next = 28;
           return regeneratorRuntime.awrap(sleep());
 
-        case 26:
+        case 28:
           _context3.next = 0;
           break;
 
-        case 28:
+        case 30:
         case "end":
           return _context3.stop();
       }

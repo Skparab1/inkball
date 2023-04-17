@@ -104,6 +104,42 @@ function drawbg(){
     j += 1;
   }
 
+  // these are timed blocks
+  j = 0;
+  while (j < timedblocks.length && tbtimer < timedblockinterval/2+50){
+    if (tbtimer < 100){
+      let tv = (tbtimer)/100;
+      ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
+    } else if (tbtimer < timedblockinterval/2-50){
+      ctx.strokeStyle = 'gray';
+    } else {
+      let tv = ((timedblockinterval/2+50)-tbtimer)/100;
+      ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
+    }
+
+    ctx.lineWidth = ballwidth/4;
+    ctx.strokeRect(timedblocks[j][0]-byte/2,timedblocks[j][1]-byte/2 ,byte,byte);
+    j += 1;
+  }
+
+  // these are antitimed blocks
+  j = 0;
+  while (j < antitimedblocks.length && tbtimer > timedblockinterval/2-50){
+    if (tbtimer < timedblockinterval/2+50){
+      let tv = (tbtimer-(timedblockinterval/2-50))/100;
+      ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
+    } else if (tbtimer < timedblockinterval/2-50){
+      ctx.strokeStyle = 'gray';
+    } else {
+      let tv = (timedblockinterval-tbtimer)/100;
+      ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
+    }
+
+    ctx.lineWidth = ballwidth/4;
+    ctx.strokeRect(antitimedblocks[j][0]-byte/2,antitimedblocks[j][1]-byte/2 ,byte,byte);
+    j += 1;
+  }
+
 }
 
 function radians_to_degrees(radians)
@@ -538,6 +574,12 @@ if (window.location.href.includes("map10")){
   map = getmap12(); mapnum = 12;
 } else if (window.location.href.includes("map13")){
   map = getmap13(); mapnum = 13;
+} else if (window.location.href.includes("map14")){
+  map = getmap14(); mapnum = 14;
+} else if (window.location.href.includes("map15")){
+  map = getmap15(); mapnum = 15;
+} else if (window.location.href.includes("map16")){
+  map = getmap16(); mapnum = 16;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -577,6 +619,18 @@ let holecolors = map.holecolors; // the centers
 // blocks
 let blocks = byteize(map.blocks);
 let testing = true; 
+
+//timedblocks
+let timedblocks = [];
+let antitimedblocks = [];
+let timedblockinterval = 3000;
+if (map.timedblocks != null){
+  timedblocks = byteize(map.timedblocks);
+  antitimedblocks = byteize(map.antitimedblocks);
+
+  timedblockinterval = map.timedblockinterval;
+}
+let tbtimer = 0;
 
 // releaser
 let releaser = map.releasepoint;
@@ -726,14 +780,49 @@ let y = 0;
               dy[lucid] = Math.abs(dy[lucid]);
             }
           }
+        }
+        o += 1;
+      }
 
-          // is it in line vertically
-          if (by[lucid] > blocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < blocks[o][1]+byte/2+ballwidth/1.5){
-            if (bx[lucid] < blocks[o][0]-byte/2){
-              // reflect left
+      // timedblocks
+      o = 0;
+      while (o < timedblocks.length && tbtimer < timedblockinterval/2-50){
+        if (dist1(timedblocks[o][0],timedblocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          if (bx[lucid] > timedblocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < timedblocks[o][0]+byte/2+ballwidth/1.5){
+            if (by[lucid] < timedblocks[o][1]){
+              dy[lucid] = -Math.abs(dy[lucid]);
+            } else {
+              dy[lucid] = Math.abs(dy[lucid]);
+            }
+          }
+
+          if (by[lucid] > timedblocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < timedblocks[o][1]+byte/2+ballwidth/1.5){
+            if (bx[lucid] < timedblocks[o][0]-byte/2){
               dx[lucid] = -Math.abs(dx[lucid]);
             } else {
-              // reflect right
+              dx[lucid] = Math.abs(dx[lucid]);
+            }
+          }
+        }
+        o += 1;
+      }
+
+      // antitimedblocks
+      o = 0;
+      while (o < antitimedblocks.length && tbtimer > timedblockinterval/2+50){
+        if (dist1(antitimedblocks[o][0],antitimedblocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          if (bx[lucid] > antitimedblocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < antitimedblocks[o][0]+byte/2+ballwidth/1.5){
+            if (by[lucid] < antitimedblocks[o][1]){
+              dy[lucid] = -Math.abs(dy[lucid]);
+            } else {
+              dy[lucid] = Math.abs(dy[lucid]);
+            }
+          }
+
+          if (by[lucid] > antitimedblocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < antitimedblocks[o][1]+byte/2+ballwidth/1.5){
+            if (bx[lucid] < antitimedblocks[o][0]-byte/2){
+              dx[lucid] = -Math.abs(dx[lucid]);
+            } else {
               dx[lucid] = Math.abs(dx[lucid]);
             }
           }
@@ -843,6 +932,10 @@ let y = 0;
       }
     }
 
+    tbtimer += 1;
+    if (tbtimer >= timedblockinterval){
+      tbtimer = 0;
+    }
 
     y += 1;
     univtimer += 1;
