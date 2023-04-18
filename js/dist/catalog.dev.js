@@ -3,7 +3,7 @@
 var holder = document.getElementById('allmaps');
 var ij = 1;
 
-while (ij < 25) {
+while (ij < 27) {
   var div = document.createElement('tr');
   div.innerHTML = "\n    <a href=\"./index.html?map".concat(ij, "\">\n      <h2 >Map ").concat(ij, "</h2>\n      <img src=\"images/map").concat(ij, ".png\" height='150px' alt=\"image of map ").concat(ij, "\">\n    </a>\n  ");
   console.log("map" + ij);

@@ -712,6 +712,12 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map24")) {
   map = getmap24();
   mapnum = 24;
+} else if (window.location.href.includes("map25")) {
+  map = getmap25();
+  mapnum = 25;
+} else if (window.location.href.includes("map26")) {
+  map = getmap26();
+  mapnum = 26;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
