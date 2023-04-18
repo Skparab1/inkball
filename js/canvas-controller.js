@@ -109,26 +109,35 @@ function drawbg(){
 
   // these are pushers
   j = 0;
-  ctx.fillStyle = 'rgb(90,90,90)';
+  let rrr = 75;
+  if (pushtimer < 4){
+    rrr = pushtimer*85/4;
+  } else if (pushtimer > byte/2-4){
+    rrr = (byte/2-pushtimer)*85/4;
+  }
+  ctx.fillStyle = 'rgb('+rrr+','+rrr+','+rrr+')';
+
   while (j < leftpusher.length){
-    drawpusherleft(leftpusher[j][0],leftpusher[j][1]);
+    drawpusherleft(leftpusher[j][0]-pushtimer,leftpusher[j][1]);
     j += 1;
   }
   j = 0;
   while (j < rightpusher.length){
-    drawpusherright(rightpusher[j][0],rightpusher[j][1]);
+    drawpusherright(rightpusher[j][0]+pushtimer,rightpusher[j][1]);
     j += 1;
   }
   j = 0;
   while (j < uppusher.length){
-    drawpusherup(uppusher[j][0],uppusher[j][1]);
+    drawpusherup(uppusher[j][0],uppusher[j][1]-pushtimer);
     j += 1;
   }
   j = 0;
   while (j < downpusher.length){
-    drawpusherdown(downpusher[j][0],downpusher[j][1]);
+    drawpusherdown(downpusher[j][0],downpusher[j][1]+pushtimer);
     j += 1;
   }
+
+  ctx.fillStyle = 'gray';
 
   // releaser
   if (releaser != null){
@@ -659,6 +668,14 @@ if (window.location.href.includes("map10")){
   map = getmap19(); mapnum = 19;
 } else if (window.location.href.includes("map20")){
   map = getmap20(); mapnum = 20;
+} else if (window.location.href.includes("map21")){
+  map = getmap21(); mapnum = 21;
+} else if (window.location.href.includes("map22")){
+  map = getmap22(); mapnum = 22;
+} else if (window.location.href.includes("map23")){
+  map = getmap23(); mapnum = 23;
+} else if (window.location.href.includes("map24")){
+  map = getmap24(); mapnum = 24;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -720,6 +737,7 @@ let leftpusher = [];
 let rightpusher = [];
 let uppusher = [];
 let downpusher = [];
+let pushtimer = 0;
 if (map.uppusher != null){
   uppusher = byteize(map.uppusher);
 }
@@ -1108,6 +1126,10 @@ let y = 0;
     tbtimer += 1;
     if (tbtimer >= timedblockinterval){
       tbtimer = 0;
+    }
+    pushtimer += 0.1;
+    if (pushtimer >= byte/2){
+      pushtimer = 0;
     }
 
     y += 1;

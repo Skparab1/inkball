@@ -127,34 +127,43 @@ function drawbg() {
 
 
   j = 0;
-  ctx.fillStyle = 'rgb(90,90,90)';
+  var rrr = 75;
+
+  if (pushtimer < 4) {
+    rrr = pushtimer * 85 / 4;
+  } else if (pushtimer > byte / 2 - 4) {
+    rrr = (byte / 2 - pushtimer) * 85 / 4;
+  }
+
+  ctx.fillStyle = 'rgb(' + rrr + ',' + rrr + ',' + rrr + ')';
 
   while (j < leftpusher.length) {
-    drawpusherleft(leftpusher[j][0], leftpusher[j][1]);
+    drawpusherleft(leftpusher[j][0] - pushtimer, leftpusher[j][1]);
     j += 1;
   }
 
   j = 0;
 
   while (j < rightpusher.length) {
-    drawpusherright(rightpusher[j][0], rightpusher[j][1]);
+    drawpusherright(rightpusher[j][0] + pushtimer, rightpusher[j][1]);
     j += 1;
   }
 
   j = 0;
 
   while (j < uppusher.length) {
-    drawpusherup(uppusher[j][0], uppusher[j][1]);
+    drawpusherup(uppusher[j][0], uppusher[j][1] - pushtimer);
     j += 1;
   }
 
   j = 0;
 
   while (j < downpusher.length) {
-    drawpusherdown(downpusher[j][0], downpusher[j][1]);
+    drawpusherdown(downpusher[j][0], downpusher[j][1] + pushtimer);
     j += 1;
-  } // releaser
+  }
 
+  ctx.fillStyle = 'gray'; // releaser
 
   if (releaser != null) {
     ctx.fillRect(width + ballwidth * 2, 0, byte / 2, byte * 7);
@@ -691,6 +700,18 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map20")) {
   map = getmap20();
   mapnum = 20;
+} else if (window.location.href.includes("map21")) {
+  map = getmap21();
+  mapnum = 21;
+} else if (window.location.href.includes("map22")) {
+  map = getmap22();
+  mapnum = 22;
+} else if (window.location.href.includes("map23")) {
+  map = getmap23();
+  mapnum = 23;
+} else if (window.location.href.includes("map24")) {
+  map = getmap24();
+  mapnum = 24;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -757,6 +778,7 @@ var leftpusher = [];
 var rightpusher = [];
 var uppusher = [];
 var downpusher = [];
+var pushtimer = 0;
 
 if (map.uppusher != null) {
   uppusher = byteize(map.uppusher);
@@ -838,7 +860,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
       switch (_context3.prev = _context3.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context3.next = 33;
+            _context3.next = 35;
             break;
           }
 
@@ -878,7 +900,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             break;
           }
 
-          return _context3.abrupt("break", 33);
+          return _context3.abrupt("break", 35);
 
         case 11:
           lucid = 0;
@@ -1181,16 +1203,22 @@ var y = 0; // start the async here so we dont start the game before loading the 
             tbtimer = 0;
           }
 
+          pushtimer += 0.1;
+
+          if (pushtimer >= byte / 2) {
+            pushtimer = 0;
+          }
+
           y += 1;
           univtimer += 1;
-          _context3.next = 31;
+          _context3.next = 33;
           return regeneratorRuntime.awrap(sleep());
 
-        case 31:
+        case 33:
           _context3.next = 0;
           break;
 
-        case 33:
+        case 35:
         case "end":
           return _context3.stop();
       }

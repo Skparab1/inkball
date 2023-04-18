@@ -2,12 +2,12 @@
 let holder = document.getElementById('allmaps');
 
 let ij = 1;
-while (ij < 21){
+while (ij < 25){
   let div = document.createElement('tr');
   div.innerHTML = `
     <a href="./index.html?map${ij}">
       <h2 >Map ${ij}</h2>
-      <img src="images/map${ij}.png" height='150px' alt="map ${ij}">
+      <img src="images/map${ij}.png" height='150px' alt="image of map ${ij}">
     </a>
   `;
 
