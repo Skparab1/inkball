@@ -416,8 +416,8 @@ function getmap24() {
   var map = {
     "bx": [30.75, 30.75, 30.75, 30.75],
     "by": [-2, -4.5, -7, -10],
-    "dx": [0, 1, 1, 0],
-    "dy": [-1, 0, 0, -1],
+    "dx": [0, 0, 0, 0],
+    "dy": [-1, 1, 1, -1],
     "clrs": [BLUE, BLUE, BLUE, BLUE],
     "holecenters": [[7.5, 17]],
     "holecolors": [BLUE],
