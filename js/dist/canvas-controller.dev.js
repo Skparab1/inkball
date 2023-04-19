@@ -86,6 +86,7 @@ function drawbg() {
 
 
   j = 0;
+  ctx.lineWidth = ballwidth / 4;
 
   while (j < timedblocks.length && tbtimer < timedblockinterval / 2 + 50) {
     if (tbtimer < 100) {
@@ -99,7 +100,6 @@ function drawbg() {
       ctx.strokeStyle = 'rgba(128,128,128,' + _tv + ')';
     }
 
-    ctx.lineWidth = ballwidth / 4;
     ctx.strokeRect(timedblocks[j][0] - byte / 2, timedblocks[j][1] - byte / 2, byte, byte);
     j += 1;
   } // these are antitimed blocks
@@ -120,7 +120,6 @@ function drawbg() {
       ctx.strokeStyle = 'rgba(128,128,128,' + _tv3 + ')';
     }
 
-    ctx.lineWidth = ballwidth / 4;
     ctx.strokeRect(antitimedblocks[j][0] - byte / 2, antitimedblocks[j][1] - byte / 2, byte, byte);
     j += 1;
   } // these are pushers
@@ -163,6 +162,17 @@ function drawbg() {
     j += 1;
   }
 
+  j = 0;
+  ctx.lineWidth = ballwidth / 4;
+  ctx.fillStyle = "rgb(" + 3 * bluefade / 100 + "," + 161 * bluefade / 100 + "," + 252 * bluefade / 100 + ")";
+  ctx.strokeStyle = "rgb(" + 128 * bluefade / 100 + "," + 128 * bluefade / 100 + "," + 128 * bluefade / 100 + ")";
+
+  while (j < bluelocks.length && bluefade != 0) {
+    ctx.fillRect(bluelocks[j][0] - byte / 2, bluelocks[j][1] - byte / 2, byte, byte);
+    ctx.strokeRect(bluelocks[j][0] - byte / 2, bluelocks[j][1] - byte / 2, byte, byte);
+    j += 1;
+  }
+
   ctx.fillStyle = 'gray'; // releaser
 
   if (releaser != null) {
@@ -191,6 +201,58 @@ function drawbg() {
     ctx.lineTo(width + byte, byte * 8);
     ctx.fill();
   }
+}
+
+function togglebluelock() {
+  return regeneratorRuntime.async(function togglebluelock$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          blueon = !blueon; // now its the new setting
+
+          if (!blueon) {
+            _context.next = 10;
+            break;
+          }
+
+        case 2:
+          if (!(bluefade < 100)) {
+            _context.next = 8;
+            break;
+          }
+
+          bluefade += 1;
+          _context.next = 6;
+          return regeneratorRuntime.awrap(sleep());
+
+        case 6:
+          _context.next = 2;
+          break;
+
+        case 8:
+          _context.next = 16;
+          break;
+
+        case 10:
+          if (!(bluefade > 0)) {
+            _context.next = 16;
+            break;
+          }
+
+          bluefade -= 1;
+          _context.next = 14;
+          return regeneratorRuntime.awrap(sleep());
+
+        case 14:
+          _context.next = 10;
+          break;
+
+        case 16:
+        case "end":
+          return _context.stop();
+      }
+    }
+  });
 }
 
 function drawpusherright(x, y) {
@@ -426,12 +488,12 @@ function dist1(x1, y1, x2, y2) {
 
 function shrinkball(num, hole) {
   var loser, u, endTime, time, wn;
-  return regeneratorRuntime.async(function shrinkball$(_context) {
+  return regeneratorRuntime.async(function shrinkball$(_context2) {
     while (1) {
-      switch (_context.prev = _context.next) {
+      switch (_context2.prev = _context2.next) {
         case 0:
           if (!(clrs[num] != holecolors[hole])) {
-            _context.next = 9;
+            _context2.next = 9;
             break;
           }
 
@@ -444,7 +506,7 @@ function shrinkball(num, hole) {
           loser.style.display = 'block';
           loser.style.opacity = 1;
           lost = true;
-          _context.next = 24;
+          _context2.next = 25;
           break;
 
         case 9:
@@ -454,21 +516,25 @@ function shrinkball(num, hole) {
 
         case 11:
           if (!(u > 0)) {
-            _context.next = 18;
+            _context2.next = 18;
             break;
           }
 
           bwidths[num] = u / 100 * ballwidth; //console.log(bwidths);
 
-          _context.next = 15;
+          _context2.next = 15;
           return regeneratorRuntime.awrap(sleep(2));
 
         case 15:
           u -= 1;
-          _context.next = 11;
+          _context2.next = 11;
           break;
 
         case 18:
+          if (clrs[num] == BLUE) {
+            togglebluelock();
+          }
+
           bwidths[num] = ballwidth;
           bx[num] = width + byte * 2; // this may be wrong
 
@@ -494,9 +560,9 @@ function shrinkball(num, hole) {
             wn.style.display = 'block';
           }
 
-        case 24:
+        case 25:
         case "end":
-          return _context.stop();
+          return _context2.stop();
       }
     }
   });
@@ -511,9 +577,9 @@ var getAllSubsets = function getAllSubsets(theArray) {
 };
 
 function releaseball(r) {
-  return regeneratorRuntime.async(function releaseball$(_context2) {
+  return regeneratorRuntime.async(function releaseball$(_context3) {
     while (1) {
-      switch (_context2.prev = _context2.next) {
+      switch (_context3.prev = _context3.next) {
         case 0:
           // release it
           releasedstatuses[r] = true;
@@ -542,7 +608,7 @@ function releaseball(r) {
 
         case 9:
         case "end":
-          return _context2.stop();
+          return _context3.stop();
       }
     }
   });
@@ -718,6 +784,12 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map26")) {
   map = getmap26();
   mapnum = 26;
+} else if (window.location.href.includes("map27")) {
+  map = getmap27();
+  mapnum = 27;
+} else if (window.location.href.includes("map28")) {
+  map = getmap28();
+  mapnum = 28;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -800,9 +872,17 @@ if (map.downpusher != null) {
 
 if (map.leftpusher != null) {
   leftpusher = byteize(map.leftpusher);
-}
+} // lock blocks
 
-console.log(uppusher, leftpusher); // releaser
+
+var bluelocks = [];
+var bluefade = 100;
+var blueon = true;
+
+if (map.bluelockblock != null) {
+  bluelocks = byteize(map.bluelockblock);
+} // releaser
+
 
 var releaser = map.releasepoint;
 
@@ -861,12 +941,12 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
 (function _callee() {
   var lucid, o, ye, g, allowd, lasttimee, r;
-  return regeneratorRuntime.async(function _callee$(_context3) {
+  return regeneratorRuntime.async(function _callee$(_context4) {
     while (1) {
-      switch (_context3.prev = _context3.next) {
+      switch (_context4.prev = _context4.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context3.next = 35;
+            _context4.next = 35;
             break;
           }
 
@@ -902,11 +982,11 @@ var y = 0; // start the async here so we dont start the game before loading the 
           lastby = by;
 
           if (!lost) {
-            _context3.next = 11;
+            _context4.next = 11;
             break;
           }
 
-          return _context3.abrupt("break", 35);
+          return _context4.abrupt("break", 35);
 
         case 11:
           lucid = 0;
@@ -1033,6 +1113,31 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
                 if (by[lucid] > antitimedblocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < antitimedblocks[o][1] + byte / 2 + ballwidth / 1.5) {
                   if (bx[lucid] < antitimedblocks[o][0] - byte / 2) {
+                    dx[lucid] = -Math.abs(dx[lucid]);
+                  } else {
+                    dx[lucid] = Math.abs(dx[lucid]);
+                  }
+                }
+              }
+
+              o += 1;
+            } // blue locks
+
+
+            o = 0;
+
+            while (o < bluelocks.length && blueon) {
+              if (dist1(bluelocks[o][0], bluelocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
+                if (bx[lucid] > bluelocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < bluelocks[o][0] + byte / 2 + ballwidth / 1.5) {
+                  if (by[lucid] < bluelocks[o][1]) {
+                    dy[lucid] = -Math.abs(dy[lucid]);
+                  } else {
+                    dy[lucid] = Math.abs(dy[lucid]);
+                  }
+                }
+
+                if (by[lucid] > bluelocks[o][1] - byte / 2 - ballwidth / 1.5 && by[lucid] < bluelocks[o][1] + byte / 2 + ballwidth / 1.5) {
+                  if (bx[lucid] < bluelocks[o][0] - byte / 2) {
                     dx[lucid] = -Math.abs(dx[lucid]);
                   } else {
                     dx[lucid] = Math.abs(dx[lucid]);
@@ -1217,16 +1322,16 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
           y += 1;
           univtimer += 1;
-          _context3.next = 33;
+          _context4.next = 33;
           return regeneratorRuntime.awrap(sleep());
 
         case 33:
-          _context3.next = 0;
+          _context4.next = 0;
           break;
 
         case 35:
         case "end":
-          return _context3.stop();
+          return _context4.stop();
       }
     }
   });
@@ -1235,9 +1340,9 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
 
 (function _callee2() {
-  return regeneratorRuntime.async(function _callee2$(_context4) {
+  return regeneratorRuntime.async(function _callee2$(_context5) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           window.addEventListener("keydown", function (event) {
             if (event.defaultPrevented) {
@@ -1250,7 +1355,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
         case 1:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   });

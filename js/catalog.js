@@ -2,7 +2,7 @@
 let holder = document.getElementById('allmaps');
 
 let ij = 1;
-while (ij < 27){
+while (ij < 31){
   let div = document.createElement('tr');
   div.innerHTML = `
     <a href="./index.html?map${ij}">

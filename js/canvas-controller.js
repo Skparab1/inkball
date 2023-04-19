@@ -73,6 +73,7 @@ function drawbg(){
 
   // these are timed blocks
   j = 0;
+  ctx.lineWidth = ballwidth/4;
   while (j < timedblocks.length && tbtimer < timedblockinterval/2+50){
     if (tbtimer < 100){
       let tv = (tbtimer)/100;
@@ -84,7 +85,6 @@ function drawbg(){
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
     }
 
-    ctx.lineWidth = ballwidth/4;
     ctx.strokeRect(timedblocks[j][0]-byte/2,timedblocks[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
@@ -102,7 +102,6 @@ function drawbg(){
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
     }
 
-    ctx.lineWidth = ballwidth/4;
     ctx.strokeRect(antitimedblocks[j][0]-byte/2,antitimedblocks[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
@@ -134,6 +133,16 @@ function drawbg(){
   j = 0;
   while (j < downpusher.length){
     drawpusherdown(downpusher[j][0],downpusher[j][1]+pushtimer);
+    j += 1;
+  }
+
+  j = 0;
+  ctx.lineWidth = ballwidth/4;
+  ctx.fillStyle = "rgb("+3*bluefade/100+","+161*bluefade/100+","+252*bluefade/100+")";
+  ctx.strokeStyle = "rgb("+128*bluefade/100+","+128*bluefade/100+","+128*bluefade/100+")";
+  while (j < bluelocks.length && bluefade != 0){
+    ctx.fillRect(bluelocks[j][0]-byte/2,bluelocks[j][1]-byte/2 ,byte,byte);
+    ctx.strokeRect(bluelocks[j][0]-byte/2,bluelocks[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
 
@@ -170,6 +179,22 @@ function drawbg(){
     ctx.lineTo(width+byte,byte*8);
     ctx.fill();
 
+  }
+}
+
+async function togglebluelock(){
+  blueon = !blueon;
+  // now its the new setting
+  if (blueon){
+    while (bluefade < 100){
+      bluefade += 1;
+      await sleep();
+    }
+  } else {
+    while (bluefade > 0){
+      bluefade -= 1;
+      await sleep();
+    }
   }
 }
 
@@ -459,6 +484,10 @@ async function shrinkball(num, hole){
       u -= 1;
     }
 
+    if (clrs[num] == BLUE){
+      togglebluelock();
+    }
+
     bwidths[num] = ballwidth;
 
     bx[num] = width+byte*2; // this may be wrong
@@ -680,6 +709,10 @@ if (window.location.href.includes("map10")){
   map = getmap25(); mapnum = 25;
 } else if (window.location.href.includes("map26")){
   map = getmap26(); mapnum = 26;
+} else if (window.location.href.includes("map27")){
+  map = getmap27(); mapnum = 27;
+} else if (window.location.href.includes("map28")){
+  map = getmap28(); mapnum = 28;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -755,7 +788,13 @@ if (map.leftpusher != null){
   leftpusher = byteize(map.leftpusher);
 }
 
-console.log(uppusher, leftpusher);
+// lock blocks
+let bluelocks = [];
+let bluefade = 100;
+let blueon = true;
+if (map.bluelockblock != null){
+  bluelocks = byteize(map.bluelockblock);
+}
 
 // releaser
 let releaser = map.releasepoint;
@@ -969,6 +1008,29 @@ let y = 0;
 
           if (by[lucid] > antitimedblocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < antitimedblocks[o][1]+byte/2+ballwidth/1.5){
             if (bx[lucid] < antitimedblocks[o][0]-byte/2){
+              dx[lucid] = -Math.abs(dx[lucid]);
+            } else {
+              dx[lucid] = Math.abs(dx[lucid]);
+            }
+          }
+        }
+        o += 1;
+      }
+
+      // blue locks
+      o = 0;
+      while (o < bluelocks.length && blueon){
+        if (dist1(bluelocks[o][0],bluelocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+          if (bx[lucid] > bluelocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < bluelocks[o][0]+byte/2+ballwidth/1.5){
+            if (by[lucid] < bluelocks[o][1]){
+              dy[lucid] = -Math.abs(dy[lucid]);
+            } else {
+              dy[lucid] = Math.abs(dy[lucid]);
+            }
+          }
+
+          if (by[lucid] > bluelocks[o][1]-byte/2-ballwidth/1.5 && by[lucid] < bluelocks[o][1]+byte/2+ballwidth/1.5){
+            if (bx[lucid] < bluelocks[o][0]-byte/2){
               dx[lucid] = -Math.abs(dx[lucid]);
             } else {
               dx[lucid] = Math.abs(dx[lucid]);
