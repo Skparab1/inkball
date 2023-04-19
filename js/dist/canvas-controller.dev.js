@@ -732,6 +732,7 @@ var lost = false; //get the map we are going to use
 
 var map;
 var mapnum = -1;
+var pushlimit = 2;
 
 if (window.location.href.includes("map10")) {
   map = getmap10();
@@ -787,12 +788,16 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map27")) {
   map = getmap27();
   mapnum = 27;
+  pushlimit = 1.6;
 } else if (window.location.href.includes("map28")) {
   map = getmap28();
   mapnum = 28;
 } else if (window.location.href.includes("map29")) {
   map = getmap29();
   mapnum = 29;
+} else if (window.location.href.includes("map30")) {
+  map = getmap30();
+  mapnum = 30;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -883,6 +888,12 @@ var bluefade = 100;
 var blueon = true;
 
 if (map.bluelockblock != null) {
+  blueon = map.initiallock;
+
+  if (!blueon) {
+    bluefade = 0;
+  }
+
   bluelocks = byteize(map.bluelockblock);
 } // releaser
 
@@ -1157,7 +1168,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             while (o < leftpusher.length) {
               if (dist1(leftpusher[o][0], leftpusher[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 // accelerate if not above threshold
-                if (dx[lucid] > -1.7) {
+                if (dx[lucid] > -pushlimit) {
                   dx[lucid] -= 0.1;
                 }
               }
@@ -1170,7 +1181,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             while (o < downpusher.length) {
               if (dist1(downpusher[o][0], downpusher[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 // accelerate if not above threshold
-                if (dy[lucid] < 1.7) {
+                if (dy[lucid] < pushlimit) {
                   dy[lucid] += 0.1;
                 }
               }
@@ -1183,7 +1194,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             while (o < rightpusher.length) {
               if (dist1(rightpusher[o][0], rightpusher[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 // accelerate if not above threshold
-                if (dx[lucid] < 1.7) {
+                if (dx[lucid] < pushlimit) {
                   dx[lucid] += 0.1;
                 }
               }
@@ -1196,7 +1207,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
             while (o < uppusher.length) {
               if (dist1(uppusher[o][0], uppusher[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 // accelerate if not above threshold
-                if (dy[lucid] > -1.7) {
+                if (dy[lucid] > -pushlimit) {
                   dy[lucid] -= 0.1;
                 }
               }

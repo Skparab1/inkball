@@ -23,16 +23,25 @@
     <div id="right-panel" class="right-panel">
       <h1>Inkball</h1>
       <a href="./app.html">
-        <button>All maps</button>
+        <button class="maps-button">All maps</button>
       </a>
     </div>
 
     <div id="lose-dialogue" class="lose-dialogue">
-      <h1>You lost</h1>
+      <h1>You Lost</h1>
+      <button class="maps-button" onclick="location.reload();">Play again</button>
+      <a href="./app.html">
+        <button class="maps-button">All maps</button>
+      </a>
     </div>
 
     <div id="win-dialogue" class="win-dialogue">
-      <h1>You won!</h1>
+      <h1>You Won!</h1>
+      <button class="maps-button" onclick="location.reload();">Play again</button>
+      <a href="./app.html">
+        <button class="maps-button">All maps</button>
+      </a>
+      <h1>Leaderboard will go here eventually</h1>
     </div>
     
     <script src="js/maps.js"></script>
