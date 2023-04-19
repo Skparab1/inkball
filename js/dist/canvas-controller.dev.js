@@ -176,8 +176,8 @@ function drawbg() {
 
   j = 0;
   ctx.lineWidth = ballwidth / 4;
-  ctx.lineJoin = "bevel";
-  ctx.fillStyle = 'gray';
+  ctx.lineJoin = "round";
+  ctx.fillStyle = 'black';
   ctx.strokeStyle = BLUE;
 
   while (j < bluebreakers.length) {
@@ -343,7 +343,7 @@ function dot(v1, v2) {
 function drawmousetrail() {
   try {
     ctx.strokeStyle = 'white';
-    var draww = ballwidth / 2;
+    var draww = ballwidth / 3;
     ctx.lineWidth = draww;
     var ld = ballwidth + draww / 2;
     var r = 0;
@@ -814,6 +814,9 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map31")) {
   map = getmap31();
   mapnum = 31;
+} else if (window.location.href.includes("map32")) {
+  map = getmap32();
+  mapnum = 32;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;
@@ -1336,11 +1339,10 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
               g += 1;
             } // is the ball too slow
+            // if (Math.abs(dx[lucid]) < 0.1 && Math.abs(dy[lucid]) < 0.1 && bx[lucid] < width){
+            //   dx[lucid] = 0.1;
+            // }
 
-
-            if (Math.abs(dx[lucid]) < 0.2 && Math.abs(dy[lucid]) < 0.2) {
-              dx[lucid] = 0.2;
-            }
 
             lucid += 1;
           } // if (univrb){

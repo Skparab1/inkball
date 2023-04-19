@@ -149,8 +149,8 @@ function drawbg(){
 
   j = 0;
   ctx.lineWidth = ballwidth/4;
-  ctx.lineJoin = "bevel";
-  ctx.fillStyle = 'gray';
+  ctx.lineJoin = "round";
+  ctx.fillStyle = 'black';
   ctx.strokeStyle = BLUE;
   while (j < bluebreakers.length){
     ctx.fillRect(bluebreakers[j][0]-byte/2,bluebreakers[j][1]-byte/2 ,byte,byte);
@@ -288,7 +288,7 @@ function drawmousetrail(){
   try {
 
     ctx.strokeStyle = 'white';
-    let draww = ballwidth/2;
+    let draww = ballwidth/3;
     ctx.lineWidth = draww;
 
     let ld = ballwidth+draww/2;
@@ -732,6 +732,8 @@ if (window.location.href.includes("map10")){
   map = getmap30(); mapnum = 30;
 } else if (window.location.href.includes("map31")){
   map = getmap31(); mapnum = 31;
+} else if (window.location.href.includes("map32")){
+  map = getmap32(); mapnum = 32;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -1209,9 +1211,9 @@ let y = 0;
       }
 
       // is the ball too slow
-      if (Math.abs(dx[lucid]) < 0.2 && Math.abs(dy[lucid]) < 0.2){
-        dx[lucid] = 0.2;
-      }
+      // if (Math.abs(dx[lucid]) < 0.1 && Math.abs(dy[lucid]) < 0.1 && bx[lucid] < width){
+      //   dx[lucid] = 0.1;
+      // }
     
       lucid += 1;
     }
