@@ -1335,6 +1335,11 @@ var y = 0; // start the async here so we dont start the game before loading the 
               }
 
               g += 1;
+            } // is the ball too slow
+
+
+            if (Math.abs(dx[lucid]) < 0.2 && Math.abs(dy[lucid]) < 0.2) {
+              dx[lucid] = 0.2;
             }
 
             lucid += 1;

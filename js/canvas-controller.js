@@ -1208,6 +1208,10 @@ let y = 0;
         g += 1;
       }
 
+      // is the ball too slow
+      if (Math.abs(dx[lucid]) < 0.2 && Math.abs(dy[lucid]) < 0.2){
+        dx[lucid] = 0.2;
+      }
     
       lucid += 1;
     }
