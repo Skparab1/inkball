@@ -1147,3 +1147,40 @@ function getmap30(){
   
   return map;
 }
+
+
+function getmap31(){  
+  
+  let map = {
+    "bx": [30.75, 30.75, 30.75, 30.75],
+    "by": [-2,-4.5,-7,-10],
+    "dx": [0, 1, 1, 0],
+    "dy": [1, 1, 1, 1],
+
+    "clrs": [BLUE,ORANGE,BLUE,ORANGE],
+  
+    "holecenters": [[2.25,16.75],[27.75,16.75], [27.75,2.25]],
+    "holecolors": [BLUE, ORANGE, GREEN],
+
+    "releasepoint": [2.5,2],
+    "releasetimes": [500,1000,1500,2000],
+
+    "bluebreakblocks": [
+      [6,6],[5,6],[4,6],[3,6],[2,6],
+      [6,5],[6,4],[6,3],[6,2],
+      [4,15],[3,15],[2,15],[4,16],[4,17],
+      [26,15],[26,16],[26,17],[27,15],[28,15],
+      [26,4],[26,3],[26,2],[27,4],[28,4]
+    ],
+
+    "initiallock": true,
+
+    "timedblockinterval": 1000,
+
+    "blocks": [
+      
+    ]
+  };
+  
+  return map;
+}

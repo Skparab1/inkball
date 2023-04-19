@@ -136,6 +136,7 @@ function drawbg(){
     j += 1;
   }
 
+  // this is blue lock blocks
   j = 0;
   ctx.lineWidth = ballwidth/4;
   ctx.fillStyle = "rgb("+3*bluefade/100+","+161*bluefade/100+","+252*bluefade/100+")";
@@ -143,6 +144,17 @@ function drawbg(){
   while (j < bluelocks.length && bluefade != 0){
     ctx.fillRect(bluelocks[j][0]-byte/2,bluelocks[j][1]-byte/2 ,byte,byte);
     ctx.strokeRect(bluelocks[j][0]-byte/2,bluelocks[j][1]-byte/2 ,byte,byte);
+    j += 1;
+  }
+
+  j = 0;
+  ctx.lineWidth = ballwidth/4;
+  ctx.lineJoin = "bevel";
+  ctx.fillStyle = 'gray';
+  ctx.strokeStyle = BLUE;
+  while (j < bluebreakers.length){
+    ctx.fillRect(bluebreakers[j][0]-byte/2,bluebreakers[j][1]-byte/2 ,byte,byte);
+    ctx.strokeRect(bluebreakers[j][0]-byte/2,bluebreakers[j][1]-byte/2 ,byte,byte);
     j += 1;
   }
 
@@ -718,6 +730,8 @@ if (window.location.href.includes("map10")){
   map = getmap29(); mapnum = 29;
 } else if (window.location.href.includes("map30")){
   map = getmap30(); mapnum = 30;
+} else if (window.location.href.includes("map31")){
+  map = getmap31(); mapnum = 31;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -803,6 +817,12 @@ if (map.bluelockblock != null){
     bluefade = 0;
   }
   bluelocks = byteize(map.bluelockblock);
+}
+
+// blue breakers
+let bluebreakers = [];
+if (map.bluebreakblocks != null){
+  bluebreakers = byteize(map.bluebreakblocks);
 }
 
 // releaser
@@ -892,8 +912,8 @@ let y = 0;
       lucid += 1;
     }
 
-    lastbx = bx;
-    lastby = by;
+    lastdx = dx;
+    lastdy = dy;
 
     if (lost){
       break;
@@ -1044,6 +1064,35 @@ let y = 0;
             } else {
               dx[lucid] = Math.abs(dx[lucid]);
             }
+          }
+        }
+        o += 1;
+      }
+
+      // blue breakers
+      o = 0;
+      while (o < bluebreakers.length){
+        if (dist1(bluebreakers[o][0],bluebreakers[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
+
+          if (bx[lucid] > bluebreakers[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < bluebreakers[o][0]+byte/2+ballwidth/1.5){
+            if (by[lucid] < bluebreakers[o][1]){
+              dy[lucid] = -Math.abs(dy[lucid]);
+            } else {
+              dy[lucid] = Math.abs(dy[lucid]);
+            }
+          }
+
+          if (by[lucid] > bluebreakers[o][1]-byte/2-ballwidth/1.5 && by[lucid] < bluebreakers[o][1]+byte/2+ballwidth/1.5){
+            if (bx[lucid] < bluebreakers[o][0]-byte/2){
+              dx[lucid] = -Math.abs(dx[lucid]);
+            } else {
+              dx[lucid] = Math.abs(dx[lucid]);
+            }
+          }
+
+          // we are bouncing
+          if (clrs[lucid] == BLUE){
+            bluebreakers.splice(o,1);
           }
         }
         o += 1;
