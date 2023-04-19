@@ -713,6 +713,8 @@ if (window.location.href.includes("map10")){
   map = getmap27(); mapnum = 27;
 } else if (window.location.href.includes("map28")){
   map = getmap28(); mapnum = 28;
+} else if (window.location.href.includes("map29")){
+  map = getmap29(); mapnum = 29;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
@@ -1045,7 +1047,7 @@ let y = 0;
       while (o < leftpusher.length){
         if (dist1(leftpusher[o][0],leftpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           // accelerate if not above threshold
-          if (dx[lucid] > -2){
+          if (dx[lucid] > -1.7){
             dx[lucid] -= 0.1;
           }
         }
@@ -1055,7 +1057,7 @@ let y = 0;
       while (o < downpusher.length){
         if (dist1(downpusher[o][0],downpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           // accelerate if not above threshold
-          if (dy[lucid] < 2){
+          if (dy[lucid] < 1.7){
             dy[lucid] += 0.1;
           }
         }
@@ -1065,7 +1067,7 @@ let y = 0;
       while (o < rightpusher.length){
         if (dist1(rightpusher[o][0],rightpusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           // accelerate if not above threshold
-          if (dx[lucid] < 2){
+          if (dx[lucid] < 1.7){
             dx[lucid] += 0.1;
           }
         }
@@ -1075,7 +1077,7 @@ let y = 0;
       while (o < uppusher.length){
         if (dist1(uppusher[o][0],uppusher[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           // accelerate if not above threshold
-          if (dy[lucid] > -2){
+          if (dy[lucid] > -1.7){
             dy[lucid] -= 0.1;
           }
         }
