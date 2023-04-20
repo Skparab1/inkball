@@ -1,7 +1,10 @@
 const canvas = document.querySelector('.myCanvas');
 canvas.width = window.innerWidth-20; 
 canvas.height = window.innerHeight-20; 
-const byte = 2*((window.innerHeight-100)/(16*2.2));
+const byte = 2*((window.innerHeight-100)/(16*2.25));
+let canvasdv = document.getElementById('canvas-container');
+let pushdown = ((window.innerHeight-(byte*19))/2); // take into account for drawing
+canvasdv.style.marginTop = (pushdown)+'px';
 let ballwidth = byte*0.75;
 let sfactor = byte/28.41;
 

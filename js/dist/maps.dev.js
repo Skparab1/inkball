@@ -4,8 +4,12 @@ var canvas = document.querySelector('.myCanvas');
 canvas.width = window.innerWidth - 20;
 canvas.height = window.innerHeight - 20;
 
-var _byte = 2 * ((window.innerHeight - 100) / (16 * 2.2));
+var _byte = 2 * ((window.innerHeight - 100) / (16 * 2.25));
 
+var canvasdv = document.getElementById('canvas-container');
+var pushdown = (window.innerHeight - _byte * 19) / 2; // take into account for drawing
+
+canvasdv.style.marginTop = pushdown + 'px';
 var ballwidth = _byte * 0.75;
 var sfactor = _byte / 28.41;
 var BLUE = "rgb(3, 161, 252)";

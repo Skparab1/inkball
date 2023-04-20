@@ -4,7 +4,7 @@ function mouse_position(){
     var posX = e.clientX;
     var posY = e.clientY;
 
-    mousepos = [posX,posY];
+    mousepos = [posX,posY-pushdown];
 
     //console.log(mousetrail);
 
