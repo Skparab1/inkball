@@ -817,6 +817,7 @@ if (window.location.href.includes("map10")) {
 } else if (window.location.href.includes("map32")) {
   map = getmap32();
   mapnum = 32;
+  pushlimit = 1.6;
 } else if (window.location.href.includes("map1")) {
   map = getmap1();
   mapnum = 1;

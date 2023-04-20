@@ -733,7 +733,7 @@ if (window.location.href.includes("map10")){
 } else if (window.location.href.includes("map31")){
   map = getmap31(); mapnum = 31;
 } else if (window.location.href.includes("map32")){
-  map = getmap32(); mapnum = 32;
+  map = getmap32(); mapnum = 32; pushlimit = 1.6;
 } else if (window.location.href.includes("map1")){
   map = getmap1(); mapnum = 1;
 } else if (window.location.href.includes("map2")){
