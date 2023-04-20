@@ -74,14 +74,14 @@ function drawbg(){
   // these are timed blocks
   j = 0;
   ctx.lineWidth = ballwidth/4;
-  while (j < timedblocks.length && tbtimer < timedblockinterval/2+50){
+  while (j < timedblocks.length && tbtimer < timedblockinterval/2+25){
     if (tbtimer < 100){
-      let tv = (tbtimer)/100;
+      let tv = (tbtimer)/50;
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
-    } else if (tbtimer < timedblockinterval/2-50){
+    } else if (tbtimer < timedblockinterval/2-25){
       ctx.strokeStyle = 'gray';
     } else {
-      let tv = ((timedblockinterval/2+50)-tbtimer)/100;
+      let tv = ((timedblockinterval/2+25)-tbtimer)/50;
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
     }
 
@@ -91,14 +91,14 @@ function drawbg(){
 
   // these are antitimed blocks
   j = 0;
-  while (j < antitimedblocks.length && tbtimer > timedblockinterval/2-50){
-    if (tbtimer < timedblockinterval/2+50){
-      let tv = (tbtimer-(timedblockinterval/2-50))/100;
+  while (j < antitimedblocks.length && tbtimer > timedblockinterval/2-25){
+    if (tbtimer < timedblockinterval/2+25){
+      let tv = (tbtimer-(timedblockinterval/2-25))/50;
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
-    } else if (tbtimer < timedblockinterval/2-50){
+    } else if (tbtimer < timedblockinterval/2-25){
       ctx.strokeStyle = 'gray';
     } else {
-      let tv = (timedblockinterval-tbtimer)/100;
+      let tv = (timedblockinterval-tbtimer)/50;
       ctx.strokeStyle = 'rgba(128,128,128,'+tv+')';
     }
 
@@ -1004,7 +1004,7 @@ let y = 0;
 
       // timedblocks
       o = 0;
-      while (o < timedblocks.length && tbtimer < timedblockinterval/2-50){
+      while (o < timedblocks.length && tbtimer < timedblockinterval/2-25){
         if (dist1(timedblocks[o][0],timedblocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           if (bx[lucid] > timedblocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < timedblocks[o][0]+byte/2+ballwidth/1.5){
             if (by[lucid] < timedblocks[o][1]){
@@ -1027,7 +1027,7 @@ let y = 0;
 
       // antitimedblocks
       o = 0;
-      while (o < antitimedblocks.length && tbtimer > timedblockinterval/2+50){
+      while (o < antitimedblocks.length && tbtimer > timedblockinterval/2+25){
         if (dist1(antitimedblocks[o][0],antitimedblocks[o][1],bx[lucid],by[lucid]) < ballwidth+byte/2){
           if (bx[lucid] > antitimedblocks[o][0]-byte/2-ballwidth/1.5 && bx[lucid] < antitimedblocks[o][0]+byte/2+ballwidth/1.5){
             if (by[lucid] < antitimedblocks[o][1]){
@@ -1168,9 +1168,11 @@ let y = 0;
         // now if we do the bounce set the timer
         collisiontimer[i] = 0;
 
-        if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)){
-          collisionaudio.play();
-        }
+        // if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)){
+        //   collisionaudio.pause();
+        //   collisionaudio.currentTime = 0;
+        //   collisionaudio.play();
+        // }
       }
       i += 1;
     }

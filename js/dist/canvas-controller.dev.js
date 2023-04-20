@@ -88,14 +88,14 @@ function drawbg() {
   j = 0;
   ctx.lineWidth = ballwidth / 4;
 
-  while (j < timedblocks.length && tbtimer < timedblockinterval / 2 + 50) {
+  while (j < timedblocks.length && tbtimer < timedblockinterval / 2 + 25) {
     if (tbtimer < 100) {
-      var tv = tbtimer / 100;
+      var tv = tbtimer / 50;
       ctx.strokeStyle = 'rgba(128,128,128,' + tv + ')';
-    } else if (tbtimer < timedblockinterval / 2 - 50) {
+    } else if (tbtimer < timedblockinterval / 2 - 25) {
       ctx.strokeStyle = 'gray';
     } else {
-      var _tv = (timedblockinterval / 2 + 50 - tbtimer) / 100;
+      var _tv = (timedblockinterval / 2 + 25 - tbtimer) / 50;
 
       ctx.strokeStyle = 'rgba(128,128,128,' + _tv + ')';
     }
@@ -107,15 +107,15 @@ function drawbg() {
 
   j = 0;
 
-  while (j < antitimedblocks.length && tbtimer > timedblockinterval / 2 - 50) {
-    if (tbtimer < timedblockinterval / 2 + 50) {
-      var _tv2 = (tbtimer - (timedblockinterval / 2 - 50)) / 100;
+  while (j < antitimedblocks.length && tbtimer > timedblockinterval / 2 - 25) {
+    if (tbtimer < timedblockinterval / 2 + 25) {
+      var _tv2 = (tbtimer - (timedblockinterval / 2 - 25)) / 50;
 
       ctx.strokeStyle = 'rgba(128,128,128,' + _tv2 + ')';
-    } else if (tbtimer < timedblockinterval / 2 - 50) {
+    } else if (tbtimer < timedblockinterval / 2 - 25) {
       ctx.strokeStyle = 'gray';
     } else {
-      var _tv3 = (timedblockinterval - tbtimer) / 100;
+      var _tv3 = (timedblockinterval - tbtimer) / 50;
 
       ctx.strokeStyle = 'rgba(128,128,128,' + _tv3 + ')';
     }
@@ -1117,7 +1117,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
             o = 0;
 
-            while (o < timedblocks.length && tbtimer < timedblockinterval / 2 - 50) {
+            while (o < timedblocks.length && tbtimer < timedblockinterval / 2 - 25) {
               if (dist1(timedblocks[o][0], timedblocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 if (bx[lucid] > timedblocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < timedblocks[o][0] + byte / 2 + ballwidth / 1.5) {
                   if (by[lucid] < timedblocks[o][1]) {
@@ -1142,7 +1142,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
             o = 0;
 
-            while (o < antitimedblocks.length && tbtimer > timedblockinterval / 2 + 50) {
+            while (o < antitimedblocks.length && tbtimer > timedblockinterval / 2 + 25) {
               if (dist1(antitimedblocks[o][0], antitimedblocks[o][1], bx[lucid], by[lucid]) < ballwidth + byte / 2) {
                 if (bx[lucid] > antitimedblocks[o][0] - byte / 2 - ballwidth / 1.5 && bx[lucid] < antitimedblocks[o][0] + byte / 2 + ballwidth / 1.5) {
                   if (by[lucid] < antitimedblocks[o][1]) {
@@ -1296,11 +1296,11 @@ var y = 0; // start the async here so we dont start the game before loading the 
             if ((collisiontimer[i] > 30 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
               bounce(newsubs[i][0], newsubs[i][1]); // now if we do the bounce set the timer
 
-              collisiontimer[i] = 0;
-
-              if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) {
-                collisionaudio.play();
-              }
+              collisiontimer[i] = 0; // if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)){
+              //   collisionaudio.pause();
+              //   collisionaudio.currentTime = 0;
+              //   collisionaudio.play();
+              // }
             }
 
             i += 1;
