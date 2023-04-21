@@ -16,7 +16,7 @@ while (ij < 33){
   if (localStorage.getItem("map"+ij) != null){
     // finished it
     div.innerHTML += `
-      <h3 style="color: lightgreen">Completed in ${localStorage.getItem("map"+ij)} sec</h3>
+      <h3 style="color: green">Completed in ${localStorage.getItem("map"+ij)} sec</h3>
     `;
     // div.style.backgroundColor = 'green';
   } else {

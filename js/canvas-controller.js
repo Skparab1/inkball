@@ -734,14 +734,16 @@ function getwholeleaderboard(ourtime, ourname){
   // so we can just print it ordinarily
 
   let disp = document.getElementById('leaderboard-container');
-  disp.innerHTML += ("<h2>Leaderboard for map"+mapnum+"</h2>");
+  disp.innerHTML += ("<h2>Leaderboard for map "+mapnum+"</h2>");
 
   r = 0;
   while (r < comparr.length){
-    if (comparr[r][1] == ourentry){
-      disp.innerHTML += ("<h3 style='color: lightgreen;'>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
-    } else {
-      disp.innerHTML += ("<h3>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+    if (comparr[r][1].time >= 5){
+      if (comparr[r][1] == ourentry){
+        disp.innerHTML += ("<h3 style='color: lightgreen;'>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+      } else {
+        disp.innerHTML += ("<h3>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+      }
     }
     r += 1;
   }
