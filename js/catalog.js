@@ -16,12 +16,12 @@ while (ij < 33){
   if (localStorage.getItem("map"+ij) != null){
     // finished it
     div.innerHTML += `
-      <h3 style="color: green">Completed in ${localStorage.getItem("map"+ij)} sec</h3>
+      <h3 style="color: lightgreen">Completed in ${localStorage.getItem("map"+ij)} sec</h3>
     `;
     // div.style.backgroundColor = 'green';
   } else {
     div.innerHTML += `
-    <h3 style="color: black">hi</h3>
+    <h3 style="color: black">•</h3>
   `;
   }
 
@@ -36,3 +36,18 @@ while (ij < 33){
   ij += 1;
 }
 
+function openwelcome(){
+  document.getElementById('welcome').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
+// is this the users first time
+let us = localStorage.getItem('inkballname');
+if (us == null){
+  // then its the first time
+  // set the name as the default
+  localStorage.setItem('inkballname','player');
+  
+  // launch the welcome dialogue
+  openwelcome();
+}

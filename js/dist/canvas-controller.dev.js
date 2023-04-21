@@ -1,5 +1,13 @@
 "use strict";
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -554,7 +562,7 @@ function shrinkball(num, hole) {
           by[num] = byte * 8;
           dx[num] = 0; // shud already be but anyway
 
-          dy[num] = 0; // but we accelerate this;
+          dy[num] = 0.15; // but we accelerate this;
 
           if (numgotten >= bx.length) {
             // you won
@@ -566,11 +574,12 @@ function shrinkball(num, hole) {
             console.log('map' + mapnum);
             localStorage.setItem('map' + mapnum, time); //alert('You won! Time taken: '+time+" sec");
 
-            lost = true; // ik its not loss but whatever LMAO
-
+            won = true;
             wn = document.getElementById('win-dialogue');
             wn.style.opacity = 1;
             wn.style.display = 'block';
+            sendlb(time, localStorage.getItem('inkballname'));
+            getwholeleaderboard(time, localStorage.getItem('inkballname'));
           }
 
         case 25:
@@ -732,6 +741,100 @@ function addpoint() {
   mousetrail[mousetrail.length - 1].push(mousepos); // add this point regardless
 }
 
+function allstoppedy() {
+  var u = 0;
+
+  while (u < dy.length) {
+    if (dy[u] > 0.1) {
+      return false;
+    }
+
+    u += 1;
+  }
+
+  return true;
+}
+
+function getlb(map) {
+  return regeneratorRuntime.async(function getlb$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=".concat(map)).then(function (response) {
+            return response.json();
+          }).then(function (data) {
+            console.log(data);
+            thisleaderboard = data.items;
+          });
+
+        case 1:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  });
+}
+
+function sendlb(ourtime, ourname) {
+  //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
+  fetch("https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=".concat(mapnum, "&time=").concat(ourtime, "&name=").concat(ourname)).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    console.log(data);
+    thisleaderboard = data.items;
+  });
+}
+
+function getwholeleaderboard(ourtime, ourname) {
+  //so we have thisleaderboard as an array of jsons
+  // create a json for this one and add it to the end
+  var ourentry = {
+    key: 'whocares',
+    map: mapnum,
+    time: ourtime,
+    username: ourname
+  };
+  thisleaderboard.push(ourentry); // quickly just create a new array with time based so it can sort
+
+  var comparr = [];
+  var r = 0;
+
+  while (r < thisleaderboard.length) {
+    comparr.push([parseFloat(thisleaderboard[r].time), thisleaderboard[r]]);
+    r += 1;
+  }
+
+  console.log("BEFORE SORT", comparr);
+  comparr = comparr.sort(function (_ref, _ref2) {
+    var _ref3 = _slicedToArray(_ref, 2),
+        a = _ref3[0],
+        b = _ref3[1];
+
+    var _ref4 = _slicedToArray(_ref2, 2),
+        c = _ref4[0],
+        d = _ref4[1];
+
+    return c - a || b - d;
+  });
+  comparr = comparr.reverse();
+  console.log("AFTER SORT", comparr); // now it is ready to be printed out
+  // so we can just print it ordinarily
+
+  var disp = document.getElementById('leaderboard-container');
+  disp.innerHTML += "<h2>Leaderboard for map" + mapnum + "</h2>";
+  r = 0;
+
+  while (r < comparr.length) {
+    if (comparr[r][1] == ourentry) {
+      disp.innerHTML += "<h3 style='color: lightgreen;'>" + comparr[r][1].username + " " + comparr[r][1].time + "</h3>";
+    } else {
+      disp.innerHTML += "<h3>" + comparr[r][1].username + " " + comparr[r][1].time + "</h3>";
+    }
+
+    r += 1;
+  }
+}
+
 var loaded = false; // ballwidth, sfactor and other defined in first.js
 
 var borderwidth = byte;
@@ -741,7 +844,9 @@ var mousepos = [0, 0];
 var mousetrail = [];
 var startTime = new Date();
 var numgotten = 0;
-var lost = false; //get the map we are going to use
+var lost = false;
+var won = false;
+var woncounter = 0; //get the map we are going to use
 
 var map;
 var mapnum = -1;
@@ -849,6 +954,8 @@ if (window.location.href.includes("map10")) {
   window.location.href = "./app.html";
 }
 
+var thisleaderboard;
+getlb(mapnum);
 var bx = byteize1d(map.bx);
 var by = byteize1d(map.by);
 var dx = sfactorize(map.dx);
@@ -982,12 +1089,12 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
 (function _callee() {
   var lucid, o, ye, g, allowd, lasttimee, r;
-  return regeneratorRuntime.async(function _callee$(_context4) {
+  return regeneratorRuntime.async(function _callee$(_context5) {
     while (1) {
-      switch (_context4.prev = _context4.next) {
+      switch (_context5.prev = _context5.next) {
         case 0:
           if (!(y < 1 || testing)) {
-            _context4.next = 35;
+            _context5.next = 35;
             break;
           }
 
@@ -1022,12 +1129,12 @@ var y = 0; // start the async here so we dont start the game before loading the 
           lastdx = dx;
           lastdy = dy;
 
-          if (!lost) {
-            _context4.next = 11;
+          if (!(lost || woncounter > 100)) {
+            _context5.next = 11;
             break;
           }
 
-          return _context4.abrupt("break", 35);
+          return _context5.abrupt("break", 35);
 
         case 11:
           lucid = 0;
@@ -1059,7 +1166,11 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
             if (bx[lucid] > width + borderwidth && by[lucid] > byte * 7) {
               // it is an out ball
-              // make sure its at rest horizontally
+              if (won && allstoppedy()) {
+                woncounter += 1;
+              } // make sure its at rest horizontally
+
+
               dx[lucid] = 0;
 
               if (by[lucid] < height - borderwidth - ballwidth * numgotten * 2) {
@@ -1397,16 +1508,16 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
           y += 1;
           univtimer += 1;
-          _context4.next = 33;
+          _context5.next = 33;
           return regeneratorRuntime.awrap(sleep());
 
         case 33:
-          _context4.next = 0;
+          _context5.next = 0;
           break;
 
         case 35:
         case "end":
-          return _context4.stop();
+          return _context5.stop();
       }
     }
   });
@@ -1415,9 +1526,9 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
 
 (function _callee2() {
-  return regeneratorRuntime.async(function _callee2$(_context5) {
+  return regeneratorRuntime.async(function _callee2$(_context6) {
     while (1) {
-      switch (_context5.prev = _context5.next) {
+      switch (_context6.prev = _context6.next) {
         case 0:
           window.addEventListener("keydown", function (event) {
             if (event.defaultPrevented) {
@@ -1430,7 +1541,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
 
         case 1:
         case "end":
-          return _context5.stop();
+          return _context6.stop();
       }
     }
   });

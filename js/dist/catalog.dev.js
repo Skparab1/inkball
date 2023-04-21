@@ -10,9 +10,9 @@ while (ij < 33) {
 
   if (localStorage.getItem("map" + ij) != null) {
     // finished it
-    div.innerHTML += "\n      <h3 style=\"color: green\">Completed in ".concat(localStorage.getItem("map" + ij), " sec</h3>\n    "); // div.style.backgroundColor = 'green';
+    div.innerHTML += "\n      <h3 style=\"color: lightgreen\">Completed in ".concat(localStorage.getItem("map" + ij), " sec</h3>\n    "); // div.style.backgroundColor = 'green';
   } else {
-    div.innerHTML += "\n    <h3 style=\"color: black\">hi</h3>\n  ";
+    div.innerHTML += "\n    <h3 style=\"color: black\">\u2022</h3>\n  ";
   }
 
   div.style["float"] = 'left';
@@ -20,4 +20,20 @@ while (ij < 33) {
   div.style.marginLeft = '5.5%';
   document.body.appendChild(div);
   ij += 1;
+}
+
+function openwelcome() {
+  document.getElementById('welcome').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+} // is this the users first time
+
+
+var us = localStorage.getItem('inkballname');
+
+if (us == null) {
+  // then its the first time
+  // set the name as the default
+  localStorage.setItem('inkballname', 'player'); // launch the welcome dialogue
+
+  openwelcome();
 }

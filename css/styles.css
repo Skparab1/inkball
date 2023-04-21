@@ -40,6 +40,10 @@ h3 {
   color: var(--fgColor);
 }
 
+h4 {
+  color: var(--fgColor);
+}
+
 a {
   color: var(--fgColor);
   text-decoration: none;
@@ -133,10 +137,19 @@ nav {
 
 .maps-button {
   border: 3px solid teal;
-  background: black;
+  background: rgba(0,0,0,0);
   color: white;
   font-size: 30px;
 }
+
+.close-button {
+  border: 3px solid teal;
+  background: rgba(0,0,0,0);
+  color: white;
+  font-size: 30px;
+  margin-top: 15px;
+}
+
 
 .win-dialogue {
   display: none;
@@ -150,6 +163,117 @@ nav {
   border: 7px solid rgb(218, 165, 32);
   opacity: 0;
   transition: opacity 0.5s;
+}
+
+.leaderboard-container {
+  width: 80%;
+  margin-top: 5%;
+  margin-left: 10%;
+  background-color: rgba(0,0,70,0.7);
+  border: 3px solid white;
+  overflow-y: scroll;
+  max-height: 55%;
+  padding: 5%;
+}
+
+.welcome {
+  position: fixed;
+  left: 20%;
+  width: 60%;
+  top: 15%;
+  height: 70%;
+  border: 3px solid white;
+  background: rgba(0,0,70,0.7);
+  text-align: center;
+  overflow-y: scroll;
+  display: none;
+}
+
+.howtoplay {
+  position: fixed;
+  left: 75%;
+  top: 0px;
+  width: 10%;
+  color: rgb(163, 163, 163);
+}
+
+.leaderboard {
+  position: fixed;
+  left: 87.5%;
+  top: 0px;
+  width: 10%;
+  color: rgb(163, 163, 163);
+}
+
+.blankspace {
+  height: 10px;
+}
+
+.inp {
+  margin-top: 5px;
+  background-color: rgb(0,0,70);
+  border: 1.5px solid white;
+  color: white;
+  text-align: center;
+}
+
+.iconholder {
+  width: 100%;
+}
+
+.icon {
+  width: 20%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  float: left;
+  cursor: help;
+}
+
+.header {
+  width: 100%;
+  text-align: center;
+}
+
+.iconlarger {
+  padding-top: 20px;
+  width: 50%;
+  float: left;
+  height: 100px;
+}
+
+.explainer {
+  position: fixed;
+  width: 40%;
+  left: 30%;
+  top: 37.5%;
+  height: 45%;
+  background-color: rgba(0,0,70,0.7);
+  border: 3px solid white;
+  text-align: center;
+  display: none;
+}
+
+.iconimg {
+  float: left;
+  margin-left: 50px;
+  margin-right: 20px;
+}
+
+.icondetail {
+  width: 50%;
+  float: left;
+  text-align: left;
+  height: 100px;
+}
+
+.totalcover {
+  position: fixed;
+  left: 0px;
+  width: 100%;
+  top: 0px;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: none;
 }
 
 .horiz-container {

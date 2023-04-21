@@ -14,12 +14,157 @@
   </head>
   <body>
     
-    <h1>Maps</h1>
+    <div class="header">
+      <h1>Maps</h1>
+      <h2 class="howtoplay" onclick="openwelcome();">How to play</h2>
+      <a href="./leaderboard.html">
+        <h2 class="leaderboard">Leaderboard</h2>
+      </a>
+    </div>
 
     <div id="allmaps">
       
     </div>
 
+    <div class="totalcover" id="fullcover"></div>
+
+    <div class="welcome" id="welcome">
+      <h1>Welcome to Inkball!</h1>
+
+      <div class="blankspace"></div>
+      <h3>Please enter your name</h3>
+      <input class='inp' type="text" id="username" value="player" onchange="localStorage.setItem('inkballname',document.getElementById('username').value);">
+
+      <div class="blankspace"></div>
+      <h3 style="margin-bottom: 0px;">How to play:</h3>
+      <h4 style="margin-top: 5px;">Drag your mouse to draw lines that deflect the balls to direct them to the targets of the corresponding color.</h4>
+
+      <div class="iconholder">
+        <div class="icon" onclick="document.getElementById('explainerball').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/ball.png" alt="ball" height="66px">
+          <h3>Ball</h3>
+        </div>
+
+        <div class="icon" onclick="document.getElementById('explainertarget').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/target.png" alt="target" height="66px">
+          <h3>Target</h3>
+        </div>
+
+        <div class="icon" onclick="document.getElementById('explainerreleasepoint').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/releasepoint.png" alt="releasepoint" height="66px">
+          <h3>Release point</h3>
+        </div>
+
+        <div class="icon" onclick="document.getElementById('explainerblock').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/block.png" alt="block" height="66px">
+          <h3>Obstacle block</h3>
+        </div>
+
+        <div class="icon" onclick="document.getElementById('explainerreleasetimer').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/releasetimer.png" alt="releasetimer" height="66px">
+          <h3>Release Timer</h3>
+        </div>
+      </div>
+
+      <div class="iconholder">
+        <div class="icon" onclick="document.getElementById('explainertimedblock').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/timedblock.png" alt="timedblock" height="66px">
+          <h3>Timed block</h3>
+        </div>
+        <div class="icon" onclick="document.getElementById('explainerbooster').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/booster.png" alt="booster" height="66px">
+          <h3>Booster</h3>
+        </div>
+        <div class="icon" onclick="document.getElementById('explainerbooststrip').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/booststrip.png" alt="boost strip" height="66px">
+          <h3>Boost strip</h3>
+        </div>
+        <div class="icon" onclick="document.getElementById('explainerlockblock').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/lockblock.png" alt="lock block" height="66px">
+          <h3>Lock block</h3>
+        </div>
+        <div class="icon" onclick="document.getElementById('explainerbreakblock').style.display = 'block'; document.getElementById('morecover').style.display = 'block';">
+          <img src="images/breakblock.png" alt="break block" height="66px">
+          <h3>Break block</h3>
+        </div>
+      </div>
+
+      <button class="close-button" onclick="document.getElementById('welcome').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+      <div class="blankspace"></div>
+    </div>
+
+    <div class="totalcover" id="morecover"></div>
+
+
+    <div class="explainer" id="explainerball">
+      <h1>Ball</h1>
+      <img src="images/ball.png" alt="ball" height="66px">
+      <h3>Direct the ball into the target of the same color</h3>
+      <button class="close-button" onclick="document.getElementById('explainerball').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainertarget">
+      <h1>Target</h1>
+      <img src="images/target.png" alt="target" height="66px">
+      <h3>Direct the ball of the same color into this target</h3>
+      <button class="close-button" onclick="document.getElementById('explainertarget').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerreleasepoint">
+      <h1>Release point</h1>
+      <img src="images/releasepoint.png" alt="releasepoint" height="66px">
+      <h3>The balls will be released from this point</h3>
+      <button class="close-button" onclick="document.getElementById('explainerreleasepoint').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerblock">
+      <h1>Obstable Block</h1>
+      <img src="images/block.png" alt="block" height="66px">
+      <h3>The balls will deflect off these obstacle blocks</h3>
+      <button class="close-button" onclick="document.getElementById('explainerblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerreleasetimer">
+      <h1>Release timer</h1>
+      <img src="images/releasetimer.png" alt="releasetimer" height="66px">
+      <h3>Indicates when a ball will be released</h3>
+      <button class="close-button" onclick="document.getElementById('explainerreleasetimer').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainertimedblock">
+      <h1>Timed blocks</h1>
+      <img src="images/timedblock.png" alt="timedblock" height="66px">
+      <h3>Obstacles that appear and disappear after set intervals</h3>
+      <button class="close-button" onclick="document.getElementById('explainertimedblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerbooster">
+      <h1>Booster</h1>
+      <img src="images/booster.png" alt="booster" height="66px">
+      <h3>Accelerates the ball in the indicated direction</h3>
+      <button class="close-button" onclick="document.getElementById('explainerbooster').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerbooststrip">
+      <h1>Boost Strip</h1>
+      <img src="images/booststrip.png" alt="booststrip" height="66px">
+      <h3>Long accelerates the ball in the indicated direction</h3>
+      <button class="close-button" onclick="document.getElementById('explainerbooststrip').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerlockblock">
+      <h1>Lock block</h1>
+      <img src="images/lockblock.png" alt="lockblock" height="66px">
+      <h3>Appears and disappears when a same colored ball is scored</h3>
+      <button class="close-button" onclick="document.getElementById('explainerlockblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="explainer" id="explainerbreakblock">
+      <h1>Break block</h1>
+      <img src="images/breakblock.png" alt="breakblock" height="66px">
+      <h3>Block that can be broken by a ball of the same color.</h3>
+      <button class="close-button" onclick="document.getElementById('explainerbreakblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">Close</button>
+    </div>
     <script src="js/catalog.js"></script>
   </body>
 </html>

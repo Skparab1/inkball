@@ -505,7 +505,7 @@ async function shrinkball(num, hole){
     bx[num] = width+byte*2; // this may be wrong
     by[num] = byte*8;
     dx[num] = 0; // shud already be but anyway
-    dy[num] = 0; // but we accelerate this;
+    dy[num] = 0.15; // but we accelerate this;
 
     if (numgotten >= bx.length){
       // you won
@@ -518,11 +518,14 @@ async function shrinkball(num, hole){
       console.log('map'+mapnum);
       localStorage.setItem('map'+mapnum,time);
       //alert('You won! Time taken: '+time+" sec");
-      lost = true; // ik its not loss but whatever LMAO
+      won = true;
 
       let wn = document.getElementById('win-dialogue');
       wn.style.opacity = 1;
       wn.style.display = 'block';
+
+      sendlb(time,localStorage.getItem('inkballname'));
+      getwholeleaderboard(time,localStorage.getItem('inkballname'));
     }
   }
 
@@ -666,6 +669,85 @@ function addpoint(){
   mousetrail[mousetrail.length-1].push(mousepos); // add this point regardless
 }
 
+function allstoppedy(){
+  let u = 0;
+  while (u < dy.length){
+    if (dy[u] > 0.1){
+      return false;
+    }
+    u += 1;
+  }
+  return true;
+}
+
+async function getlb(map){
+  fetch((`https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=${map}`))
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+      console.log(data);
+      thisleaderboard = data.items;
+  })
+}
+
+function sendlb(ourtime, ourname){
+  //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
+  fetch((`https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=${mapnum}&time=${ourtime}&name=${ourname}`))
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+      console.log(data);
+      thisleaderboard = data.items;
+  })
+}
+
+function getwholeleaderboard(ourtime, ourname){
+  //so we have thisleaderboard as an array of jsons
+  // create a json for this one and add it to the end
+
+  let ourentry = {
+    key: 'whocares',
+    map: mapnum,
+    time: ourtime,
+    username: ourname,
+  };
+
+  thisleaderboard.push(ourentry);
+
+  // quickly just create a new array with time based so it can sort
+  let comparr = [];
+  let r = 0;
+  while (r < thisleaderboard.length){
+    comparr.push([parseFloat(thisleaderboard[r].time),thisleaderboard[r]]);
+    r += 1;
+  }
+
+  console.log("BEFORE SORT",comparr);
+  comparr = comparr.sort(([a, b], [c, d]) => c - a || b - d);
+  comparr = comparr.reverse();
+
+  console.log("AFTER SORT",comparr);
+
+  // now it is ready to be printed out
+  // so we can just print it ordinarily
+
+  let disp = document.getElementById('leaderboard-container');
+  disp.innerHTML += ("<h2>Leaderboard for map"+mapnum+"</h2>");
+
+  r = 0;
+  while (r < comparr.length){
+    if (comparr[r][1] == ourentry){
+      disp.innerHTML += ("<h3 style='color: lightgreen;'>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+    } else {
+      disp.innerHTML += ("<h3>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+    }
+    r += 1;
+  }
+
+}
+
 let loaded = false;
 
 // ballwidth, sfactor and other defined in first.js
@@ -680,7 +762,8 @@ let startTime = new Date();
 
 let numgotten = 0;
 let lost = false;
-
+let won = false;
+let woncounter = 0;
 
 //get the map we are going to use
 let map;
@@ -755,6 +838,9 @@ if (window.location.href.includes("map10")){
 } else {
   window.location.href = "./app.html";
 }
+
+let thisleaderboard;
+getlb(mapnum);
 
 let bx = byteize1d(map.bx);
 let by = byteize1d(map.by);
@@ -917,7 +1003,7 @@ let y = 0;
     lastdx = dx;
     lastdy = dy;
 
-    if (lost){
+    if (lost || woncounter > 100){
       break;
     }
 
@@ -949,6 +1035,10 @@ let y = 0;
 
       if (bx[lucid] > width+borderwidth && by[lucid] > byte*7){
         // it is an out ball
+
+        if (won && allstoppedy()){
+          woncounter += 1;
+        }
 
         // make sure its at rest horizontally
         dx[lucid] = 0;
