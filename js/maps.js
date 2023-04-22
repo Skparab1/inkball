@@ -1260,7 +1260,7 @@ function getmap32(){
     ],
 
     "bluelockblock": [
-      [1,13],[2,13],[3,13],[2,5]
+      [1,13],[2,13],[3,13]
     ],
 
     "initiallock": true,
