@@ -31,12 +31,34 @@ if (localStorage.getItem('mapreload') == 'declined') {
   location.reload();
 } else {
   localStorage.setItem('mapreload', 'declined');
+}
+
+function setvolume(v) {
+  audi.volume = v / 100;
+  localStorage.setItem('volume', String(v / 100));
 } // set up the audio
 
 
 var randad = Math.floor(Math.random() * 3); // 0 1 2
 
 var audi;
+var ttrs = localStorage.getItem('musicon');
+var audiopaused = false;
+
+if (ttrs == null) {
+  audiopaused = false;
+} else if (ttrs == 'dontplay') {
+  audiopaused = true;
+}
+
+ttrs = localStorage.getItem('sfxon');
+var sfxon = true;
+
+if (ttrs == null) {
+  sfxon = true;
+} else if (ttrs == 'dontplay') {
+  sfxon = false;
+}
 
 if (randad == 0) {
   audi = new Audio('audio/inkball_theme.mp3');
@@ -46,8 +68,16 @@ if (randad == 0) {
   audi = new Audio('audio/inkball_3.mp3');
 }
 
-audi.volume = 0.5;
-audi.play();
+if (localStorage.getItem('volume') != null) {
+  setvolume(parseFloat(localStorage.getItem('volume')) * 100);
+} else {
+  setvolume(100);
+}
+
+if (!audiopaused) {
+  audi.play();
+}
+
 var getaudio = new Audio('audio/inkball_get.mp3');
 var winaudio = new Audio('audio/inkball_win.mp3');
 var loseaudio = new Audio('audio/inkball_lose.mp3');
@@ -528,7 +558,11 @@ function shrinkball(num, hole) {
           //alert("Oops! Ball entered hole of wrong color");
           //location.reload();
           audi.pause();
-          loseaudio.play();
+
+          if (sfxon) {
+            loseaudio.play();
+          }
+
           loser = document.getElementById('lose-dialogue');
           document.getElementById('lwtime').textContent = 'In ' + time + " sec";
           loser.style.display = 'block';
@@ -539,7 +573,10 @@ function shrinkball(num, hole) {
 
         case 13:
           // you got a ball
-          getaudio.play();
+          if (sfxon) {
+            getaudio.play();
+          }
+
           u = 100;
 
         case 15:
@@ -574,7 +611,11 @@ function shrinkball(num, hole) {
           if (numgotten >= bx.length) {
             // you won
             audi.pause();
-            winaudio.play();
+
+            if (sfxon) {
+              winaudio.play();
+            }
+
             console.log('map' + mapnum);
             localStorage.setItem('map' + mapnum, time);
 
@@ -1487,7 +1528,7 @@ var y = 0; // start the async here so we dont start the game before loading the 
           i = 0;
 
           while (i < newsubs.length) {
-            if ((collisiontimer[i] > 10 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
+            if ((collisiontimer[i] > 20 || bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width) && touching(newsubs[i][0], newsubs[i][1])) {
               bounce(newsubs[i][0], newsubs[i][1]); // now if we do the bounce set the timer
 
               collisiontimer[i] = 0; // if (!(bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)){

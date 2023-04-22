@@ -16,10 +16,34 @@ if (localStorage.getItem('mapreload') == 'declined'){
   localStorage.setItem('mapreload','declined');
 }
 
+function setvolume(v){
+  audi.volume = v/100;
+  localStorage.setItem('volume',String(v/100));
+}
+
 // set up the audio
 let randad = Math.floor(Math.random()*3); // 0 1 2
 
 var audi;
+
+let ttrs = localStorage.getItem('musicon');
+var audiopaused = false;
+if (ttrs == null){
+  audiopaused = false;
+} else if (ttrs == 'dontplay'){
+  audiopaused = true;
+}
+
+
+ttrs = localStorage.getItem('sfxon');
+var sfxon = true;
+if (ttrs == null){
+  sfxon = true;
+} else if (ttrs == 'dontplay'){
+  sfxon = false;
+}
+
+
 if (randad == 0){
   audi = new Audio('audio/inkball_theme.mp3');
 } else if (randad == 1){
@@ -27,8 +51,16 @@ if (randad == 0){
 } else {
   audi = new Audio('audio/inkball_3.mp3');
 }
-audi.volume = 0.5;
-audi.play();
+if (localStorage.getItem('volume') != null){
+  setvolume(parseFloat(localStorage.getItem('volume'))*100);
+} else {
+  setvolume(100);
+}
+
+if (!audiopaused){
+  audi.play();
+}
+
 let getaudio = new Audio('audio/inkball_get.mp3');
 let winaudio = new Audio('audio/inkball_win.mp3');
 let loseaudio = new Audio('audio/inkball_lose.mp3');
@@ -484,7 +516,10 @@ async function shrinkball(num, hole){
     //alert("Oops! Ball entered hole of wrong color");
     //location.reload();
     audi.pause();
-    loseaudio.play();
+
+    if (sfxon){
+      loseaudio.play();
+    }
 
     let loser = document.getElementById('lose-dialogue');
     document.getElementById('lwtime').textContent = 'In '+time+" sec";
@@ -493,7 +528,9 @@ async function shrinkball(num, hole){
     lost = true;
   } else {
     // you got a ball
-    getaudio.play();
+    if (sfxon){
+      getaudio.play();
+    }
 
     let u = 100;
     while (u > 0){
@@ -517,7 +554,9 @@ async function shrinkball(num, hole){
     if (numgotten >= bx.length){
       // you won
       audi.pause();
-      winaudio.play();
+      if (sfxon){
+        winaudio.play();
+      }
 
       console.log('map'+mapnum);
       localStorage.setItem('map'+mapnum,time);
@@ -1342,7 +1381,7 @@ let y = 0;
     // now try each of them
     i = 0;
     while (i < newsubs.length){
-      if ((collisiontimer[i] > 10 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
+      if ((collisiontimer[i] > 20 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
         bounce(newsubs[i][0],newsubs[i][1]);
         // now if we do the bounce set the timer
         collisiontimer[i] = 0;

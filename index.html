@@ -46,19 +46,19 @@
 
       <h1 id="audio">Audio</h1>
       <div id="volume">
-        <input type="range" class="range" min="1" max="100" value="100" id="volume-control">
+        <input type="range" class="range" min="1" max="100" value="100" id="volume-control" onchange="setvolume(document.getElementById('volume-control').value);">
       </div>
       <button id='audiobtn' class="action" onclick="toggleMusic()"><h3 id="audio-toggle">Pause Music</h3></button>
 
       <div class="horiz-container" style="padding-top: 0.5rem">
         <h2 id='sf' style="position: absolute; left: 2rem">Music</h2>
         <label class="switch">
-          <input type="checkbox" onclick="togglesfx()">
+          <input type="checkbox" onclick="togglem()">
           <span class="slidersmall" style="width: 50px; position: absolute; left: 6.5rem"></span>
         </label>
         <h2 id='es' style="position: absolute; left: 12.5rem">Sfx</h2>
         <label class="switch">
-          <input type="checkbox" onclick="toggleeatsfx()">
+          <input type="checkbox" onclick="togglesfx()">
           <span class="slidersmall" style="width: 50px; position: absolute; left: 7.2rem"></span>
         </label>
       </div>
@@ -69,7 +69,7 @@
       <h1>You Lost</h1>
       <h2 id="lwtime"></h2>
       <button class="maps-button" onclick="location.reload();">Play again</button>
-      <a href="./app.html">
+      <a href="./app.html" class="nohover">
         <button class="maps-button">All maps</button>
       </a>
     </div>
@@ -78,7 +78,7 @@
       <h1>You Won!</h1>
       <h2 id="lwtime"></h2>
       <button class="maps-button" onclick="location.reload();">Play again</button>
-      <a href="./app.html">
+      <a class='nohover' href="./app.html">
         <button class="maps-button">All maps</button>
       </a>
       <button class="maps-button" onclick="goleaderboard();">Leaderboard</button>
