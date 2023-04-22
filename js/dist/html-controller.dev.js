@@ -43,4 +43,6 @@ function togglesfx() {
   } else {
     localStorage.setItem('sfxon', 'dontplay');
   }
+
+  sfxon = !sfxon;
 }
