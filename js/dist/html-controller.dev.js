@@ -10,3 +10,7 @@ function mouse_position() {
     addpoint(); //console.log(mousetrail);
   }
 }
+
+function goleaderboard() {
+  window.open('https://skparab1.github.io/inkball/leaderboard.html?forcepush=' + mapnum);
+}

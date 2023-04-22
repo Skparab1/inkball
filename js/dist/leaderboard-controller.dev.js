@@ -256,7 +256,7 @@ fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(fun
 
   if (window.location.href.includes('forcepush')) {
     l = window.location.href.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/inkball/leaderboard.html?forcepush=', '');
-    l = l.replace('https://skparab1.github.io/inkball/leaderboard.html?forcepush=');
+    l = l.replace('https://skparab1.github.io/inkball/leaderboard.html?forcepush=', '');
     sendto(parseInt(l));
   } else {
     sendto(1);
@@ -302,8 +302,7 @@ fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(fun
   console.log('got here');
   var ctr = 0;
   var gottennames = [];
-  console.log(data.length);
-  renderdata(1, data); // var tpdisp = document.getElementById('totplays');
+  console.log(data.length); // var tpdisp = document.getElementById('totplays');
   // tpdisp.textContent = 'Total plays: '+totplays;
   // var updisp = document.getElementById('unqplayers');
   // updisp.textContent = 'Total unique players: '+unqplayers;
