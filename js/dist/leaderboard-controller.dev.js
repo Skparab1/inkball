@@ -1,18 +1,92 @@
 "use strict";
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 var table = document.getElementById('table'); // generate all of it
 
 var thetabs = document.getElementById('large-bar');
-var y = 0;
+var thedata;
+var y = 1;
 
 while (y < 33) {
-  thetabs.innerHTML += "\n    <div id=\"1\" class=\"tabs\" style=\"margin-left: ".concat(18 * y, "%\" onclick=\"sendto('hard');\"><h1>Hard</h1></div>\n    ");
+  thetabs.innerHTML += "\n    <th id=\"".concat(y, "\" class=\"tabs\" onclick=\"sendto('").concat(y, "');\"><h5 style=\"padding: 0px; margin: 0px; margin-top: 10px;\">").concat(y, "</h5></th>\n    ");
   y += 1;
 }
 
+function thismapdata(map, data3) {
+  // go through
+  var newarr = [];
+  var r = 0;
+
+  while (r < data3.length) {
+    if (data3[r].map == map) {
+      newarr.push(data3[r]);
+    }
+
+    r += 1;
+  }
+
+  return newarr;
+}
+
+function renderdata(map, data2) {
+  var thisleaderboard = thismapdata(map, data2); // quickly just create a new array with time based so it can sort
+
+  var comparr = [];
+  var r = 0;
+
+  while (r < thisleaderboard.length) {
+    comparr.push([parseFloat(thisleaderboard[r].time), thisleaderboard[r]]);
+    r += 1;
+  }
+
+  console.log("BEFORE SORT", comparr);
+  comparr = comparr.sort(function (_ref, _ref2) {
+    var _ref3 = _slicedToArray(_ref, 2),
+        a = _ref3[0],
+        b = _ref3[1];
+
+    var _ref4 = _slicedToArray(_ref2, 2),
+        c = _ref4[0],
+        d = _ref4[1];
+
+    return c - a || b - d;
+  });
+  comparr = comparr.reverse();
+  var ctr = 0;
+  console.log(comparr);
+
+  for (var i = 0; i < comparr.length; i++) {
+    console.log('got in');
+    var play = comparr[i][1]; // difficulty = 'hard';
+    // difficulty = 'normal';
+    // difficulty = 'easy';
+    // difficulty = 'veryeasy';
+    // difficulty = 'og3life';
+
+    if (!gn.includes(play.name)) {
+      unqplayers += 1;
+      gn.push(play.name);
+    } //console.log(loc);
+    // filter
+    //                                      verify score
+
+
+    if (true) {
+      table.appendChild(createTableRow(ctr + 1, filter(play.username.substring(0, 40)), play.time));
+      console.log('made a row');
+      ctr += 1; //gottennames.push(play.name);
+    }
+  }
+}
+
 function mutetab(id) {
-  console.log(id);
-  console.log('mute');
   var el = document.getElementById(String(id));
   el.style.backgroundColor = 'rgb(0,0,0)';
   el.style.color = 'rgb(76,76,255)';
@@ -20,25 +94,8 @@ function mutetab(id) {
 
 function highlighttab(id) {
   var el = document.getElementById(String(id));
-  console.log('hightlight');
   el.style.backgroundColor = 'rgb(76,76,76)';
-  el.style.color = 'rgb(23,23,23)';
-}
-
-function convdiff(diff) {
-  if (diff == 'hard') {
-    return 1;
-  } else if (diff == 'normal') {
-    return 2;
-  } else if (diff == 'easy') {
-    return 3;
-  } else if (diff == 'veryeasy') {
-    return 4;
-  } else if (diff == 'og3life') {
-    return 5;
-  }
-
-  return diff;
+  el.style.color = 'rgb(255,255,255)';
 }
 
 function purediff(d) {
@@ -54,71 +111,26 @@ function purediff(d) {
   return d;
 }
 
-function settabs(diff) {
-  diff = convdiff(diff);
+function sendto(map) {
+  document.getElementById('thehead').textContent = 'Map ' + map; // just go through and configure the tabs
 
-  if (diff == 1) {
-    highlighttab(1);
-    mutetab(2);
-    mutetab(3);
-    mutetab(4);
-    mutetab(5);
-  } else if (diff == 2) {
-    highlighttab(2);
-    mutetab(1);
-    mutetab(3);
-    mutetab(4);
-    mutetab(5);
-  } else if (diff == 3) {
-    highlighttab(3);
-    mutetab(2);
-    mutetab(1);
-    mutetab(4);
-    mutetab(5);
-  } else if (diff == 4) {
-    highlighttab(4);
-    mutetab(2);
-    mutetab(3);
-    mutetab(1);
-    mutetab(5);
-  } else if (diff == 5) {
-    highlighttab(5);
-    mutetab(2);
-    mutetab(3);
-    mutetab(4);
-    mutetab(1);
-  }
+  var u = 1;
+
+  while (u < 33) {
+    if (u == map) {
+      highlighttab(String(u));
+    } else {
+      mutetab(String(u));
+    }
+
+    u += 1;
+  } // now clear the table
+
+
+  table.innerHTML = "\n        <tr>\n        <th id=\"rank\">Rank</th>\n        <th id=\"name\">Name</th>\n        <th>Score</th>\n    </tr>\n    ";
+  renderdata(map, thedata);
 }
 
-function sendto(diff) {
-  if (diff == 'back') {
-    window.open('https://skparab1.github.io/pacman', '_self');
-  } else {
-    var lc = window.location.href;
-    lc = lc.replace('?diff=hard', '');
-    lc = lc.replace('?diff=normal', '');
-    lc = lc.replace('?diff=easy', '');
-    lc = lc.replace('?diff=veryeasy', '');
-    lc = lc.replace('?diff=og3life', '');
-    lc = lc + '?diff=' + diff;
-    window.open(lc, '_self');
-  }
-}
-
-var loc = window.location.href;
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html/?', '');
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html?', '');
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html', '');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html/?', '');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html?', '');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html', '');
-loc = loc.replace('diff=', '');
-
-if (loc == '' || loc == ' ') {
-  loc = 'normal';
-}
-
-settabs(loc);
 var b1 = document.getElementById('bar1');
 var b2 = document.getElementById('bar2');
 var b3 = document.getElementById('bar3');
@@ -234,10 +246,22 @@ var loader = document.getElementById('loader');
 var unqplayers = 0;
 var gn = [];
 var totplays = 0;
-fetch("https://wfcdaj.deta.dev/leaderboard?number=10000").then(function (response) {
+fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(function (response) {
   return response.json();
 }).then(function (data) {
   console.log(data);
+  data = data.items;
+  thedata = data;
+  var l;
+
+  if (window.location.href.includes('forcepush')) {
+    l = window.location.href.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/inkball/leaderboard.html?forcepush=', '');
+    l = l.replace('https://skparab1.github.io/inkball/leaderboard.html?forcepush=');
+    sendto(parseInt(l));
+  } else {
+    sendto(1);
+  }
+
   fadeload = true;
 
   (function _callee3() {
@@ -275,52 +299,26 @@ fetch("https://wfcdaj.deta.dev/leaderboard?number=10000").then(function (respons
     });
   })();
 
+  console.log('got here');
   var ctr = 0;
   var gottennames = [];
-
-  for (var i = 0; i < data.length; i++) {
-    var play = data[i]; // difficulty = 'hard';
-    // difficulty = 'normal';
-    // difficulty = 'easy';
-    // difficulty = 'veryeasy';
-    // difficulty = 'og3life';
-
-    if (!gn.includes(play.name)) {
-      unqplayers += 1;
-      gn.push(play.name);
-    }
-
-    console.log(play.difficulty); //console.log(loc);
-    // filter
-    //                                      verify score
-
-    if (purediff(play.difficulty) == loc && play.score <= 583 && play.time > 1.5 && play.time < 500) {
-      // && ctr <= 99  && !gottennames.includes(play.name)
-      table.appendChild(createTableRow(ctr + 1, filter(play.name.substring(0, 40)), play.score, play.time));
-      ctr += 1;
-      gottennames.push(play.name);
-    }
-
-    totplays += 1;
-  }
-
-  var tpdisp = document.getElementById('totplays');
-  tpdisp.textContent = 'Total plays: ' + totplays;
-  var updisp = document.getElementById('unqplayers');
-  updisp.textContent = 'Total unique players: ' + unqplayers;
-  var stats = document.getElementById('stats');
-  stats.style.position = 'absolute';
-  var body = document.body,
-      html = document.documentElement;
-  var height = Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
-  stats.style.top = height + 'px';
+  console.log(data.length);
+  renderdata(1, data); // var tpdisp = document.getElementById('totplays');
+  // tpdisp.textContent = 'Total plays: '+totplays;
+  // var updisp = document.getElementById('unqplayers');
+  // updisp.textContent = 'Total unique players: '+unqplayers;
+  // var stats = document.getElementById('stats');
+  // stats.style.position = 'absolute';
+  // var body = document.body,
+  // html = document.documentElement;
+  // var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+  // stats.style.top = (height)+'px';
 });
 
-function createTableRow(rank, name, score, time) {
+function createTableRow(rank, name, time) {
   var tableRow = document.createElement('tr');
   tableRow.appendChild(createTableData(rank));
   tableRow.appendChild(createTableData(name));
-  tableRow.appendChild(createTableData(score));
   tableRow.appendChild(createTableData(time));
   return tableRow;
 }

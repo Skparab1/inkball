@@ -4,17 +4,77 @@ const table = document.getElementById('table');
 // generate all of it
 let thetabs = document.getElementById('large-bar');
 
-let y = 0;
+let thedata;
+
+let y = 1;
 while (y < 33){
     thetabs.innerHTML += `
-    <div id="1" class="tabs" style="margin-left: ${18*y}%" onclick="sendto('hard');"><h1>Hard</h1></div>
+    <th id="${y}" class="tabs" onclick="sendto('${y}');"><h5 style="padding: 0px; margin: 0px; margin-top: 10px;">${y}</h5></th>
     `;
     y += 1;
 }
 
+function thismapdata(map, data3){
+    // go through
+    let newarr = [];
+    let r = 0;
+    while (r < data3.length){
+        if (data3[r].map == map){
+            newarr.push(data3[r]);
+        }
+        r += 1;
+    }
+
+    return newarr;
+}
+
+function renderdata(map, data2){
+    let thisleaderboard = thismapdata(map, data2);
+    // quickly just create a new array with time based so it can sort
+    let comparr = [];
+    let r = 0;
+    while (r < thisleaderboard.length){
+        comparr.push([parseFloat(thisleaderboard[r].time),thisleaderboard[r]]);
+        r += 1;
+    }
+
+    console.log("BEFORE SORT",comparr);
+    comparr = comparr.sort(([a, b], [c, d]) => c - a || b - d);
+    comparr = comparr.reverse();
+
+    let ctr = 0;
+
+    console.log(comparr);
+
+    for (let i = 0; i < comparr.length; i++) {
+
+        console.log('got in');
+
+        const play = comparr[i][1];
+        // difficulty = 'hard';
+        // difficulty = 'normal';
+        // difficulty = 'easy';
+        // difficulty = 'veryeasy';
+        // difficulty = 'og3life';
+
+        if(!gn.includes(play.name)){
+            unqplayers += 1;
+            gn.push(play.name);
+        }
+        //console.log(loc);
+        // filter
+        //                                      verify score
+        if (true){
+            table.appendChild(createTableRow(ctr + 1, filter(play.username.substring(0,40)), play.time));
+            console.log('made a row');
+            ctr += 1;
+            //gottennames.push(play.name);
+        }
+    }
+
+}
+
 function mutetab(id){
-    console.log(id);
-    console.log('mute');
     let el = document.getElementById(String(id));
     el.style.backgroundColor = 'rgb(0,0,0)';
     el.style.color = 'rgb(76,76,255)';
@@ -22,24 +82,8 @@ function mutetab(id){
 
 function highlighttab(id){
     let el = document.getElementById(String(id));
-    console.log('hightlight');
     el.style.backgroundColor = 'rgb(76,76,76)';
-    el.style.color = 'rgb(23,23,23)';
-}
-
-function convdiff(diff){
-    if (diff == 'hard'){
-       return 1;
-    } else if (diff == 'normal'){
-        return 2;
-    } else if (diff == 'easy'){
-        return 3;
-    } else if (diff == 'veryeasy'){
-        return 4;
-    } else if (diff == 'og3life'){
-        return 5;
-    }
-    return diff;
+    el.style.color = 'rgb(255,255,255)';
 }
 
 function purediff(d){
@@ -55,51 +99,33 @@ function purediff(d){
     return d;
 }
 
-function settabs(diff){
+function sendto(map){
 
-    diff = convdiff(diff);
+    document.getElementById('thehead').textContent = 'Map '+map;
 
-    if (diff == 1){
-        highlighttab(1);mutetab(2);mutetab(3);mutetab(4);mutetab(5);
-    } else if (diff == 2){
-        highlighttab(2);mutetab(1);mutetab(3);mutetab(4);mutetab(5);
-    } else if (diff == 3){
-        highlighttab(3);mutetab(2);mutetab(1);mutetab(4);mutetab(5);
-    } else if (diff == 4){
-        highlighttab(4);mutetab(2);mutetab(3);mutetab(1);mutetab(5);
-    } else if (diff == 5){
-        highlighttab(5);mutetab(2);mutetab(3);mutetab(4);mutetab(1);
+    // just go through and configure the tabs
+    let u = 1;
+    while (u < 33){
+        if (u == map){
+            highlighttab(String(u));
+        } else {
+            mutetab(String(u));
+        }
+        u += 1;
     }
+
+    // now clear the table
+    table.innerHTML = `
+        <tr>
+        <th id="rank">Rank</th>
+        <th id="name">Name</th>
+        <th>Score</th>
+    </tr>
+    `;
+
+    renderdata(map, thedata);
 }
 
-function sendto(diff){
-    if (diff == 'back'){
-        window.open('https://skparab1.github.io/pacman','_self');
-    } else {
-        let lc = window.location.href;
-        lc = lc.replace('?diff=hard','');
-        lc = lc.replace('?diff=normal','');
-        lc = lc.replace('?diff=easy','');
-        lc = lc.replace('?diff=veryeasy','');
-        lc = lc.replace('?diff=og3life','');
-        lc = lc+'?diff='+diff;
-        window.open(lc,'_self');
-    }
-}
-
-var loc = window.location.href;
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html/?','');
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html?','');
-loc = loc.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/pacman/leaderboard/leaderboard.html','');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html/?','');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html?','');
-loc = loc.replace('https://skparab1.github.io/pacman/leaderboard/leaderboard.html','');
-loc = loc.replace('diff=','');
-if (loc == '' || loc == ' '){
-    loc = 'normal';
-}
-
-settabs(loc);
 
 let b1 = document.getElementById('bar1');
 let b2 = document.getElementById('bar2');
@@ -164,12 +190,25 @@ var unqplayers = 0;
 var gn = [];
 var totplays = 0;
 
-fetch(("https://wfcdaj.deta.dev/leaderboard?number=10000"))
+fetch(("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all"))
     .then(response => {
         return response.json();
     })
     .then(data => {
         console.log(data);
+
+        data = data.items;
+
+        thedata = data;
+
+        let l;
+        if (window.location.href.includes('forcepush')){
+            l = window.location.href.replace('file:///Users/homemac/Desktop/Programming/Otherprograms/inkball/leaderboard.html?forcepush=','');
+            l = l.replace('https://skparab1.github.io/inkball/leaderboard.html?forcepush=');
+            sendto(parseInt(l));
+        } else {
+            sendto(1);
+        }
 
         fadeload = true;
         (async () => {
@@ -184,51 +223,33 @@ fetch(("https://wfcdaj.deta.dev/leaderboard?number=10000"))
             loaded = true;
         })();
 
+        console.log('got here');
+
+
+
         let ctr = 0;
         let gottennames = [];
-        for (let i = 0; i < data.length; i++) {
-            const play = data[i];
-            // difficulty = 'hard';
-            // difficulty = 'normal';
-            // difficulty = 'easy';
-            // difficulty = 'veryeasy';
-            // difficulty = 'og3life';
+        console.log(data.length);
 
-            if(!gn.includes(play.name)){
-                unqplayers += 1;
-                gn.push(play.name);
-            }
-
-            console.log(play.difficulty);
-            //console.log(loc);
-            // filter
-            //                                      verify score
-            if (purediff(play.difficulty) == loc && play.score <= 583 && play.time > 1.5 && play.time < 500){ // && ctr <= 99  && !gottennames.includes(play.name)
-                table.appendChild(createTableRow(ctr + 1, filter(play.name.substring(0,40)), play.score, play.time));
-                ctr += 1;
-                gottennames.push(play.name);
-            }
-            totplays += 1;
-
-        }
-        var tpdisp = document.getElementById('totplays');
-        tpdisp.textContent = 'Total plays: '+totplays;
-        var updisp = document.getElementById('unqplayers');
-        updisp.textContent = 'Total unique players: '+unqplayers;
-        var stats = document.getElementById('stats');
-        stats.style.position = 'absolute';
-        var body = document.body,
-        html = document.documentElement;
-        var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
+        renderdata(1,data);
+       
+        // var tpdisp = document.getElementById('totplays');
+        // tpdisp.textContent = 'Total plays: '+totplays;
+        // var updisp = document.getElementById('unqplayers');
+        // updisp.textContent = 'Total unique players: '+unqplayers;
+        // var stats = document.getElementById('stats');
+        // stats.style.position = 'absolute';
+        // var body = document.body,
+        // html = document.documentElement;
+        // var height = Math.max( body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight );
                                                         
-        stats.style.top = (height)+'px';
+        // stats.style.top = (height)+'px';
     });
 
-function createTableRow(rank, name, score, time) {
+function createTableRow(rank, name, time) {
     const tableRow = document.createElement('tr');
     tableRow.appendChild(createTableData(rank));
     tableRow.appendChild(createTableData(name));
-    tableRow.appendChild(createTableData(score));
     tableRow.appendChild(createTableData(time));
     return tableRow;
 }

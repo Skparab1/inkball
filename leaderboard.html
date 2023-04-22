@@ -10,21 +10,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Finlandica&display=swap" rel="stylesheet">
-    <script src="js/leaderboard-controller.js" defer></script>
   </head>
   <body>
     <nav>
       <ul class="nav-items">
-        <li><a href="https://skparab1.github.io">Home</a></li>
-        <li><a href="https://skparab1.github.io/wordle/random">Wordle</a></li>
-        <li><a href="https://skparab1.github.io/snake">Snake</a></li>
-        <li><a href="https://skparab1.github.io/pacman">Pacman</a></li>
+        <li><a href="./index.html">Back to game</a></li>
       </ul> 
     </nav>
     <h1 id="title">Inkball Leaderboard</h1>
-    <div id="large-bar" style="width: 100%; overflow-x: hidden;">
-      <div id="0" class="tabs" onclick="sendto('back');" style="width: 5%;"><h1 style="font-size: 25px;">Back</h1></div>
-      </div>
+    <div class="container" style="border: 0px solid black;">
+      <table style="border: 0px solid black;">
+        <thead>
+          <tr id="large-bar"></tr>
+        </thead>
+      </table>
+    </div>
     <div id="loader" style="opacity: 1">
       <div style="width: 100%; height: 50px; padding-top: 50px;">
         <div style="width: 5%; height: 50px; float: left;"></div>
@@ -39,13 +39,13 @@
         <h1 style="text-align: center;">Taking too long to load? Try reloading or check your network connection.</h1>
       </div>
     </div>
+    <h1 id="thehead" style="text-align: center; margin: 0px; padding: 0px; position: absolute; top: 150px; left: 48%"></h1>
     <div id="leaderboard" style="opacity: 0;">
       <table id="table">
         <tr>
           <th id="rank">Rank</th>
           <th id="name">Name</th>
           <th>Score</th>
-          <th>Time</th>
         </tr>
       </table>
     </div>
@@ -54,4 +54,6 @@
       <h1 id="unqplayers"></h1>
     </div>
   </body>
+
+  <script src="js/leaderboard-controller.js"></script>
 </html>

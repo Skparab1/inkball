@@ -195,6 +195,7 @@ nav {
   top: 0px;
   width: 10%;
   color: rgb(163, 163, 163);
+  cursor: pointer;
 }
 
 .leaderboard {
@@ -203,6 +204,7 @@ nav {
   top: 0px;
   width: 10%;
   color: rgb(163, 163, 163);
+  cursor: pointer;
 }
 
 .blankspace {
