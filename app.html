@@ -5,7 +5,7 @@
     <meta name='og:viewport' content='width=device-width,initial-scale=1'>
     <meta name="og:description" content="canvas application">
     <meta property="og:image" content="image">
-    <title>Inkball - Maps</title>
+    <title>Inkball - Main Menu</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +15,11 @@
   <body>
     
     <div class="header">
-      <h1>Maps</h1>
+      <h1>Main Menu</h1>
+      <a href="https://github.com/skparab1/inkball">
+        <h2 class="github">Github</h2>
+      </a>
+      <h2 class="contributors" onclick="document.getElementById('contributors').style.display = 'block'; document.getElementById('fullcover').style.display = 'block';">Contributors</h2>
       <h2 class="howtoplay" onclick="openwelcome();">How to play</h2>
       <a href="./leaderboard.html">
         <h2 class="leaderboard">Leaderboard</h2>
@@ -26,9 +30,22 @@
       
     </div>
 
+    <div id="easy" style="position: absolute;">
+      <h1 style="color: rgb(7, 229, 92)">Easy</h1>
+    </div>
+
+    <div id="medium" style="position: absolute;">
+      <h1 style="color: rgb(218, 229, 7)">Medium</h1>
+    </div>
+
+    <div id="hard" style="position: absolute;">
+      <h1 style="color: rgb(229, 7, 7)">Hard</h1>
+    </div>
+
     <div class="totalcover" id="fullcover"></div>
 
     <div class="welcome" id="welcome">
+      <button class="exit-modal nohover" onclick="document.getElementById('welcome').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
       <h1>Welcome to Inkball!</h1>
 
       <div class="blankspace"></div>
@@ -95,8 +112,18 @@
 
     <div class="totalcover" id="morecover"></div>
 
+    <div class="contrib" id="contributors">
+      <button class="exit-modal nohover" onclick="document.getElementById('contributors').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Contributors</h1>
+      <h3>Developers: Shubham Parab, Ritam Chakraborty</h3>
+      <h3>Design: Anindit Pati, Advaita Guruprasad, Ritam Chakraborty, Shubham Parab, Eshwar Rajasekar</h3>
+      <h3>Music/sound: Advaita Guruprasad</h3>
+
+      <button class="close-button" onclick="document.getElementById('contributors').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
 
     <div class="explainer" id="explainerball">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerball').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Ball</h1>
       <img src="images/ball.png" alt="ball" height="66px">
       <h3>Direct the ball into the target of the same color</h3>
@@ -104,6 +131,7 @@
     </div>
 
     <div class="explainer" id="explainertarget">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainertarget').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Target</h1>
       <img src="images/target.png" alt="target" height="66px">
       <h3>Direct the ball of the same color into this target</h3>
@@ -111,6 +139,7 @@
     </div>
 
     <div class="explainer" id="explainerreleasepoint">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerreleasepoint').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Release point</h1>
       <img src="images/releasepoint.png" alt="releasepoint" height="66px">
       <h3>The balls will be released from this point</h3>
@@ -118,6 +147,7 @@
     </div>
 
     <div class="explainer" id="explainerblock">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Obstable Block</h1>
       <img src="images/block.png" alt="block" height="66px">
       <h3>The balls will deflect off these obstacle blocks</h3>
@@ -125,6 +155,7 @@
     </div>
 
     <div class="explainer" id="explainerreleasetimer">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerreleasetimer').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Release timer</h1>
       <img src="images/releasetimer.png" alt="releasetimer" height="66px">
       <h3>Indicates when a ball will be released</h3>
@@ -132,6 +163,7 @@
     </div>
 
     <div class="explainer" id="explainertimedblock">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainertimedblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Timed blocks</h1>
       <img src="images/timedblock.png" alt="timedblock" height="66px">
       <h3>Obstacles that appear and disappear after set intervals</h3>
@@ -139,6 +171,7 @@
     </div>
 
     <div class="explainer" id="explainerbooster">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerbooster').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Booster</h1>
       <img src="images/booster.png" alt="booster" height="66px">
       <h3>Accelerates the ball in the indicated direction</h3>
@@ -146,6 +179,7 @@
     </div>
 
     <div class="explainer" id="explainerbooststrip">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerbooststrip').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Boost Strip</h1>
       <img src="images/booststrip.png" alt="booststrip" height="66px">
       <h3>Long accelerates the ball in the indicated direction</h3>
@@ -153,6 +187,7 @@
     </div>
 
     <div class="explainer" id="explainerlockblock">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerlockblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Lock block</h1>
       <img src="images/lockblock.png" alt="lockblock" height="66px">
       <h3>Appears and disappears when a same colored ball is scored</h3>
@@ -160,6 +195,7 @@
     </div>
 
     <div class="explainer" id="explainerbreakblock">
+      <button class="exit-modal nohover" onclick="document.getElementById('explainerbreakblock').style.display = 'none'; document.getElementById('morecover').style.display = 'none';">&times</button>
       <h1>Break block</h1>
       <img src="images/breakblock.png" alt="breakblock" height="66px">
       <h3>Block that can be broken by a ball of the same color.</h3>

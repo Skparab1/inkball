@@ -49,7 +49,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:not(.nohover):hover {
   background-color: var(--accentColor);
 }
 
@@ -139,7 +139,8 @@ nav {
   border: 3px solid teal;
   background: rgba(0,0,0,0);
   color: white;
-  font-size: 30px;
+  font-size: 25px;
+  padding: 5px;
 }
 
 .close-button {
@@ -191,11 +192,161 @@ nav {
 
 .howtoplay {
   position: fixed;
-  left: 75%;
+  left: 77%;
   top: 0px;
   width: 10%;
   color: rgb(163, 163, 163);
   cursor: pointer;
+}
+
+.contributors {
+  position: fixed;
+  left: 66%;
+  top: 0px;
+  width: 10%;
+  color: rgb(163, 163, 163);
+  cursor: pointer;
+}
+
+.github {
+  position: fixed;
+  left: 57%;
+  top: 0px;
+  width: 10%;
+  color: rgb(163, 163, 163);
+  cursor: pointer;
+}
+
+
+input[type="range"] {
+  background-color: transparent;
+}
+
+input[type="range"]::-moz-range-progress {
+  background-color: hsl(24, 92%, 61%); 
+}
+
+input[type="range"]::-moz-range-track {
+  background-color: lightgray; 
+}
+
+input[type="range"]::-ms-fill-lower {
+  background-color: hsl(24, 92%, 61%); 
+}
+
+input[type="range"]::-ms-fill-upper {  
+  background-color: lightgray;
+}
+
+input[type="range"] {
+  background-color: transparent;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 8rem;
+  height: 2rem;
+}
+
+.switchsmall {
+  position: relative;
+  display: block;
+  width: 2rem;
+  height: 2rem;
+}
+
+.switch input {
+  visibility: hidden;
+}
+.switchsmall input {
+  visibility: hidden;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: background-color 0.25s;
+}
+
+.slidersmall {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: background-color 0.25s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.5rem;
+  width: 1.5rem;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: transform 0.25s;
+}
+.slidersmall:before {
+  position: absolute;
+  content: "";
+  height: 1.5rem;
+  width: 1.5rem;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: transform 0.25s;
+}
+
+input:checked + .slider {
+  background-color: hsl(24, 92%, 61%);
+}
+input:not(:checked) + .slidersmall {
+  background-color: hsl(150, 68%, 50%);
+}
+
+input:checked + .slidersmall {
+  background-color: hsl(0, 68%, 50%);
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px hsl(24, 92%, 61%);
+}
+
+input:checked + .slider:before {
+  transform: translateX(6rem);
+}
+
+input:checked + .slidersmall:before {
+  transform: translateX(1rem);
+}
+
+.slider.round {
+  border-radius: 1.5rem;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+input:checked + .slider.small:before {
+  transform: translateX(1rem);
+}
+
+.slidersmall {
+  border-radius: 1rem;
+}
+
+.slidersmall:before {
+  border-radius: 50%;
 }
 
 .chroma {
@@ -227,6 +378,22 @@ nav {
   }
 }
 
+
+.exit-modal {
+  all: unset;
+  cursor: pointer;
+  position: absolute;
+  color: var(--fgColor);
+  top: 0;
+  right: 0;
+  width: 2.5rem;
+  font-size: 2.5rem;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  user-select: none;
+  font-weight: bold;
+}
 
 .leaderboard {
   position: fixed;
@@ -285,6 +452,19 @@ nav {
   display: none;
 }
 
+.contrib {
+  position: fixed;
+  width: 40%;
+  left: 30%;
+  top: 25%;
+  height: 50%;
+  background-color: rgba(0,0,70,0.7);
+  border: 3px solid white;
+  text-align: center;
+  display: none;
+  padding: 15px;
+}
+
 .iconimg {
   float: left;
   margin-left: 50px;
@@ -311,7 +491,6 @@ nav {
 .horiz-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
 }
 
 #settings {
@@ -321,8 +500,8 @@ nav {
 .action {
   all: unset;
   color: var(--fgColor);  
-  border: solid var(--fgColor) 0.1rem;
-  width: 80%;
+  border: solid teal 2px;
+  width: 65%;
   height: 40px;
   font-family: 'Finlandica', sans-serif;
   text-align: center;

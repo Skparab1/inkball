@@ -1,5 +1,6 @@
 
 let holder = document.getElementById('allmaps');
+// document.body.innerHTML += "<div><h2>Medium</h2></div>";
 
 let ij = 1;
 while (ij < 33){
@@ -7,7 +8,7 @@ while (ij < 33){
   div.innerHTML = `
     <a href="./index.html?map${ij}">
       <h2 >Map ${ij}</h2>
-      <img src="images/map${ij}.png" height='150px' alt="image of map ${ij}">
+      <img src="images/m${ij}.png" height='150px' alt="image of map ${ij}">
     </a>
   `;
 
@@ -29,7 +30,24 @@ while (ij < 33){
   div.style.width = '17%';
   div.style.marginLeft = '5.5%';
 
+  if (ij < 5 || (ij > 12 && ij < 17) || (ij > 24 && ij < 29)){
+    div.style.marginTop = '66px';
+  }
 
+  if (ij == 1){
+    document.getElementById('easy').style.top = div.offsetTop+div.style.marginTop+10+'px';
+    document.getElementById('easy').style.left = '5.5%';
+  }
+
+  if (ij == 13){
+    document.getElementById('medium').style.top = 200*4+66*2+10+'px';
+    document.getElementById('medium').style.left = '5.5%';
+  }
+
+  if (ij == 25){
+    document.getElementById('hard').style.top = 200*8+66*3+10+'px';
+    document.getElementById('hard').style.left = '5.5%';
+  }
 
   document.body.appendChild(div);
 

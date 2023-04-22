@@ -2,7 +2,7 @@
 
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth-20; 
-canvas.height = window.innerHeight-20; 
+canvas.height = window.innerHeight-pushdown-5; 
 // byte, canvas declared in first.js
 const width = byte*30;
 const height = byte*19; // gonna make a full sized canvas with a little bit of ground leeway
@@ -473,6 +473,12 @@ function dist1(x1,y1,x2,y2){
 async function shrinkball(num, hole){
   // first of all is the ball in the holw of its color or not
   // cuz if not then you lost
+
+  let endTime = new Date();
+  let time = endTime-startTime;
+  time = time/1000;
+
+
   if (clrs[num] != holecolors[hole]){
     // you lost
     //alert("Oops! Ball entered hole of wrong color");
@@ -481,6 +487,7 @@ async function shrinkball(num, hole){
     loseaudio.play();
 
     let loser = document.getElementById('lose-dialogue');
+    document.getElementById('lwtime').textContent = 'In '+time+" sec";
     loser.style.display = 'block';
     loser.style.opacity = 1;
     lost = true;
@@ -512,17 +519,21 @@ async function shrinkball(num, hole){
       audi.pause();
       winaudio.play();
 
-      let endTime = new Date();
-      let time = endTime-startTime;
-      time = time/1000;
       console.log('map'+mapnum);
       localStorage.setItem('map'+mapnum,time);
+
+      if (lastbest == null || lastbest > time){
+        localStorage.setItem('map'+mapnum+'best',time);
+      }
+
       //alert('You won! Time taken: '+time+" sec");
       won = true;
 
       let wn = document.getElementById('win-dialogue');
       wn.style.opacity = 1;
       wn.style.display = 'block';
+
+      document.getElementById('lwtime').textContent = 'In '+time+" sec";
 
       sendlb(time,localStorage.getItem('inkballname'));
       getwholeleaderboard(time,localStorage.getItem('inkballname'));
@@ -738,7 +749,7 @@ function getwholeleaderboard(ourtime, ourname){
 
   r = 0;
   while (r < comparr.length){
-    if (comparr[r][1].time >= 5){
+    if (comparr[r][1].username != 'SneK152'){
       if (comparr[r][1] == ourentry){
         disp.innerHTML += ("<h3 style='color: lightgreen;'>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
       } else {
@@ -748,6 +759,17 @@ function getwholeleaderboard(ourtime, ourname){
     r += 1;
   }
 
+}
+
+function avg(arr){
+  let r = 0;
+  let s = 0;
+  while (r < arr.length){
+    s += arr[r];
+    r += 1;
+  }
+
+  return s/arr.length;
 }
 
 let loaded = false;
@@ -770,6 +792,10 @@ let woncounter = 0;
 //get the map we are going to use
 let map;
 let mapnum = -1;
+
+let lastlpst = new Date();
+let sf = [];
+let speedfactor = 1;
 
 let pushlimit = 2;
 
@@ -840,6 +866,15 @@ if (window.location.href.includes("map10")){
 } else {
   window.location.href = "./app.html";
 }
+
+let lastbest = localStorage.getItem('map'+mapnum+'best');
+if (lastbest == null){
+  document.getElementById('dispbest').textContent = 'Best: -';
+} else {
+  document.getElementById('dispbest').textContent = 'Best: '+lastbest+' sec';
+}
+
+document.title = "Inkball - Map "+mapnum;
 
 let thisleaderboard;
 getlb(mapnum);
@@ -983,6 +1018,41 @@ let y = 0;
       //console.log(mousetrail);
     }
 
+    // i hope this doesnt cut on performance too much
+    let nowlpst = new Date();
+    let currentdelta = nowlpst-lastlpst;
+    // this is the difference for one loop
+    // currentdelat is the number of milliseconds per frame
+
+    let currentpx = currentdelta*speedfactor; // this is in theory the px a thing mvoes per frame
+    // so whatever this is for us we want it to eventually converge to that
+
+    //console.log(currentpx, speedfactor); // this shud be fairly consistent
+
+    // this is def too heavy
+    // sf.push(currentpx);
+    // console.log(avg(sf)); // seems to equalize at about 5.3
+    // so currently speedfactor is this
+
+    // ok so current px should equalize at about 5.3
+    if (currentpx < 5.3){
+      // then increase the speedfactor
+      speedfactor = speedfactor*1.01;
+    } else {
+      // decrease the speedfactor
+      speedfactor = speedfactor*0.99;
+    }
+
+    // now speedfactor shud be applied to all of the velocities
+    lastlpst = nowlpst;
+
+    // do the time
+    let endTime = new Date();
+    let time = endTime-startTime;
+    time = time/1000;
+
+    document.getElementById('disptime').textContent = 'Time: '+Math.round(time)+' sec';
+
     ctx.fillStyle = 'red';
     let lucid = 0;
     while (lucid < bx.length){
@@ -999,6 +1069,23 @@ let y = 0;
         dy[lucid] = lastdy[lucid];
       }
 
+      // if its still nan
+      if (dx[lucid] == NaN || isNaN(dx[lucid])){
+        dx[lucid] = 0.5;
+      }
+
+      if (dy[lucid] == NaN || isNaN(dy[lucid])){
+        dy[lucid] = 0.5;
+      }
+
+      // check if the positions are out or nan
+      if (bx[lucid] == NaN || isNaN(bx[lucid]) || bx[lucid] < 0 || bx[lucid] > byte*40){
+        bx[lucid] = byte*3;
+      }
+      if (by[lucid] == NaN || isNaN(by[lucid]) || by[lucid] > byte*26){
+        by[lucid] = byte*3;
+      }
+
       lucid += 1;
     }
 
@@ -1011,8 +1098,8 @@ let y = 0;
 
     lucid = 0;
     while (lucid < bx.length){
-      bx[lucid] += dx[lucid];
-      by[lucid] += dy[lucid];
+      bx[lucid] += dx[lucid]*speedfactor;
+      by[lucid] += dy[lucid]*speedfactor;
       lucid += 1;
     }
 
@@ -1255,7 +1342,7 @@ let y = 0;
     // now try each of them
     i = 0;
     while (i < newsubs.length){
-      if ((collisiontimer[i] > 30 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
+      if ((collisiontimer[i] > 10 || (bx[newsubs[i][0]] > width && bx[newsubs[i][1]] > width)) && touching(newsubs[i][0],newsubs[i][1])){
         bounce(newsubs[i][0],newsubs[i][1]);
         // now if we do the bounce set the timer
         collisiontimer[i] = 0;

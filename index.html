@@ -22,13 +22,52 @@
 
     <div id="right-panel" class="right-panel">
       <h1>Inkball</h1>
-      <a href="./app.html">
-        <button class="maps-button">All maps</button>
+      <a class='nohover' href="./app.html">
+        <button class="maps-button">Main menu</button>
       </a>
+      <a class='nohover' href="./leaderboard.html">
+        <button class="maps-button">Leaderboard</button>
+      </a>
+
+      <div class="blankspace"></div>
+      <div class="blankspace"></div>
+      <div class="blankspace"></div>
+      
+      <h1 id="score">Score</h1>
+
+      <h2 id="disptime">Time:</h2>
+      <h2 id="dispbest">Best:</h2>
+
+
+      <div class="blankspace"></div>
+      <div class="blankspace"></div>
+      <div class="blankspace"></div>
+
+
+      <h1 id="audio">Audio</h1>
+      <div id="volume">
+        <input type="range" class="range" min="1" max="100" value="100" id="volume-control">
+      </div>
+      <button id='audiobtn' class="action" onclick="toggleMusic()"><h3 id="audio-toggle">Pause Music</h3></button>
+
+      <div class="horiz-container" style="padding-top: 0.5rem">
+        <h2 id='sf' style="position: absolute; left: 2rem">Music</h2>
+        <label class="switch">
+          <input type="checkbox" onclick="togglesfx()">
+          <span class="slidersmall" style="width: 50px; position: absolute; left: 6.5rem"></span>
+        </label>
+        <h2 id='es' style="position: absolute; left: 12.5rem">Sfx</h2>
+        <label class="switch">
+          <input type="checkbox" onclick="toggleeatsfx()">
+          <span class="slidersmall" style="width: 50px; position: absolute; left: 7.2rem"></span>
+        </label>
+      </div>
+
     </div>
 
     <div id="lose-dialogue" class="lose-dialogue">
       <h1>You Lost</h1>
+      <h2 id="lwtime"></h2>
       <button class="maps-button" onclick="location.reload();">Play again</button>
       <a href="./app.html">
         <button class="maps-button">All maps</button>
@@ -37,6 +76,7 @@
 
     <div id="win-dialogue" class="win-dialogue">
       <h1>You Won!</h1>
+      <h2 id="lwtime"></h2>
       <button class="maps-button" onclick="location.reload();">Play again</button>
       <a href="./app.html">
         <button class="maps-button">All maps</button>

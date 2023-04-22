@@ -64,7 +64,7 @@ function renderdata(map, data2){
         //console.log(loc);
         // filter
         //                                      verify score
-        if (true){
+        if (play.username != 'SneK152'){
             table.appendChild(createTableRow(ctr + 1, filter(play.username.substring(0,40)), play.time));
             console.log('made a row');
             ctr += 1;
