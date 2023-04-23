@@ -521,6 +521,8 @@ async function shrinkball(num, hole){
       loseaudio.play();
     }
 
+    sendlbloss(time,(localStorage.getItem('inkballname')+"BADGES"+localStorage.getItem('badges')));
+
     let loser = document.getElementById('lose-dialogue');
     document.getElementById('lwtime').textContent = 'In '+time+" sec";
     loser.style.display = 'block';
@@ -744,6 +746,18 @@ async function getlb(map){
 function sendlb(ourtime, ourname){
   //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
   fetch((`https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=${mapnum}&time=${ourtime}&name=${ourname}`))
+  .then(response => {
+      return response.json();
+  })
+  .then(data => {
+      console.log(data);
+      thisleaderboard = data.items;
+  })
+}
+
+function sendlbloss(ourtime, ourname){
+  //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
+  fetch((`https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=loss&time=${ourtime}&name=${ourname}`))
   .then(response => {
       return response.json();
   })

@@ -550,7 +550,7 @@ function shrinkball(num, hole) {
           time = time / 1000;
 
           if (!(clrs[num] != holecolors[hole])) {
-            _context2.next = 13;
+            _context2.next = 14;
             break;
           }
 
@@ -563,15 +563,16 @@ function shrinkball(num, hole) {
             loseaudio.play();
           }
 
+          sendlbloss(time, localStorage.getItem('inkballname') + "BADGES" + localStorage.getItem('badges'));
           loser = document.getElementById('lose-dialogue');
           document.getElementById('lwtime').textContent = 'In ' + time + " sec";
           loser.style.display = 'block';
           loser.style.opacity = 1;
           lost = true;
-          _context2.next = 29;
+          _context2.next = 30;
           break;
 
-        case 13:
+        case 14:
           // you got a ball
           if (sfxon) {
             getaudio.play();
@@ -579,23 +580,23 @@ function shrinkball(num, hole) {
 
           u = 100;
 
-        case 15:
+        case 16:
           if (!(u > 0)) {
-            _context2.next = 22;
+            _context2.next = 23;
             break;
           }
 
           bwidths[num] = u / 100 * ballwidth; //console.log(bwidths);
 
-          _context2.next = 19;
+          _context2.next = 20;
           return regeneratorRuntime.awrap(sleep(2));
 
-        case 19:
+        case 20:
           u -= 1;
-          _context2.next = 15;
+          _context2.next = 16;
           break;
 
-        case 22:
+        case 23:
           if (clrs[num] == BLUE) {
             togglebluelock();
           }
@@ -633,7 +634,7 @@ function shrinkball(num, hole) {
             getwholeleaderboard(time, localStorage.getItem('inkballname'));
           }
 
-        case 29:
+        case 30:
         case "end":
           return _context2.stop();
       }
@@ -829,6 +830,16 @@ function getlb(map) {
 function sendlb(ourtime, ourname) {
   //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
   fetch("https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=".concat(mapnum, "&time=").concat(ourtime, "&name=").concat(ourname)).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    console.log(data);
+    thisleaderboard = data.items;
+  });
+}
+
+function sendlbloss(ourtime, ourname) {
+  //https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=19&time=20&username=skparab1
+  fetch("https://newmicro-1-b9063375.deta.app/?INKBALLWRITE=valid&map=loss&time=".concat(ourtime, "&name=").concat(ourname)).then(function (response) {
     return response.json();
   }).then(function (data) {
     console.log(data);
