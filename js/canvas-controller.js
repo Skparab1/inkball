@@ -799,9 +799,9 @@ function getwholeleaderboard(ourtime, ourname){
 
     if (procname!= 'SneK152'){
       if (comparr[r][1] == ourentry){
-        disp.innerHTML += ("<h3 style='color: lightgreen;'>"+procname+" "+comparr[r][1].time+"</h3>");
+        disp.innerHTML += ("<h3 style='color: lightgreen;'>"+procname.substring(0,40)+" "+comparr[r][1].time+"</h3>");
       } else {
-        disp.innerHTML += ("<h3>"+procname+" "+comparr[r][1].time+"</h3>");
+        disp.innerHTML += ("<h3>"+procname.substring(0,40)+" "+comparr[r][1].time+"</h3>");
       }
     }
     r += 1;
