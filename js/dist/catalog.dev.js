@@ -3,6 +3,7 @@
 var holder = document.getElementById('allmaps'); // document.body.innerHTML += "<div><h2>Medium</h2></div>";
 
 var ij = 1;
+var completedmaps = 0;
 
 while (ij < 33) {
   var div = document.createElement('tr');
@@ -11,7 +12,8 @@ while (ij < 33) {
 
   if (localStorage.getItem("map" + ij) != null) {
     // finished it
-    div.innerHTML += "\n      <h3 class='chroma'>Completed in ".concat(localStorage.getItem("map" + ij), " sec</h3>\n    "); // div.style.backgroundColor = 'green';
+    div.innerHTML += "\n      <h3 class='chroma'>Completed in ".concat(localStorage.getItem("map" + ij), " sec</h3>\n    ");
+    completedmaps += 1; // div.style.backgroundColor = 'green';
   } else {
     div.innerHTML += "\n    <h3 style=\"color: black\">\u2022</h3>\n  ";
   }
@@ -46,6 +48,21 @@ while (ij < 33) {
 function openwelcome() {
   document.getElementById('welcome').style.display = 'block';
   document.getElementById('fullcover').style.display = 'block';
+}
+
+function openbadge1() {
+  document.getElementById('badge1d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
+function openbadge2() {
+  document.getElementById('badge2d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
+function openbadge3() {
+  document.getElementById('badge3d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
 } // is this the users first time
 
 
@@ -58,3 +75,22 @@ if (us == null) {
 
   openwelcome();
 }
+
+var badges = '';
+
+if (completedmaps >= 10) {
+  document.getElementById('badge1').style.display = 'block';
+  badges += 'check';
+}
+
+if (completedmaps >= 20) {
+  document.getElementById('badge2').style.display = 'block';
+  badges += 'star';
+}
+
+if (completedmaps >= 30) {
+  document.getElementById('badge3').style.display = 'block';
+  badges += 'trophy';
+}
+
+localStorage.setItem('badges', badges);

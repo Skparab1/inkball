@@ -24,6 +24,17 @@
       <a href="./leaderboard.html">
         <h2 class="leaderboard">Leaderboard</h2>
       </a>
+
+      <div id='badge1' class="badge1" onclick="openbadge1();">
+        <img src="images/check.png" alt="green check mark" height="50px">
+      </div>
+      <div id='badge2' class="badge2" onclick="openbadge2();">
+        <img src="images/star.png" alt="blue star" height="50px">
+      </div>
+      <div id='badge3' class="badge3" onclick="openbadge3();">
+        <img src="images/trophy.png" alt="black trophy" height="50px">
+      </div>
+
     </div>
 
     <div id="allmaps">
@@ -111,6 +122,32 @@
     </div>
 
     <div class="totalcover" id="morecover"></div>
+
+    <div class="contrib" id="badge1d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge1d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Check Badge</h1>
+      <img src="images/check.png" alt="green check mark" height="100px">
+      <h3>Player has completed 10 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge1d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
+
+
+    <div class="contrib" id="badge2d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge2d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Star Badge</h1>
+      <img src="images/star.png" alt="green check mark" height="100px">
+      <h3>Player has completed 20 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge2d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
+
+
+    <div class="contrib" id="badge3d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge3d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Trophy Badge</h1>
+      <img src="images/trophy.png" alt="green check mark" height="100px">
+      <h3>Player has completed 30 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge3d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
 
     <div class="contrib" id="contributors">
       <button class="exit-modal nohover" onclick="document.getElementById('contributors').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>

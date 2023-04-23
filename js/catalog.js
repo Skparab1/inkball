@@ -3,6 +3,7 @@ let holder = document.getElementById('allmaps');
 // document.body.innerHTML += "<div><h2>Medium</h2></div>";
 
 let ij = 1;
+let completedmaps = 0;
 while (ij < 33){
   let div = document.createElement('tr');
   div.innerHTML = `
@@ -19,6 +20,7 @@ while (ij < 33){
     div.innerHTML += `
       <h3 class='chroma'>Completed in ${localStorage.getItem("map"+ij)} sec</h3>
     `;
+    completedmaps += 1;
     // div.style.backgroundColor = 'green';
   } else {
     div.innerHTML += `
@@ -59,6 +61,22 @@ function openwelcome(){
   document.getElementById('fullcover').style.display = 'block';
 }
 
+function openbadge1(){
+  document.getElementById('badge1d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
+
+function openbadge2(){
+  document.getElementById('badge2d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
+function openbadge3(){
+  document.getElementById('badge3d').style.display = 'block';
+  document.getElementById('fullcover').style.display = 'block';
+}
+
 // is this the users first time
 let us = localStorage.getItem('inkballname');
 if (us == null){
@@ -69,3 +87,21 @@ if (us == null){
   // launch the welcome dialogue
   openwelcome();
 }
+
+let badges = ''; 
+
+if (completedmaps >= 10){
+  document.getElementById('badge1').style.display = 'block';
+  badges += 'check';
+}
+if (completedmaps >= 20){
+  document.getElementById('badge2').style.display = 'block';
+  badges += 'star';
+}
+if (completedmaps >= 30){
+  document.getElementById('badge3').style.display = 'block';
+  badges += 'trophy';
+}
+
+localStorage.setItem('badges',badges);
+

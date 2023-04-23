@@ -12,6 +12,66 @@ var table = document.getElementById('table'); // generate all of it
 
 var thetabs = document.getElementById('large-bar');
 var thedata;
+var thebadges = []; //2d arr with [name,[true,true,false]]
+
+function findn(nm, dt) {
+  var d = 0;
+
+  while (d < dt.length) {
+    if (dt[d][0] == nm) {
+      return d;
+    }
+
+    d += 1;
+  }
+
+  return -1;
+}
+
+function setbadges() {
+  // go through thedata
+  var e = 0;
+
+  while (e < thedata.length) {
+    var nname = thedata[e].username;
+    var check = false;
+    var star = false;
+    var trophy = false;
+
+    if (nname.includes('&BADGES&')) {
+      var g = nname.split('&BADGES&')[1];
+      check = g.includes('check');
+      star = g.includes('star');
+      trophy = g.includes('trophy');
+    }
+
+    if (!thebadges.includes(nname)) {
+      // add it
+      thebadges.push(nname, [false, false, false]);
+    } // now modify the things
+
+
+    var eqxx = findn(nname, thebadges);
+    var theentry = thebadges[eqxx]; // this is the entry
+
+    if (check) {
+      theentry[1][0] = true;
+    }
+
+    if (star) {
+      theentry[1][1] = true;
+    }
+
+    if (trophy) {
+      theentry[1][2] = true;
+    } // now we write it back
+
+
+    thebadges[eqxx] = theentry;
+    e += 1;
+  }
+}
+
 var y = 1;
 
 while (y < 33) {
@@ -79,7 +139,7 @@ function renderdata(map, data2) {
 
 
     if (play.username != 'SneK152') {
-      table.appendChild(createTableRow(ctr + 1, filter(play.username.substring(0, 40)), play.time));
+      table.appendChild(createTableRow(ctr + 1, play.username, play.time));
       console.log('made a row');
       ctr += 1; //gottennames.push(play.name);
     }
@@ -238,7 +298,14 @@ var sleep = function sleep(ms) {
 })();
 
 function filter(s) {
-  return s.replace("c0ckgr1nder69420", "cg69420").replace("shooooobum", "s").replace("Nate Higgers", "NH");
+  s = s.replace("c0ckgr1nder69420", "cg69420").replace("shooooobum", "s").replace("Nate Higgers", "NH");
+
+  if (s.includes('&BADGES&')) {
+    s = s.split('&BADGES&');
+    s = s[0];
+  }
+
+  return s;
 }
 
 var lb = document.getElementById('leaderboard');
@@ -252,6 +319,7 @@ fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(fun
   console.log(data);
   data = data.items;
   thedata = data;
+  setbadges();
   var l;
 
   if (window.location.href.includes('forcepush')) {
@@ -315,16 +383,35 @@ fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(fun
 });
 
 function createTableRow(rank, name, time) {
+  // get the badges
+  var cbadges = thebadges[findn(name, thebadges)][1];
+  var check = cbadges[0];
+  var star = cbadges[1];
+  var trophy = cbadges[2];
+  name = filter(name.substring(0, 40));
   var tableRow = document.createElement('tr');
   tableRow.appendChild(createTableData(rank));
-  tableRow.appendChild(createTableData(name));
+  tableRow.appendChild(createTableData(name, check, star, trophy));
   tableRow.appendChild(createTableData(time));
   return tableRow;
 }
 
-function createTableData(data) {
+function createTableData(data, check, star, trophy) {
   var tableData = document.createElement('td');
   var textData = document.createTextNode(data);
   tableData.appendChild(textData);
+
+  if (check) {
+    tableData.innerHTML += "\n        <img src='images/check.png' alt='green check mark' height='20px'>\n        ";
+  }
+
+  if (star) {
+    tableData.innerHTML += "\n        <img src='images/star.png' alt='blue star' height='20px'>\n        ";
+  }
+
+  if (trophy) {
+    tableData.innerHTML += "\n        <img src='images/trophy.png' alt='yellow trophy' height='20px'>\n        ";
+  }
+
   return tableData;
 }
