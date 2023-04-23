@@ -16,6 +16,7 @@ var thebadges = []; //2d arr with [name,[true,true,false]]
 
 function findn(nm, dt) {
   var d = 0;
+  console.log(dt);
 
   while (d < dt.length) {
     if (dt[d][0] == nm) {
@@ -34,20 +35,22 @@ function setbadges() {
 
   while (e < thedata.length) {
     var nname = thedata[e].username;
+    console.log(nname);
     var check = false;
     var star = false;
     var trophy = false;
+    var truname = nname;
 
-    if (nname.includes('&BADGES&')) {
-      var g = nname.split('&BADGES&')[1];
+    if (nname.includes('BADGES')) {
+      var g = nname.split('BADGES')[1];
       check = g.includes('check');
       star = g.includes('star');
       trophy = g.includes('trophy');
     }
 
-    if (!thebadges.includes(nname)) {
+    if (findn(nname, thebadges) == -1) {
       // add it
-      thebadges.push(nname, [false, false, false]);
+      thebadges.push([nname, [false, false, false]]);
     } // now modify the things
 
 
@@ -300,8 +303,8 @@ var sleep = function sleep(ms) {
 function filter(s) {
   s = s.replace("c0ckgr1nder69420", "cg69420").replace("shooooobum", "s").replace("Nate Higgers", "NH");
 
-  if (s.includes('&BADGES&')) {
-    s = s.split('&BADGES&');
+  if (s.includes('BADGES')) {
+    s = s.split('BADGES');
     s = s[0];
   }
 
@@ -384,11 +387,14 @@ fetch("https://newmicro-1-b9063375.deta.app/?INKBALLGET=valid&map=all").then(fun
 
 function createTableRow(rank, name, time) {
   // get the badges
+  name = filter(name.substring(0, 40));
+  console.log(name);
+  console.log(thebadges);
+  console.log(findn(name, thebadges));
   var cbadges = thebadges[findn(name, thebadges)][1];
   var check = cbadges[0];
   var star = cbadges[1];
   var trophy = cbadges[2];
-  name = filter(name.substring(0, 40));
   var tableRow = document.createElement('tr');
   tableRow.appendChild(createTableData(rank));
   tableRow.appendChild(createTableData(name, check, star, trophy));

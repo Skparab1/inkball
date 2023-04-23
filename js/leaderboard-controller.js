@@ -10,6 +10,7 @@ let thebadges = [];  //2d arr with [name,[true,true,false]]
 
 function findn(nm, dt){
     let d = 0;
+    console.log(dt);
     while (d < dt.length){
         if (dt[d][0] == nm){
             return d;
@@ -25,20 +26,24 @@ function setbadges(){
     while (e < thedata.length){
         let nname = thedata[e].username;
 
+        console.log(nname);
+
         let check = false;
         let star = false;
         let trophy = false;
+
+        let truname = nname;
     
-        if (nname.includes('&BADGES&')){
-            let g = nname.split('&BADGES&')[1];
+        if (nname.includes('BADGES')){
+            let g = nname.split('BADGES')[1];
             check = g.includes('check');
             star = g.includes('star');
             trophy = g.includes('trophy');
         }
 
-        if (!thebadges.includes(nname)){
+        if (findn(nname,thebadges) == -1){
             // add it
-            thebadges.push(nname,[false,false,false]);
+            thebadges.push([nname,[false,false,false]]);
         }
 
         // now modify the things
@@ -239,8 +244,8 @@ const sleep = ms => new Promise(res => setTimeout(res, ms));
 
 function filter(s){
     s = s.replace("c0ckgr1nder69420","cg69420").replace("shooooobum","s").replace("Nate Higgers","NH");
-    if (s.includes('&BADGES&')){
-        s = s.split('&BADGES&');
+    if (s.includes('BADGES')){
+        s = s.split('BADGES');
         s = s[0];
     }
 
@@ -313,13 +318,17 @@ function createTableRow(rank, name, time) {
 
     // get the badges
 
+    name = filter(name.substring(0,40));
+
+    console.log(name);
+    console.log(thebadges);
+    console.log(findn(name,thebadges));
+
     let cbadges = thebadges[findn(name,thebadges)][1];
 
     let check = cbadges[0];
     let star = cbadges[1];
     let trophy = cbadges[2];
-
-    name = filter(name.substring(0,40));
 
     const tableRow = document.createElement('tr');
     tableRow.appendChild(createTableData(rank));

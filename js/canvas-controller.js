@@ -574,7 +574,7 @@ async function shrinkball(num, hole){
 
       document.getElementById('lwtime').textContent = 'In '+time+" sec";
 
-      sendlb(time,(localStorage.getItem('inkballname')+"&BADGES&"+localStorage.getItem('badges')));
+      sendlb(time,(localStorage.getItem('inkballname')+"BADGES"+localStorage.getItem('badges')));
       getwholeleaderboard(time,localStorage.getItem('inkballname'));
     }
   }
