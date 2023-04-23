@@ -1,5 +1,5 @@
 # Inkball • [Play](https://skparab1.github.io/inkball) • [Leaderboard](https://skparab1.github.io/inkball/leaderboard.html)
-Developed by Shubham Parab, Anindit Pati, Advaita Guruprasad, Ritam Chakraborty, Snehil Kakani
+Developed by Shubham Parab, Anindit Pati, Advaita Guruprasad, Ritam Chakraborty, and Snehil Kakani
 
 <img width="200" alt="Inkball logo" src="https://user-images.githubusercontent.com/71990977/233870117-bd24288d-91bf-40e1-992f-13288d4be7af.png">
 
@@ -29,8 +29,8 @@ Achievement badges allow users to display their game wins, both on their menu an
 The original background music and sound effects, created by Advaita Guruprasad enhance the experience and make it immersive
 
 # Contributers
-- Developers: Shubham Parab, Ritam Chakraborty
-- Design: Anindit Pati, Advaita Guruprasad, Snehil Kakani
+- Developers: Shubham Parab and Ritam Chakraborty
+- Design: Anindit Pati, Advaita Guruprasad, and Snehil Kakani
 - Music/Sound: Advaita Guruprasad
 
 # Software and tools
