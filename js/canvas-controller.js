@@ -786,13 +786,22 @@ function getwholeleaderboard(ourtime, ourname){
   let disp = document.getElementById('leaderboard-container');
   disp.innerHTML += ("<h2>Leaderboard for map "+mapnum+"</h2>");
 
+
+
   r = 0;
   while (r < comparr.length){
-    if (comparr[r][1].username != 'SneK152'){
+
+    let procname = comparr[r][1].username;
+
+    if (procname.includes('BADGES')){
+      procname = procname.split('BADGES')[0];
+    }
+
+    if (procname!= 'SneK152'){
       if (comparr[r][1] == ourentry){
-        disp.innerHTML += ("<h3 style='color: lightgreen;'>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+        disp.innerHTML += ("<h3 style='color: lightgreen;'>"+procname+" "+comparr[r][1].time+"</h3>");
       } else {
-        disp.innerHTML += ("<h3>"+comparr[r][1].username+" "+comparr[r][1].time+"</h3>");
+        disp.innerHTML += ("<h3>"+procname+" "+comparr[r][1].time+"</h3>");
       }
     }
     r += 1;

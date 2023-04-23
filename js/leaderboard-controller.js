@@ -35,19 +35,22 @@ function setbadges(){
         let truname = nname;
     
         if (nname.includes('BADGES')){
+            console.log(nname);
             let g = nname.split('BADGES')[1];
+            console.log(g);
             check = g.includes('check');
             star = g.includes('star');
             trophy = g.includes('trophy');
+            truname = nname.split('BADGES')[0];
         }
 
-        if (findn(nname,thebadges) == -1){
+        if (findn(truname,thebadges) == -1){
             // add it
-            thebadges.push([nname,[false,false,false]]);
+            thebadges.push([truname,[false,false,false]]);
         }
 
         // now modify the things
-        let eqxx = findn(nname,thebadges);
+        let eqxx = findn(truname,thebadges);
         let theentry = thebadges[eqxx];
 
         // this is the entry
