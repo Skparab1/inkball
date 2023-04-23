@@ -7,6 +7,7 @@
     <meta property="og:image" content="https://skparab1.github.io/pacman/about/lb.png">
     <title>Inkball - Leaderboard</title>
     <link rel="stylesheet" href="css/leaderboard.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Finlandica&display=swap" rel="stylesheet">
@@ -52,6 +53,33 @@
     <div id="stats" style="text-align: center; width: 100%">
       <h1 id="totplays"></h1>
       <h1 id="unqplayers"></h1>
+    </div>
+    
+    <div class="totalcover" id="fullcover"></div>
+
+    <div class="contrib" id="badge1d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge1d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Check Badge</h1>
+      <img src="images/check.png" alt="green check mark" height="100px">
+      <h3>Player has completed 10 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge1d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
+
+    <div class="contrib" id="badge2d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge2d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Star Badge</h1>
+      <img src="images/star.png" alt="green check mark" height="100px">
+      <h3>Player has completed 20 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge2d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
+    </div>
+
+
+    <div class="contrib" id="badge3d">
+      <button class="exit-modal nohover" onclick="document.getElementById('badge3d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">&times</button>
+      <h1>Trophy Badge</h1>
+      <img src="images/trophy.png" alt="green check mark" height="100px">
+      <h3>Player has completed 30 maps!</h3>
+      <button class="close-button" onclick="document.getElementById('badge3d').style.display = 'none'; document.getElementById('fullcover').style.display = 'none';">Close</button>
     </div>
   </body>
 

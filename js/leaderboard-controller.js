@@ -8,6 +8,24 @@ let thedata;
 
 let thebadges = [];  //2d arr with [name,[true,true,false]]
 
+
+function openbadge1(){
+    document.getElementById('badge1d').style.display = 'block';
+    document.getElementById('fullcover').style.display = 'block';
+}
+
+
+function openbadge2(){
+    document.getElementById('badge2d').style.display = 'block';
+    document.getElementById('fullcover').style.display = 'block';
+}
+
+function openbadge3(){
+    document.getElementById('badge3d').style.display = 'block';
+    document.getElementById('fullcover').style.display = 'block';
+}
+  
+
 function findn(nm, dt){
     let d = 0;
     console.log(dt);
@@ -347,19 +365,19 @@ function createTableData(data, check, star, trophy) {
 
     if (check){
         tableData.innerHTML += `
-        <img src='images/check.png' alt='green check mark' height='20px'>
+        <img src='images/check.png' alt='green check mark' style='cursor: pointer' onclick='openbadge1();' height='20px'>
         `;
     }
 
     if (star){
         tableData.innerHTML += `
-        <img src='images/star.png' alt='blue star' height='20px'>
+        <img src='images/star.png' alt='blue star' style='cursor: pointer' onclick='openbadge2();' height='20px'>
         `;
     }
 
     if (trophy){
         tableData.innerHTML += `
-        <img src='images/trophy.png' alt='yellow trophy' height='20px'>
+        <img src='images/trophy.png' alt='yellow trophy' style='cursor: pointer' onclick='openbadge3();' height='20px'>
         `;
     }
 
